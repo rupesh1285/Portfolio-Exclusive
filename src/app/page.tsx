@@ -1,65 +1,83 @@
-import Image from "next/image";
+"use client";
+
+import BackgroundStage from "@/components/canvas/BackgroundStage";
+import { motion } from "framer-motion";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="relative min-h-screen w-full bg-black overflow-hidden">
+      <BackgroundStage />
+
+      {/* Glassmorphic Navigation Header */}
+      <nav className="absolute top-0 left-0 w-full z-[100] flex justify-between items-center px-12 py-8">
+        <div className="text-white font-bold tracking-widest text-xl">RA.</div>
+        <div className="flex gap-8 text-silverWhite/60 font-mono text-xs uppercase tracking-[0.3em]">
+          <span className="hover:text-white cursor-pointer transition-colors">Architecture</span>
+          <span className="hover:text-white cursor-pointer transition-colors">Projects</span>
+          <span className="hover:text-white cursor-pointer transition-colors">Contact</span>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      </nav>
+
+      <div className="relative z-[60] flex h-screen w-full flex-col md:flex-row items-center px-10 md:px-24">
+        
+        {/* LEFT SIDE: The Identity */}
+        <div className="w-full md:w-1/2 flex flex-col justify-center text-left">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <div className="flex items-center gap-4 mb-6">
+              <div className="h-[1px] w-12 bg-white/30" />
+              <p className="text-white font-mono text-[10px] tracking-[0.5em] uppercase opacity-60">
+                Full-Stack Engineer
+              </p>
+            </div>
+            
+            <h1 className="text-8xl md:text-[10rem] font-bold tracking-tighter text-white leading-[0.8] mb-4">
+              RUPESH<br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/20">
+                AGARWAL
+              </span>
+            </h1>
+
+            <p className="mt-8 text-silverWhite/50 text-lg md:text-xl font-light max-w-lg leading-relaxed font-mono">
+              // DECODING THE FUTURE OF INTERACTIVE INTERFACES.
+              <br />
+              // SPECIALIZED IN HIGH-PERFORMANCE WEB ARCHITECTURE.
+            </p>
+          </motion.div>
         </div>
-      </main>
-    </div>
+
+        {/* RIGHT SIDE: The World-Class "Doodle" Upgrade */}
+        <div className="w-full md:w-1/2 h-full flex items-center justify-center">
+          <motion.div 
+            whileHover={{ scale: 1.05 }}
+            className="relative w-80 h-80 flex items-center justify-center"
+          >
+            {/* The "Neural Core" - A complex, rotating, glowing ring system */}
+            <div className="absolute inset-0 border border-white/10 rounded-full animate-[spin_10s_linear_infinite]" />
+            <div className="absolute inset-4 border border-white/20 rounded-full animate-[spin_15s_linear_infinite_reverse]" />
+            <div className="absolute inset-10 border-2 border-white/40 rounded-full animate-[pulse_4s_ease-in-out_infinite]" />
+            
+            {/* The Centerpiece */}
+            <div className="text-white text-6xl font-thin tracking-tighter z-10">
+              01
+            </div>
+            
+            {/* Scanning Line Effect */}
+            <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent opacity-20 animate-[moveUp_3s_linear_infinite]" />
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Custom Styles for Keyframes */}
+      <style jsx global>{`
+        @keyframes moveUp {
+          from { transform: translateY(320px); }
+          to { transform: translateY(-40px); }
+        }
+      `}</style>
+    </main>
   );
 }
