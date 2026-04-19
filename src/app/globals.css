@@ -1,20 +1,177 @@
 @import "tailwindcss";
 
 @theme {
-  --color-premiumBlack: #050505;
-  --color-silverWhite: #F5F5F7;
-  --color-metallicSilver: #8E8E93;
-  --color-warmBeige: #D6CFC7;
+  --color-void:      #040404;
+  --color-abyss:     #090909;
+  --color-carbon:    #101010;
+  --color-charcoal:  #181818;
+  --color-graphite:  #282828;
+  --color-iron:      #3A3A3A;
+  --color-steel:     #525252;
+  --color-silver:    #8A8A8A;
+  --color-chrome:    #ACACAC;
+  --color-platinum:  #C6C6C6;
+  --color-pearl:     #DEDEDE;
+  --color-snow:      #F6F6F6;
+  --color-pure:      #FFFFFF;
 }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar { display: none; }
 
 body {
-  background-color: var(--color-premiumBlack);
-  color: var(--color-silverWhite);
+  background: #040404;
+  color: #DEDEDE;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: 'DM Mono', monospace;
 }
 
-.bg-grid {
-  background-size: 60px 60px;
-  background-image: 
-    linear-gradient(to right, rgba(142, 142, 147, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(142, 142, 147, 0.08) 1px, transparent 1px);
+* { cursor: none !important; }
+
+/* ── Film grain ─────────────────────────────────────── */
+@keyframes grainShift {
+  0%   { background-position:   0px   0px; }
+  10%  { background-position: -55px -28px; }
+  20%  { background-position:  28px  55px; }
+  30%  { background-position: -80px  28px; }
+  40%  { background-position:  55px -55px; }
+  50%  { background-position: -28px  80px; }
+  60%  { background-position:  80px -28px; }
+  70%  { background-position: -55px  55px; }
+  80%  { background-position:  28px -80px; }
+  90%  { background-position: -80px -55px; }
+  100% { background-position:   0px   0px; }
+}
+.animate-grain { animation: grainShift 0.07s steps(1) infinite; }
+
+/* ── Hex texture float ──────────────────────────────── */
+@keyframes noiseFloat {
+  0%,100% { transform: translate(0,0)       scale(1.02); }
+  33%      { transform: translate(-1%,0.6%)  scale(1);    }
+  66%      { transform: translate(0.6%,-1%)  scale(1.02); }
+}
+.animate-noise { animation: noiseFloat 9s ease-in-out infinite; }
+
+/* ── HERO ENTRANCE: name slam ───────────────────────── */
+@keyframes nameReveal {
+  0%   { opacity:0; transform:translateY(108%) skewY(5deg); filter:blur(22px); }
+  55%  { opacity:1; filter:blur(0); }
+  82%  { transform:translateY(-5px) skewY(-0.5deg); }
+  100% { opacity:1; transform:translateY(0) skewY(0); filter:blur(0); }
+}
+.animate-name-1 { animation: nameReveal 1.2s cubic-bezier(0.16,1,0.3,1) 0.1s  both; }
+.animate-name-2 { animation: nameReveal 1.2s cubic-bezier(0.16,1,0.3,1) 0.28s both; }
+
+/* ── HERO ENTRANCE: fade-rise ───────────────────────── */
+@keyframes fadeRise {
+  from { opacity:0; transform:translateY(30px); filter:blur(6px); }
+  to   { opacity:1; transform:translateY(0);    filter:blur(0);   }
+}
+.animate-fade-rise   { animation: fadeRise 1s cubic-bezier(0.16,1,0.3,1) 0.82s both; }
+.animate-fade-rise-2 { animation: fadeRise 1s cubic-bezier(0.16,1,0.3,1) 1.02s both; }
+.animate-fade-rise-3 { animation: fadeRise 1s cubic-bezier(0.16,1,0.3,1) 1.2s  both; }
+.animate-fade-rise-4 { animation: fadeRise 1s cubic-bezier(0.16,1,0.3,1) 1.38s both; }
+
+/* ── Sphere float ───────────────────────────────────── */
+@keyframes sphereFloat {
+  0%,100% { transform:translateY(0px)   rotate(0deg);    }
+  33%      { transform:translateY(-18px) rotate(0.3deg);  }
+  66%      { transform:translateY(-8px)  rotate(-0.2deg); }
+}
+.animate-sphere-float { animation: sphereFloat 11s ease-in-out infinite; }
+
+/* ── Status pulse ───────────────────────────────────── */
+@keyframes statusPulse {
+  0%,100% { opacity:1;    box-shadow:0 0 0px rgba(140,140,140,0);   }
+  50%      { opacity:0.22; box-shadow:0 0 8px rgba(140,140,140,0.6); }
+}
+.animate-status { animation: statusPulse 3s ease infinite; }
+
+/* ── Scroll hint ────────────────────────────────────── */
+@keyframes scrollDrop {
+  0%   { opacity:0; transform:translateY(-6px); }
+  50%  { opacity:0.75; }
+  100% { opacity:0; transform:translateY(6px);  }
+}
+.animate-scroll-drop { animation: scrollDrop 2.6s ease-in-out infinite; }
+
+/* ── Ticker ─────────────────────────────────────────── */
+@keyframes tickerScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.ticker-inner {
+  animation: tickerScroll 34s linear infinite;
+  white-space: nowrap;
+  display: inline-flex;
+}
+
+/* ── SLIDE 2: reveal on scroll ──────────────────────── */
+/* up */
+.s2-reveal {
+  opacity:0;
+  transform:translateY(48px);
+  transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+}
+.s2-reveal.in-view { opacity:1; transform:translateY(0); }
+
+/* from left */
+.s2-left {
+  opacity:0;
+  transform:translateX(-60px);
+  transition: opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1s cubic-bezier(0.16,1,0.3,1);
+}
+.s2-left.in-view { opacity:1; transform:translateX(0); }
+
+/* from right */
+.s2-right {
+  opacity:0;
+  transform:translateX(60px);
+  transition: opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1s cubic-bezier(0.16,1,0.3,1);
+}
+.s2-right.in-view { opacity:1; transform:translateX(0); }
+
+/* scale-in */
+.s2-scale {
+  opacity:0;
+  transform:scale(0.92);
+  transition: opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1s cubic-bezier(0.16,1,0.3,1);
+}
+.s2-scale.in-view { opacity:1; transform:scale(1); }
+
+/* ── Project row hover ──────────────────────────────── */
+.proj-row {
+  transition: background 0.4s ease, padding-left 0.4s cubic-bezier(0.16,1,0.3,1),
+              padding-right 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.proj-row:hover { background:rgba(0,0,0,0.03); }
+
+/* ── Number counter spin ────────────────────────────── */
+@keyframes countUp {
+  from { transform: translateY(100%); opacity:0; }
+  to   { transform: translateY(0);    opacity:1; }
+}
+.stat-num { animation: countUp 0.8s cubic-bezier(0.16,1,0.3,1) both; }
+.stat-num-1 { animation-delay: 1.4s; }
+.stat-num-2 { animation-delay: 1.55s; }
+.stat-num-3 { animation-delay: 1.7s; }
+
+/* ── HUD scrollbar ──────────────────────────────────── */
+@keyframes hudPulse { 0%,100%{opacity:0.45;} 50%{opacity:1;} }
+.hud-dot { animation: hudPulse 2.8s ease-in-out infinite; }
+
+/* ── Slide 2 top-of-slide curtain shimmer ───────────── */
+@keyframes shimmerSweep {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%);  }
+}
+.shimmer-line {
+  animation: shimmerSweep 1.4s cubic-bezier(0.4,0,0.2,1) forwards;
 }
