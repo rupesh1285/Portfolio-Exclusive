@@ -1,654 +1,646 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import BackgroundStage from "@/components/canvas/BackgroundStage";
 
 /* ════════════════════════════════════════════════════════════
-   PRECISION CURSOR — dot + lagging ring + ghost
+   PRECISION CURSOR
 ════════════════════════════════════════════════════════════ */
 function PrecisionCursor() {
   const dotRef   = useRef<HTMLDivElement>(null);
   const ringRef  = useRef<HTMLDivElement>(null);
   const ghostRef = useRef<HTMLDivElement>(null);
-  const state    = useRef({ mx:-200,my:-200,rx:-200,ry:-200,gx:-200,gy:-200 });
+  const st = useRef({ mx:-200,my:-200,rx:-200,ry:-200,gx:-200,gy:-200 });
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
-      state.current.mx = e.clientX; state.current.my = e.clientY;
-      if (dotRef.current) {
-        dotRef.current.style.left = e.clientX + "px";
-        dotRef.current.style.top  = e.clientY + "px";
-      }
+      st.current.mx = e.clientX; st.current.my = e.clientY;
+      if (dotRef.current) { dotRef.current.style.left=e.clientX+"px"; dotRef.current.style.top=e.clientY+"px"; }
     };
     let raf = 0;
     const tick = () => {
-      const s = state.current;
-      s.rx += (s.mx - s.rx) * 0.1;  s.ry += (s.my - s.ry) * 0.1;
-      s.gx += (s.mx - s.gx) * 0.05; s.gy += (s.my - s.gy) * 0.05;
-      if (ringRef.current)  { ringRef.current.style.left  = s.rx+"px"; ringRef.current.style.top  = s.ry+"px"; }
-      if (ghostRef.current) { ghostRef.current.style.left = s.gx+"px"; ghostRef.current.style.top = s.gy+"px"; }
+      const s = st.current;
+      s.rx += (s.mx-s.rx)*0.1;  s.ry += (s.my-s.ry)*0.1;
+      s.gx += (s.mx-s.gx)*0.05; s.gy += (s.my-s.gy)*0.05;
+      if (ringRef.current)  { ringRef.current.style.left=s.rx+"px";  ringRef.current.style.top=s.ry+"px";  }
+      if (ghostRef.current) { ghostRef.current.style.left=s.gx+"px"; ghostRef.current.style.top=s.gy+"px"; }
       raf = requestAnimationFrame(tick);
     };
-    const xl = () => { if(!ringRef.current)return; ringRef.current.style.cssText += ";width:62px;height:62px;border-color:rgba(200,200,200,0.7);background:rgba(200,200,200,0.04)"; };
-    const xd = () => { if(!ringRef.current)return; ringRef.current.style.cssText += ";width:62px;height:62px;border-color:rgba(18,18,18,0.55);background:rgba(18,18,18,0.042)"; };
-    const ct = () => { if(!ringRef.current)return; ringRef.current.style.cssText += ";width:30px;height:30px;border-color:rgba(180,180,180,0.42);background:transparent"; };
-
+    const xl = () => { if(!ringRef.current)return; Object.assign(ringRef.current.style,{width:"60px",height:"60px",borderColor:"rgba(200,200,200,0.7)",background:"rgba(200,200,200,0.04)"}); };
+    const xd = () => { if(!ringRef.current)return; Object.assign(ringRef.current.style,{width:"60px",height:"60px",borderColor:"rgba(18,18,18,0.55)",background:"rgba(18,18,18,0.04)"}); };
+    const ct = () => { if(!ringRef.current)return; Object.assign(ringRef.current.style,{width:"30px",height:"30px",borderColor:"rgba(180,180,180,0.42)",background:"transparent"}); };
     window.addEventListener("mousemove", onMove);
     raf = requestAnimationFrame(tick);
-    document.querySelectorAll("[data-cursor-expand]").forEach(el => { el.addEventListener("mouseenter",xl); el.addEventListener("mouseleave",ct); });
-    document.querySelectorAll("[data-cursor-dark]").forEach(el => { el.addEventListener("mouseenter",xd); el.addEventListener("mouseleave",ct); });
+    document.querySelectorAll("[data-cursor-expand]").forEach(el=>{el.addEventListener("mouseenter",xl);el.addEventListener("mouseleave",ct);});
+    document.querySelectorAll("[data-cursor-dark]").forEach(el=>{el.addEventListener("mouseenter",xd);el.addEventListener("mouseleave",ct);});
     return () => { window.removeEventListener("mousemove", onMove); cancelAnimationFrame(raf); };
   }, []);
 
   return (
     <>
-      <div ref={ghostRef} className="fixed pointer-events-none z-[9990]" style={{ width:52,height:52,borderRadius:"50%",border:"1px solid rgba(165,165,165,0.09)",transform:"translate(-50%,-50%)" }} />
-      <div ref={ringRef}  className="fixed pointer-events-none z-[9995]" style={{ width:30,height:30,borderRadius:"50%",border:"1px solid rgba(180,180,180,0.42)",transform:"translate(-50%,-50%)",transition:"width 0.45s cubic-bezier(0.16,1,0.3,1),height 0.45s cubic-bezier(0.16,1,0.3,1),border-color 0.3s,background 0.3s" }} />
-      <div ref={dotRef}   className="fixed pointer-events-none z-[9999]" style={{ width:4,height:4,borderRadius:"50%",background:"#FFFFFF",transform:"translate(-50%,-50%)",mixBlendMode:"difference" }} />
+      <div ref={ghostRef} className="fixed pointer-events-none z-[9990]" style={{width:52,height:52,borderRadius:"50%",border:"1px solid rgba(165,165,165,0.09)",transform:"translate(-50%,-50%)"}}/>
+      <div ref={ringRef}  className="fixed pointer-events-none z-[9995]" style={{width:30,height:30,borderRadius:"50%",border:"1px solid rgba(180,180,180,0.42)",transform:"translate(-50%,-50%)",transition:"width 0.45s cubic-bezier(0.16,1,0.3,1),height 0.45s cubic-bezier(0.16,1,0.3,1),border-color 0.3s,background 0.3s"}}/>
+      <div ref={dotRef}   className="fixed pointer-events-none z-[9999]" style={{width:4,height:4,borderRadius:"50%",background:"#FFF",transform:"translate(-50%,-50%)",mixBlendMode:"difference"}}/>
     </>
   );
 }
 
 /* ════════════════════════════════════════════════════════════
-   CHROME WIREFRAME SPHERE — silver depth shading
-   Performance: pre-compute lat/lon points, batch strokes per alpha bucket
-════════════════════════════════════════════════════════════ */
-function ChromeSphere() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rotRef    = useRef({ rx:0.38, ry:0, vx:0.00016, vy:0.00052 });
-  const mouseRef  = useRef({ x:0, y:0 });
-  const tRef      = useRef(0);
-
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => { mouseRef.current = { x:e.clientX, y:e.clientY }; };
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
-  }, []);
-
-  useEffect(() => {
-    const el = canvasRef.current; if (!el) return;
-    const canvas = el as HTMLCanvasElement;
-    const ctx    = canvas.getContext("2d", { alpha:true }) as CanvasRenderingContext2D;
-    const parent = canvas.parentElement!;
-    const SIZE   = Math.min(parent.offsetWidth, parent.offsetHeight);
-    canvas.width = SIZE; canvas.height = SIZE;
-    const CX=SIZE/2, CY=SIZE/2, R=SIZE*0.405, LATS=16, LONS=22;
-    let raf=0;
-
-    function project(x:number,y:number,z:number,rX:number,rY:number){
-      const x1=x*Math.cos(rY)-z*Math.sin(rY), z1=x*Math.sin(rY)+z*Math.cos(rY);
-      const y2=y*Math.cos(rX)-z1*Math.sin(rX), z2=y*Math.sin(rX)+z1*Math.cos(rX);
-      const fov=SIZE*1.9, sc=fov/(fov+z2);
-      return {px:CX+x1*sc, py:CY+y2*sc, z:z2, sc};
-    }
-    const mg = (d:number) => Math.round(52 + d * 182);
-
-    function frame(){
-      ctx.clearRect(0,0,SIZE,SIZE);
-      tRef.current += 0.007; const t = tRef.current;
-      const ox=(mouseRef.current.x-window.innerWidth/2)/window.innerWidth;
-      const oy=(mouseRef.current.y-window.innerHeight/2)/window.innerHeight;
-      rotRef.current.rx+=rotRef.current.vx; rotRef.current.ry+=rotRef.current.vy;
-      const rX=rotRef.current.rx+oy*0.18, rY=rotRef.current.ry+ox*0.38;
-
-      /* Latitude rings */
-      for(let lat=0;lat<=LATS;lat++){
-        const phi=(lat/LATS)*Math.PI;
-        const pts:ReturnType<typeof project>[]=[];
-        for(let lon=0;lon<=LONS*2;lon++)
-          pts.push(project(R*Math.sin(phi)*Math.cos((lon/(LONS*2))*Math.PI*2),R*Math.cos(phi),R*Math.sin(phi)*Math.sin((lon/(LONS*2))*Math.PI*2),rX,rY));
-        for(let i=0;i<pts.length-1;i++){
-          const a=pts[i],b=pts[i+1];
-          const depth=Math.max(0,Math.min(1,(a.z+b.z)/(2*R)*0.5+0.5));
-          ctx.beginPath();ctx.moveTo(a.px,a.py);ctx.lineTo(b.px,b.py);
-          ctx.strokeStyle=`rgba(${mg(depth)},${mg(depth)},${mg(depth)},${0.030+0.265*depth})`;
-          ctx.lineWidth=0.4+depth*0.28; ctx.stroke();
-        }
-      }
-      /* Longitude rings */
-      for(let lon=0;lon<LONS;lon++){
-        const theta=(lon/LONS)*Math.PI*2;
-        const pts:ReturnType<typeof project>[]=[];
-        for(let lat=0;lat<=LATS*2;lat++)
-          pts.push(project(R*Math.sin((lat/(LATS*2))*Math.PI)*Math.cos(theta),R*Math.cos((lat/(LATS*2))*Math.PI),R*Math.sin((lat/(LATS*2))*Math.PI)*Math.sin(theta),rX,rY));
-        for(let i=0;i<pts.length-1;i++){
-          const a=pts[i],b=pts[i+1];
-          const depth=Math.max(0,Math.min(1,(a.z+b.z)/(2*R)*0.5+0.5));
-          ctx.beginPath();ctx.moveTo(a.px,a.py);ctx.lineTo(b.px,b.py);
-          ctx.strokeStyle=`rgba(${mg(depth)},${mg(depth)},${mg(depth)},${0.020+0.17*depth})`;
-          ctx.lineWidth=0.34+depth*0.18; ctx.stroke();
-        }
-      }
-      /* Equator node ring */
-      for(let i=0;i<=LONS*3;i++){
-        const theta=(i/(LONS*3))*Math.PI*2+t*0.16;
-        const{px,py,sc,z:pz}=project(R*Math.cos(theta),0,R*Math.sin(theta),rX,rY);
-        const depth=Math.max(0,Math.min(1,pz/R*0.5+0.5));
-        const pulse=0.35+0.65*Math.abs(Math.sin(t*2.2+i*0.38));
-        ctx.beginPath();ctx.arc(px,py,sc,0,Math.PI*2);
-        ctx.fillStyle=`rgba(210,210,210,${depth*pulse*0.68})`;ctx.fill();
-      }
-      /* Poles */
-      ([-R,R] as number[]).forEach((yp,idx)=>{
-        const{px,py,sc}=project(0,yp,0,rX,rY);
-        const p=0.5+0.5*Math.sin(t*1.8+idx*Math.PI);
-        ctx.beginPath();ctx.arc(px,py,8*sc,0,Math.PI*2);ctx.fillStyle=`rgba(155,155,155,${sc*0.062*p})`;ctx.fill();
-        ctx.beginPath();ctx.arc(px,py,2.0*sc,0,Math.PI*2);ctx.fillStyle=`rgba(238,238,238,${sc*0.86})`;ctx.fill();
-      });
-      /* Outer halo */
-      const hR=R*1.11;
-      for(let i=0;i<160;i++){
-        const t1=(i/160)*Math.PI*2+t*0.04, t2=((i+1)/160)*Math.PI*2+t*0.04;
-        const p1=project(hR*Math.cos(t1),0,hR*Math.sin(t1),rX,rY);
-        const p2=project(hR*Math.cos(t2),0,hR*Math.sin(t2),rX,rY);
-        const wave=0.18+0.82*Math.abs(Math.sin(t*0.9+i*0.1));
-        const depth=Math.max(0,Math.min(1,(p1.z+p2.z)/(2*R)*0.5+0.5));
-        ctx.beginPath();ctx.moveTo(p1.px,p1.py);ctx.lineTo(p2.px,p2.py);
-        ctx.strokeStyle=`rgba(150,150,152,${depth*wave*0.2})`;ctx.lineWidth=1.0*p1.sc;ctx.stroke();
-      }
-      raf=requestAnimationFrame(frame);
-    }
-    frame();
-    return ()=>cancelAnimationFrame(raf);
-  },[]);
-
-  return <canvas ref={canvasRef} style={{ width:"100%",height:"100%" }} />;
-}
-
-/* ════════════════════════════════════════════════════════════
-   NODE GRID (WHITE SLIDE) — heavily optimized
-   Key: single path per alpha level, 60px grid, no O(n²) inner loop
+   NODE GRID — (For White Scene)
 ════════════════════════════════════════════════════════════ */
 function NodeGrid() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef  = useRef({ x:-9999, y:-9999 });
 
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => { mouseRef.current = { x:e.clientX, y:e.clientY }; };
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
-  }, []);
+  useEffect(()=>{
+    const onMove=(e:MouseEvent)=>{mouseRef.current={x:e.clientX,y:e.clientY};};
+    window.addEventListener("mousemove",onMove);
+    return()=>window.removeEventListener("mousemove",onMove);
+  },[]);
 
-  useEffect(() => {
-    const el = canvasRef.current; if(!el) return;
-    const canvas = el as HTMLCanvasElement;
-    const ctx    = canvas.getContext("2d", { alpha:true }) as CanvasRenderingContext2D;
-    let W=0, H=0, raf=0;
-
-    const GAP = 60;
-    interface Node { x:number; y:number; baseR:number; phase:number; }
-    let nodes: Node[] = [];
-
+  useEffect(()=>{
+    const el=canvasRef.current; if(!el)return;
+    const canvas=el as HTMLCanvasElement;
+    const ctx=canvas.getContext("2d",{alpha:true}) as CanvasRenderingContext2D;
+    let W=0,H=0,raf=0;
+    const GAP=62;
+    interface Node{x:number;y:number;baseR:number;phase:number;}
+    let nodes:Node[]=[]; let gridCache:HTMLCanvasElement|null=null;
     function resize(){
-      W = canvas.width  = canvas.parentElement!.offsetWidth;
-      H = canvas.height = canvas.parentElement!.offsetHeight;
-      const COLS = Math.ceil(W/GAP)+1, ROWS = Math.ceil(H/GAP)+1;
-      nodes = [];
-      for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++)
-        nodes.push({ x:c*GAP, y:r*GAP, baseR:1.1+Math.random()*0.7, phase:Math.random()*Math.PI*2 });
+      W=canvas.width=canvas.parentElement!.offsetWidth;
+      H=canvas.height=canvas.parentElement!.offsetHeight;
+      const COLS=Math.ceil(W/GAP)+1,ROWS=Math.ceil(H/GAP)+1;
+      nodes=[];
+      for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)
+        nodes.push({x:c*GAP,y:r*GAP,baseR:1.0+Math.random()*0.7,phase:Math.random()*Math.PI*2});
+      gridCache=document.createElement("canvas"); gridCache.width=W; gridCache.height=H;
+      const gc=gridCache.getContext("2d")!;
+      gc.strokeStyle="rgba(0,0,0,0.036)"; gc.lineWidth=0.4;
+      for(let x=0;x<W;x+=GAP){gc.beginPath();gc.moveTo(x,0);gc.lineTo(x,H);gc.stroke();}
+      for(let y=0;y<H;y+=GAP){gc.beginPath();gc.moveTo(0,y);gc.lineTo(W,y);gc.stroke();}
     }
-    resize();
-    window.addEventListener("resize", resize);
-
-    /* Draw grid lines ONCE into an offscreen canvas */
-    let gridCache: HTMLCanvasElement | null = null;
-    function buildGridCache(){
-      gridCache = document.createElement("canvas");
-      gridCache.width = W; gridCache.height = H;
-      const gc = gridCache.getContext("2d")!;
-      gc.strokeStyle = "rgba(0,0,0,0.038)";
-      gc.lineWidth = 0.45;
-      for(let x=0;x<W;x+=GAP){ gc.beginPath();gc.moveTo(x,0);gc.lineTo(x,H);gc.stroke(); }
-      for(let y=0;y<H;y+=GAP){ gc.beginPath();gc.moveTo(0,y);gc.lineTo(W,y);gc.stroke(); }
-    }
-    buildGridCache();
-
+    resize(); window.addEventListener("resize",resize);
     let t=0;
     function draw(){
-      ctx.clearRect(0,0,W,H);
-      t += 0.018;
+      ctx.clearRect(0,0,W,H); t+=0.018;
       const{x:mx,y:my}=mouseRef.current;
-
-      if(gridCache) ctx.drawImage(gridCache,0,0);
-
-      /* Nodes */
+      if(gridCache)ctx.drawImage(gridCache,0,0);
       for(const n of nodes){
-        const dm   = Math.hypot(n.x-mx, n.y-my);
-        const prox = Math.max(0,(200-dm)/200);
-        const pulse= 0.4+0.6*Math.abs(Math.sin(t+n.phase));
-        const alpha= 0.09+prox*0.5+pulse*0.04;
-        const r    = n.baseR*(1+prox*2.8);
-
-        /* Glow halo near cursor */
+        const dm=Math.hypot(n.x-mx,n.y-my);
+        const prox=Math.max(0,(190-dm)/190);
+        const pulse=0.4+0.6*Math.abs(Math.sin(t+n.phase));
+        const r=n.baseR*(1+prox*2.6);
         if(prox>0.05){
           const gr=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,r*5);
-          gr.addColorStop(0,`rgba(0,0,0,${prox*0.10})`);
-          gr.addColorStop(1,`rgba(0,0,0,0)`);
-          ctx.beginPath();ctx.arc(n.x,n.y,r*5,0,Math.PI*2);
-          ctx.fillStyle=gr;ctx.fill();
+          gr.addColorStop(0,`rgba(0,0,0,${prox*0.09})`);gr.addColorStop(1,"rgba(0,0,0,0)");
+          ctx.beginPath();ctx.arc(n.x,n.y,r*5,0,Math.PI*2);ctx.fillStyle=gr;ctx.fill();
         }
         ctx.beginPath();ctx.arc(n.x,n.y,r,0,Math.PI*2);
-        ctx.fillStyle=`rgba(0,0,0,${alpha})`;ctx.fill();
+        ctx.fillStyle=`rgba(0,0,0,${0.09+prox*0.48+pulse*0.04})`;ctx.fill();
       }
-
-      /* Connections — only within a fixed radius of cursor, batched */
-      const ACTIVE_DIST = 200;
-      const CONN_DIST   = GAP * 1.5;
-      ctx.lineWidth=0.45;
+      const AD=195,CD=GAP*1.5; ctx.lineWidth=0.4;
       for(let i=0;i<nodes.length;i++){
-        const a=nodes[i];
-        if(Math.hypot(a.x-mx,a.y-my)>ACTIVE_DIST) continue;
+        const a=nodes[i]; if(Math.hypot(a.x-mx,a.y-my)>AD)continue;
         for(let j=i+1;j<nodes.length;j++){
           const b=nodes[j];
-          if(Math.abs(a.x-b.x)>CONN_DIST||Math.abs(a.y-b.y)>CONN_DIST) continue;
-          const d=Math.hypot(a.x-b.x,a.y-b.y);
-          if(d>CONN_DIST) continue;
-          const near=Math.max(0,(ACTIVE_DIST-Math.min(Math.hypot(a.x-mx,a.y-my),Math.hypot(b.x-mx,b.y-my)))/ACTIVE_DIST);
+          if(Math.abs(a.x-b.x)>CD||Math.abs(a.y-b.y)>CD)continue;
+          const d=Math.hypot(a.x-b.x,a.y-b.y); if(d>CD)continue;
+          const near=Math.max(0,(AD-Math.min(Math.hypot(a.x-mx,a.y-my),Math.hypot(b.x-mx,b.y-my)))/AD);
           ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
-          ctx.strokeStyle=`rgba(0,0,0,${near*0.13})`;ctx.stroke();
+          ctx.strokeStyle=`rgba(0,0,0,${near*0.12})`;ctx.stroke();
         }
       }
       raf=requestAnimationFrame(draw);
     }
     draw();
-    return ()=>{ window.removeEventListener("resize",resize); cancelAnimationFrame(raf); };
+    return()=>{window.removeEventListener("resize",resize);cancelAnimationFrame(raf);};
   },[]);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-0" />;
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-0"/>;
 }
 
 /* ════════════════════════════════════════════════════════════
-   HUD SCROLLBAR — CSS var driven, zero React re-renders
+   HUD SCROLLBAR
 ════════════════════════════════════════════════════════════ */
 function HudScrollbar() {
   return (
     <div className="fixed right-7 top-1/2 -translate-y-1/2 z-[9000] pointer-events-none"
-      style={{ display:"flex", flexDirection:"column", alignItems:"flex-end", gap:10, height:280 }}>
-
-      <span style={{ fontFamily:"'DM Mono',monospace", fontSize:7, letterSpacing:"0.4em", textTransform:"uppercase",
-        color:"rgba(160,160,160,0.45)", marginBottom:4 }}>01</span>
-
-      {/* Track */}
-      <div style={{ width:1, flex:1, background:"rgba(150,150,150,0.18)", position:"relative", overflow:"hidden" }}>
-        {/* Fill — driven by CSS variable set on document root */}
-        <div style={{ position:"absolute", top:0, left:0, width:"100%", height:"100%",
-          background:"linear-gradient(to bottom, rgba(190,190,190,0.5), rgba(255,255,255,0.85))",
-          transformOrigin:"top", transform:"scaleY(var(--scroll-total,0))",
-          transition:"transform 0.05s linear" }} />
+      style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:10,height:300}}>
+      <span style={{fontFamily:"'DM Mono',monospace",fontSize:7,letterSpacing:"0.4em",textTransform:"uppercase",color:"rgba(160,160,160,0.45)",marginBottom:4}}>01</span>
+      <div style={{width:1,flex:1,background:"rgba(150,150,150,0.16)",position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",top:0,left:0,width:"100%",height:"100%",
+          background:"linear-gradient(to bottom,rgba(180,180,180,0.45),rgba(255,255,255,0.8))",
+          transformOrigin:"top",transform:"scaleY(var(--scroll-total,0))",transition:"transform 0.06s linear"}}/>
       </div>
-
-      {/* Dot indicator */}
-      <div className="hud-dot" style={{ width:3, height:3, borderRadius:"50%", background:"rgba(200,200,200,0.6)" }} />
-
-      <span style={{ fontFamily:"'DM Mono',monospace", fontSize:7, letterSpacing:"0.4em", textTransform:"uppercase",
-        color:"rgba(160,160,160,0.45)", marginTop:4 }}>02</span>
+      <div className="hud-dot" style={{width:3,height:3,borderRadius:"50%",background:"rgba(200,200,200,0.55)"}}/>
+      <span style={{fontFamily:"'DM Mono',monospace",fontSize:7,letterSpacing:"0.4em",textTransform:"uppercase",color:"rgba(160,160,160,0.45)",marginTop:4}}>03</span>
     </div>
   );
 }
 
-/* ════════════════════════════════════════════════════════════
-   SLIDE 2 — WHITE EDITORIAL with staggered reveal animations
-════════════════════════════════════════════════════════════ */
-function SlideTwo() {
-  const refs = useRef<(HTMLElement|null)[]>([]);
 
+/* ════════════════════════════════════════════════════════════
+   SCENE 2 — WHITE (Restored Content + 5vh Limit Math)
+════════════════════════════════════════════════════════════ */
+function SceneTwo() {
+  const deckRef = useRef<HTMLDivElement>(null);
+
+  // 1. THE 5VH "GREEN SIGNAL" MATH ENGINE
   useEffect(() => {
-    const obs = new IntersectionObserver(
-      entries => entries.forEach(e => {
-        if(e.isIntersecting) (e.target as HTMLElement).classList.add("in-view");
-      }),
-      { threshold:0.08, rootMargin:"0px 0px -40px 0px" }
-    );
-    refs.current.forEach(el => { if(el) obs.observe(el); });
-    return () => obs.disconnect();
+    const scrollParent = deckRef.current?.closest('.overflow-y-auto') || window;
+
+    const onScroll = () => {
+      if (!deckRef.current) return;
+      
+      const vh = window.innerHeight;
+      const rect = deckRef.current.getBoundingClientRect();
+      
+      const TICKER_H = 44;
+      const TITLE_OFFSET = 90; 
+      const CARD_H = Math.max(vh * 0.70, 550); 
+      const SAFE_BOTTOM = vh * 0.95; // EXACTLY 5vh away from the bottom of the screen
+
+      const scrolledPast = Math.max(0, TICKER_H - rect.top);
+      const SPACING = CARD_H + (vh * 0.10); 
+      const t = scrolledPast / SPACING; 
+
+      const maxShift = (idx: number) => Math.max(0, TICKER_H + idx * TITLE_OFFSET + CARD_H - SAFE_BOTTOM);
+
+      const i = Math.floor(t);
+      const frac = t - i;
+
+      let shift = 0;
+      if (i >= 0) {
+        const currentShift = maxShift(i);
+        const nextShift = maxShift(i + 1);
+        shift = currentShift + (nextShift - currentShift) * frac;
+      }
+
+      deckRef.current.style.setProperty('--stack-shift', `${Math.max(0, shift)}px`);
+    };
+
+    scrollParent.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    onScroll(); 
+
+    return () => {
+      scrollParent.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
-  const ref = (i:number) => (el:HTMLElement|null) => { refs.current[i]=el; };
-
   const projects = [
-    { num:"01", title:"NeuralCommerce", tags:["Next.js","Node.js","ML"],     desc:"AI-driven e-commerce engine with real-time personalisation at scale.", year:"2024" },
-    { num:"02", title:"ArchitectOS",    tags:["React","WebGL","Three.js"],   desc:"3D building visualisation platform used by 40+ architectural firms.",  year:"2024" },
-    { num:"03", title:"PulseFinance",   tags:["MERN","WebSockets","Redis"],  desc:"Live trading dashboard processing 50k+ events per second.",            year:"2023" },
+    { num: "01", title: "Finalist", tags: ["Next.js", "WebGL", "Algorithms"], desc: "Advanced workspace for software engineers to practice coding algorithms with a high-performance UI.", link: "#" },
+    { num: "02", title: "Imagination", tags: ["React", "E-Commerce", "Animations"], desc: "An experiential gifting platform curating bespoke, premium presents through seamless cinematic interactions.", link: "#" },
+    { num: "03", title: "Formatter.AI", tags: ["Python", "React", "Automation"], desc: "Intelligent code management engine handling indentation, deduplication, and syntax formatting.", link: "#" },
+    { num: "04", title: "NeuralCommerce", tags: ["Node.js", "ML", "PostgreSQL"], desc: "AI-driven e-commerce engine with real-time personalisation at scale.", link: "#" },
   ];
-  const skills = [
-    { cat:"Frontend",  items:["React / Next.js","TypeScript","Three.js","WebGL","Framer Motion"] },
-    { cat:"Backend",   items:["Node.js","PostgreSQL","Redis","GraphQL","REST APIs"] },
-    { cat:"Toolchain", items:["Figma","Canvas API","GSAP","Docker","Vercel"] },
-  ];
-  const ticker = ["Full-Stack Engineering","Interactive Interfaces","Real-Time Systems","3D Web Experiences","Performance Architecture"];
+
+  const ticker = ["Full-Stack Engineering", "Interactive Interfaces", "Real-Time Systems", "3D Web Experiences", "Performance Architecture"];
 
   return (
-    <div className="relative w-full min-h-screen overflow-hidden bg-[#F6F6F6]">
-      <NodeGrid />
+    <div className="relative w-full min-h-screen overflow-x-clip pb-32" style={{
+      background: "radial-gradient(circle at 50% 0%, #FFFFFF 0%, #EBEBEB 100%)",
+      backgroundColor: "#FFFFFF"
+    }}>
+      
+      {/* Interactive Node Background */}
+      <NodeGrid/>
+      
+      {/* Tactile CSS Film Grain */}
+      <div className="absolute inset-0 pointer-events-none z-[5] animate-grain" style={{
+         opacity: 0.02,
+         backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+         backgroundSize: "200px 200px"
+      }}/>
 
-      {/* Top inner shadow */}
-      <div className="absolute top-0 left-0 right-0 h-14 pointer-events-none z-[10]"
-        style={{ background:"linear-gradient(to bottom, rgba(0,0,0,0.06) 0%, transparent 100%)" }} />
-
-      {/* Corner vignette */}
-      <div className="absolute inset-0 pointer-events-none z-[5]"
-        style={{ background:"radial-gradient(ellipse 92% 92% at 50% 50%, transparent 62%, rgba(175,175,175,0.26) 100%)" }} />
-
-      {/* ── Ticker ───────────────────────────────────── */}
-      <div className="relative z-[20] overflow-hidden" style={{ borderBottom:"1px solid rgba(0,0,0,0.07)", padding:"13px 0" }}>
-        <div className="ticker-inner">
-          {[...ticker,...ticker].map((item,i)=>(
-            <span key={i} style={{ fontFamily:"'DM Mono',monospace", fontSize:8.5, letterSpacing:"0.52em",
-              textTransform:"uppercase", color:"rgba(0,0,0,0.22)", padding:"0 44px" }}>
-              {item}<span style={{ marginLeft:44, color:"rgba(0,0,0,0.1)" }}>◆</span>
+      {/* ── STICKY TICKER STRIP ── */}
+      <div className="sticky top-0 left-0 w-full z-[100] bg-[#F5F5F5]/80 backdrop-blur-md" 
+           style={{ borderBottom: "1px solid rgba(0,0,0,0.08)", height: 44, display: "flex", alignItems: "center", overflow: "hidden" }}>
+        <div className="ticker-inner flex whitespace-nowrap">
+          {[...ticker, ...ticker].map((item, i) => (
+            <span key={i} style={{ fontFamily: "'DM Mono',monospace", fontSize: 8.5, fontWeight: 600, letterSpacing: "0.48em", textTransform: "uppercase", color: "#22222291", padding: "0 44px" }}>
+              {item}<span style={{ marginLeft: 44, color: "#22222291", fontSize: 6.5 }}>●</span>
             </span>
           ))}
         </div>
       </div>
 
-      <div className="relative z-[20] max-w-[1180px] mx-auto px-12 pt-20 pb-28">
-
-        {/* ── Header: left slides in, right slides in from opposite ── */}
-        <div className="mb-20">
-          <div ref={ref(0) as (el:HTMLDivElement|null)=>void} className="s2-left flex items-center gap-4 mb-7" style={{ transitionDelay:"0ms" }}>
-            <div style={{ width:32, height:1, background:"rgba(0,0,0,0.18)" }} />
-            <p style={{ fontFamily:"'DM Mono',monospace", fontSize:8.5, letterSpacing:"0.6em",
-              textTransform:"uppercase", color:"rgba(0,0,0,0.32)" }}>Selected Work</p>
+      <div className="relative z-[20] max-w-[1440px] mx-auto px-6 md:px-12 pt-16">
+        
+        {/* Header Section (FIXED: Removed opacity-hiding animation classes) */}
+        <div className="mb-24">
+          <div className="flex items-center gap-4 mb-7">
+            <div style={{ width: 32, height: 1, background: "rgba(0,0,0,0.4)" }}/>
+            <p style={{ fontFamily: "'DM Mono',monospace", fontSize: 9, fontWeight: 500, letterSpacing: "0.6em", textTransform: "uppercase", color: "#000000" }}>Selected Work</p>
           </div>
-
           <div className="flex items-end justify-between gap-8 flex-wrap">
-            <h2 ref={ref(1) as (el:HTMLDivElement|null)=>void} className="s2-reveal"
-              style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:"clamp(64px,7.5vw,112px)",
-                lineHeight:0.88, color:"#0A0A0A", letterSpacing:"0.015em", transitionDelay:"80ms" }}>
-              WHAT I<br />
-              <span style={{ color:"transparent", WebkitTextStroke:"1.5px rgba(0,0,0,0.2)" }}>BUILD.</span>
+            <h2 style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: "clamp(60px,8vw,120px)", lineHeight: 0.85, color: "#080808", letterSpacing: "0.015em" }}>
+              WHAT I<br/><span style={{ color: "transparent", WebkitTextStroke: "1.5px rgba(0,0,0,0.25)" }}>BUILD.</span>
             </h2>
-            <p ref={ref(2) as (el:HTMLDivElement|null)=>void} className="s2-right"
-              style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(14px,1.3vw,18px)",
-                fontStyle:"italic", fontWeight:300, lineHeight:1.9, color:"rgba(0,0,0,0.45)",
-                maxWidth:310, borderLeft:"1px solid rgba(0,0,0,0.1)", paddingLeft:22, transitionDelay:"120ms" }}>
-              Full-stack engineering across MERN, real-time systems, and cinematic web experiences.
+            <p style={{ fontFamily: "'Cormorant Garamond',Georgia,serif", fontSize: "clamp(15px,1.4vw,20px)", fontStyle: "italic", fontWeight: 400, lineHeight: 1.8, color: "rgba(0,0,0,0.7)", maxWidth: 320, borderLeft: "1px solid rgba(0,0,0,0.15)", paddingLeft: 24 }}>
+              Engineering robust platforms and cinematic web experiences.
             </p>
           </div>
         </div>
 
-        {/* ── Project rows — alternate left/right slide-in ── */}
-        <div className="flex flex-col">
-          {projects.map((p,i)=>(
-            <div key={p.num} ref={ref(i+3) as (el:HTMLDivElement|null)=>void}
-              data-cursor-dark
-              className={`${i%2===0?"s2-left":"s2-right"} proj-row`}
-              style={{ transitionDelay:`${i*110}ms`, borderTop:"1px solid rgba(0,0,0,0.08)",
-                padding:"34px 0", display:"grid", gridTemplateColumns:"64px 1fr 220px 52px",
-                alignItems:"center", gap:"28px" }}>
-              <span style={{ fontFamily:"'DM Mono',monospace", fontSize:9.5, letterSpacing:"0.35em", color:"rgba(0,0,0,0.18)" }}>{p.num}</span>
-              <div>
-                <h3 style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:"clamp(32px,3.8vw,56px)",
-                  letterSpacing:"0.02em", color:"#080808", lineHeight:1, marginBottom:7 }}>{p.title}</h3>
-                <p style={{ fontFamily:"'DM Mono',monospace", fontSize:11, color:"rgba(0,0,0,0.38)", letterSpacing:"0.03em" }}>{p.desc}</p>
+        {/* ── THE 5VH MATH CATERPILLAR DECK ── */}
+        <div ref={deckRef} className="relative w-full flex flex-col gap-[10vh] pb-[40vh]" style={{ "--stack-shift": "0px" } as React.CSSProperties}>
+          
+          {projects.map((p, i) => (
+            <div key={p.num}
+              className="sticky w-full flex flex-col"
+              style={{
+                top: `calc(44px + ${i * 90}px - var(--stack-shift, 0px))`,
+                height: "70vh", 
+                minHeight: "550px", 
+                background: "#0A0A0C", 
+                borderRadius: "32px",
+                border: "1px solid rgba(255,255,255,0.08)",
+                boxShadow: "0 -20px 50px rgba(0,0,0,0.5)",
+                padding: "32px", 
+                zIndex: i + 1, 
+              }}>
+              
+              {/* ── TOP SECTION: Title, Links, Desc ── */}
+              <div className="flex flex-col shrink-0 mb-6">
+                <div className="flex justify-between items-center h-[58px] mb-2">
+                  <div className="flex items-center gap-6">
+                    <span style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 52, color: "rgba(255,255,255,0.9)", lineHeight: 0.8 }}>{p.num}</span>
+                    <h3 style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: "clamp(32px,3vw,48px)", letterSpacing: "0.04em", color: "#FFFFFF", lineHeight: 0.9 }}>{p.title}</h3>
+                  </div>
+                  <div className="flex gap-4">
+                    <button data-cursor-expand style={{ fontFamily: "'DM Mono',monospace", fontSize: 8.5, letterSpacing: "0.2em", textTransform: "uppercase", padding: "10px 20px", border: "1px solid rgba(255,255,255,0.2)", color: "#FFF", borderRadius: "100px", background: "transparent", transition: "background 0.3s" }}
+                      onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.05)")} onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>GITHUB</button>
+                    <button data-cursor-expand style={{ fontFamily: "'DM Mono',monospace", fontSize: 8.5, letterSpacing: "0.2em", textTransform: "uppercase", padding: "10px 20px", border: "1px solid transparent", color: "#0A0A0C", borderRadius: "100px", background: "#FFF", transition: "transform 0.2s" }}
+                      onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.03)")} onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}>LIVE</button>
+                  </div>
+                </div>
+
+                <p style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, lineHeight: 1.6, color: "rgba(255,255,255,0.45)", letterSpacing: "0.03em", maxWidth: "60%", marginLeft: "78px" }}>
+                  {p.desc}
+                </p>
               </div>
-              <div className="flex flex-wrap gap-2">
-                {p.tags.map(tag=>(<span key={tag} style={{ fontFamily:"'DM Mono',monospace", fontSize:8,
-                  letterSpacing:"0.3em", textTransform:"uppercase", padding:"5px 11px",
-                  border:"1px solid rgba(0,0,0,0.13)", color:"rgba(0,0,0,0.4)" }}>{tag}</span>))}
+
+              {/* ── BOTTOM SECTION: 70/30 Split ── */}
+              <div className="flex gap-6 w-full flex-1 min-h-0">
+                
+                {/* LEFT: 70% Media Preview with Auto-Image Paths */}
+                <div className="relative w-[70%] h-full rounded-[20px] overflow-hidden bg-[#121214] border border-[rgba(255,255,255,0.04)] flex items-center justify-center group" data-cursor-dark>
+                  <img src={`/project${i + 1}.png`} alt={p.title} className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700 z-10" />
+                  <div className="absolute inset-0 flex items-center justify-center z-0 pointer-events-none">
+                     <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, letterSpacing: "0.4em", color: "rgba(255,255,255,0.2)", textTransform: "uppercase" }}>
+                       {"// project" + (i + 1) + ".png"}
+                     </span>
+                  </div>
+                  <div className="absolute inset-0 pointer-events-none rounded-[20px] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)] z-20" />
+                </div>
+
+                {/* RIGHT: 30% Information Panel */}
+                <div className="w-[30%] h-full bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.04)] rounded-[20px] p-6 flex flex-col gap-6 overflow-y-auto" style={{ scrollbarWidth: "none" }}>
+                  <div>
+                    <p style={{ fontFamily: "'DM Mono',monospace", fontSize: 8, letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 12 }}>Tech Architecture</p>
+                    <div className="flex flex-wrap gap-2">
+                      {p.tags.map(tag => (
+                        <span key={tag} style={{ fontFamily: "'DM Mono',monospace", fontSize: 8.5, letterSpacing: "0.1em", padding: "6px 12px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.7)", borderRadius: "6px" }}>{tag}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div style={{ width: "100%", height: "1px", background: "rgba(255,255,255,0.05)" }}/>
+                  <div className="flex-1">
+                    <p style={{ fontFamily: "'DM Mono',monospace", fontSize: 8, letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 12 }}>Core Functionality</p>
+                    <ul className="flex flex-col gap-3">
+                      {["Real-time data synchronization", "JWT Authentication Flow", "Optimized WebGL Rendering", "Responsive Fluid Layouts"].map((feature, idx) => (
+                        <li key={idx} className="flex items-start gap-3">
+                          <div className="shrink-0" style={{ width: 4, height: 4, borderRadius: "50%", background: "rgba(255,255,255,0.4)", marginTop: 6 }} />
+                          <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 10, color: "rgba(255,255,255,0.55)", lineHeight: 1.4 }}>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
               </div>
-              <span style={{ fontFamily:"'DM Mono',monospace", fontSize:9, letterSpacing:"0.18em",
-                color:"rgba(0,0,0,0.16)", textAlign:"right" }}>{p.year}</span>
             </div>
           ))}
-          <div style={{ borderTop:"1px solid rgba(0,0,0,0.08)" }} />
         </div>
 
-        {/* ── Skills — scale-in with stagger ── */}
-        <div ref={ref(6) as (el:HTMLDivElement|null)=>void} className="s2-scale mt-24 mb-24" style={{ transitionDelay:"60ms" }}>
+      </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════
+   SCENE 3 — DEEP CHARCOAL (Skills + Certifications)
+════════════════════════════════════════════════════════════ */
+function SceneThree() {
+  const refs = useRef<(HTMLElement|null)[]>([]);
+  useEffect(()=>{
+    const obs=new IntersectionObserver(
+      entries=>entries.forEach(e=>{if(e.isIntersecting)(e.target as HTMLElement).classList.add("in-view");}),
+      {threshold:0.07,rootMargin:"0px 0px -40px 0px"}
+    );
+    refs.current.forEach(el=>{if(el)obs.observe(el);});
+    return()=>obs.disconnect();
+  },[]);
+  const ref=(i:number)=>(el:HTMLElement|null)=>{refs.current[i]=el;};
+
+  const skills=[
+    {cat:"Frontend",  pct:92, items:["React / Next.js","TypeScript","Three.js","WebGL","GSAP"]},
+    {cat:"Backend",   pct:85, items:["Node.js","PostgreSQL","Redis","GraphQL","REST"]},
+    {cat:"Toolchain", pct:78, items:["Docker","Vercel","AWS","Figma","CI/CD"]},
+    {cat:"Creative",  pct:80, items:["Canvas API","WebGL Shaders","Framer Motion","GSAP"]},
+  ];
+  const certs=[
+    {name:"Meta Front-End Developer",  issuer:"Meta / Coursera",     year:"2024",badge:"MF"},
+    {name:"AWS Cloud Practitioner",    issuer:"Amazon Web Services",  year:"2023",badge:"AW"},
+    {name:"Google UX Design",          issuer:"Google / Coursera",    year:"2023",badge:"GU"},
+    {name:"MongoDB Developer Path",    issuer:"MongoDB University",   year:"2022",badge:"MG"},
+  ];
+  const tickerItems=["React","Next.js","TypeScript","Node.js","PostgreSQL","Redis","WebGL","Three.js","Docker","GraphQL","AWS","Figma"];
+
+  return (
+    <div className="relative w-full overflow-hidden min-h-screen" style={{background:"#111318"}}>
+      <div className="absolute inset-0 pointer-events-none" style={{
+        backgroundImage:`repeating-linear-gradient(-45deg,transparent 0,transparent 38px,rgba(255,255,255,0.007) 38px,rgba(255,255,255,0.007) 39px)`,
+      }}/>
+      <div className="absolute inset-0 pointer-events-none" style={{
+        background:"radial-gradient(ellipse 80% 55% at 50% 0%,rgba(255,255,255,0.018) 0%,transparent 65%)",
+      }}/>
+
+      <div className="relative overflow-hidden" style={{borderBottom:"1px solid rgba(255,255,255,0.06)",padding:"13px 0"}}>
+        <div className="ticker-rev">
+          {[...tickerItems,...tickerItems,...tickerItems,...tickerItems].map((item,i)=>(
+            <span key={i} style={{fontFamily:"'DM Mono',monospace",fontSize:8.5,letterSpacing:"0.52em",textTransform:"uppercase",color:"rgba(255,255,255,0.16)",padding:"0 36px"}}>
+              {item}<span style={{marginLeft:36,color:"rgba(255,255,255,0.07)"}}>◆</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div className="relative max-w-[1180px] mx-auto px-12 pt-20 pb-24">
+        <div ref={ref(0) as (el:HTMLDivElement|null)=>void} className="s3-left mb-20">
           <div className="flex items-center gap-4 mb-12">
-            <div style={{ width:32, height:1, background:"rgba(0,0,0,0.18)" }} />
-            <p style={{ fontFamily:"'DM Mono',monospace", fontSize:8.5, letterSpacing:"0.6em",
-              textTransform:"uppercase", color:"rgba(0,0,0,0.32)" }}>Skills &amp; Stack</p>
+            <div style={{width:32,height:1,background:"rgba(255,255,255,0.15)"}}/>
+            <p style={{fontFamily:"'DM Mono',monospace",fontSize:8.5,letterSpacing:"0.6em",textTransform:"uppercase",color:"rgba(255,255,255,0.3)"}}>Skills &amp; Stack</p>
           </div>
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)" }}>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:"40px 60px"}}>
             {skills.map((s,si)=>(
-              <div key={s.cat} ref={ref(7+si) as (el:HTMLDivElement|null)=>void}
-                data-cursor-dark
-                className="s2-reveal"
-                style={{ transitionDelay:`${si*120}ms`, borderLeft:si>0?"1px solid rgba(0,0,0,0.08)":"none",
-                  paddingLeft:si>0?34:0, paddingRight:34 }}>
-                <p style={{ fontFamily:"'DM Mono',monospace", fontSize:8.5, letterSpacing:"0.46em",
-                  textTransform:"uppercase", color:"rgba(0,0,0,0.26)", marginBottom:16 }}>{s.cat}</p>
-                <div className="flex flex-col gap-[5px]">
-                  {s.items.map(item=>(<span key={item} style={{ fontFamily:"'Bebas Neue',sans-serif",
-                    fontSize:24, letterSpacing:"0.025em", color:"#080808", lineHeight:1.18 }}>{item}</span>))}
+              <div key={s.cat} ref={ref(si+1) as (el:HTMLDivElement|null)=>void} className="s3-reveal" style={{transitionDelay:`${si*90}ms`}}>
+                <div className="flex items-center justify-between mb-3">
+                  <span style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:22,letterSpacing:"0.04em",color:"rgba(228,228,234,0.85)"}}>{s.cat}</span>
+                  <span style={{fontFamily:"'DM Mono',monospace",fontSize:9,letterSpacing:"0.25em",color:"rgba(175,175,185,0.5)"}}>{s.pct}%</span>
+                </div>
+                <div style={{height:1,background:"rgba(255,255,255,0.08)",marginBottom:12,position:"relative"}}>
+                  <div className="skill-bar" style={{position:"absolute",top:0,left:0,height:"100%",width:`${s.pct}%`,background:"linear-gradient(to right,rgba(175,175,185,0.5),rgba(228,228,238,0.9))",animationDelay:`${0.5+si*0.15}s`}}/>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {s.items.map(item=>(
+                    <span key={item} data-cursor-expand
+                      style={{fontFamily:"'DM Mono',monospace",fontSize:8.5,letterSpacing:"0.25em",padding:"4px 10px",border:"1px solid rgba(255,255,255,0.1)",color:"rgba(195,195,208,0.65)",transition:"border-color 0.25s,color 0.25s"}}
+                      onMouseEnter={e=>{const el=e.currentTarget as HTMLElement;el.style.borderColor="rgba(200,200,210,0.38)";el.style.color="rgba(228,228,238,0.9)";}}
+                      onMouseLeave={e=>{const el=e.currentTarget as HTMLElement;el.style.borderColor="rgba(255,255,255,0.1)";el.style.color="rgba(195,195,208,0.65)";}}
+                    >{item}</span>
+                  ))}
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* ── CTA — reveal up ── */}
-        <div ref={ref(10) as (el:HTMLDivElement|null)=>void} className="s2-reveal"
-          style={{ transitionDelay:"0ms", borderTop:"1px solid rgba(0,0,0,0.08)", paddingTop:48 }}>
-          <div className="flex items-end justify-between flex-wrap gap-8">
-            <div>
-              <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(13px,1.1vw,16px)",
-                fontStyle:"italic", fontWeight:300, color:"rgba(0,0,0,0.35)", marginBottom:18, letterSpacing:"0.04em" }}>
-                "The best interface is no interface."
-              </p>
-              <p style={{ fontFamily:"'DM Mono',monospace", fontSize:8.5, letterSpacing:"0.52em",
-                textTransform:"uppercase", color:"rgba(0,0,0,0.26)", marginBottom:14 }}>Currently available</p>
-              <p style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:"clamp(22px,2.8vw,40px)",
-                color:"#080808", letterSpacing:"0.03em" }}>LET&apos;S BUILD SOMETHING EXTRAORDINARY.</p>
-            </div>
-            <div className="flex gap-4">
-              {[
-                { label:"Get in Touch", fill:"#080808", color:"#F6F6F6", hf:"#1e1e1e" },
-                { label:"Download CV",  fill:"transparent", color:"#080808", hf:"rgba(0,0,0,0.05)" },
-              ].map(btn=>(
-                <button key={btn.label} data-cursor-dark style={{
-                  fontFamily:"'DM Mono',monospace", fontSize:8.5, letterSpacing:"0.32em",
-                  textTransform:"uppercase", padding:"15px 30px", background:btn.fill, color:btn.color,
-                  border:btn.fill==="transparent"?"1px solid rgba(0,0,0,0.18)":"none", transition:"background 0.3s, transform 0.2s",
-                }}
-                  onMouseEnter={e=>{ const b=e.currentTarget as HTMLButtonElement; b.style.background=btn.hf; b.style.transform="translateY(-1px)"; }}
-                  onMouseLeave={e=>{ const b=e.currentTarget as HTMLButtonElement; b.style.background=btn.fill; b.style.transform="translateY(0)"; }}
-                >{btn.label}</button>
-              ))}
-            </div>
+        <div style={{height:1,background:"linear-gradient(to right,transparent,rgba(255,255,255,0.1),transparent)",marginBottom:52}}/>
+
+        <div ref={ref(5) as (el:HTMLDivElement|null)=>void} className="s3-left">
+          <div className="flex items-center gap-4 mb-12">
+            <div style={{width:32,height:1,background:"rgba(255,255,255,0.15)"}}/>
+            <p style={{fontFamily:"'DM Mono',monospace",fontSize:8.5,letterSpacing:"0.6em",textTransform:"uppercase",color:"rgba(255,255,255,0.3)"}}>Certifications</p>
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:16}}>
+            {certs.map((c,ci)=>(
+              <div key={c.name} ref={ref(ci+6) as (el:HTMLDivElement|null)=>void}
+                data-cursor-expand className="s3-reveal cert-card"
+                style={{transitionDelay:`${ci*80}ms`,display:"flex",alignItems:"center",gap:18,padding:"20px 22px",border:"1px solid rgba(255,255,255,0.07)",background:"rgba(255,255,255,0.018)"}}>
+                <div style={{width:44,height:44,flexShrink:0,border:"1px solid rgba(255,255,255,0.12)",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Bebas Neue',sans-serif",fontSize:15,letterSpacing:"0.06em",color:"rgba(198,198,210,0.7)"}}>
+                  {c.badge}
+                </div>
+                <div>
+                  <p style={{fontFamily:"'DM Mono',monospace",fontSize:10.5,color:"rgba(218,218,228,0.82)",letterSpacing:"0.03em",marginBottom:4}}>{c.name}</p>
+                  <p style={{fontFamily:"'DM Mono',monospace",fontSize:8.5,color:"rgba(155,155,168,0.5)",letterSpacing:"0.25em",textTransform:"uppercase"}}>{c.issuer} · {c.year}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* ── Footer ── */}
-        <div ref={ref(11) as (el:HTMLDivElement|null)=>void} className="s2-reveal mt-20 flex justify-between items-center"
-          style={{ transitionDelay:"100ms", borderTop:"1px solid rgba(0,0,0,0.06)", paddingTop:22 }}>
-          <span style={{ fontFamily:"'DM Mono',monospace", fontSize:8.5, letterSpacing:"0.38em",
-            textTransform:"uppercase", color:"rgba(0,0,0,0.18)" }}>Rupesh Agarwal © 2025</span>
-          <span style={{ fontFamily:"'DM Mono',monospace", fontSize:8.5, letterSpacing:"0.38em",
-            textTransform:"uppercase", color:"rgba(0,0,0,0.18)" }}>Full-Stack Engineer — India</span>
+        <div ref={ref(10) as (el:HTMLDivElement|null)=>void} className="s3-reveal mt-20 flex justify-between items-center"
+          style={{transitionDelay:"80ms",borderTop:"1px solid rgba(255,255,255,0.05)",paddingTop:22}}>
+          <span style={{fontFamily:"'DM Mono',monospace",fontSize:8.5,letterSpacing:"0.38em",textTransform:"uppercase",color:"rgba(255,255,255,0.14)"}}>Rupesh Agarwal © 2025</span>
+          <span style={{fontFamily:"'DM Mono',monospace",fontSize:8.5,letterSpacing:"0.38em",textTransform:"uppercase",color:"rgba(255,255,255,0.14)"}}>Full-Stack Engineer — India</span>
         </div>
-
       </div>
     </div>
   );
 }
 
 /* ════════════════════════════════════════════════════════════
-   IST CLOCK — hydration safe (empty initial state)
+   IST CLOCK
 ════════════════════════════════════════════════════════════ */
 function useClock() {
   const [t, setT] = useState("");
-  useEffect(() => {
-    const tick = () => {
-      const now = new Date(new Date().toLocaleString("en-US",{ timeZone:"Asia/Kolkata" }));
+  useEffect(()=>{
+    const tick=()=>{
+      const now=new Date(new Date().toLocaleString("en-US",{timeZone:"Asia/Kolkata"}));
       setT(`${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}:${String(now.getSeconds()).padStart(2,"0")}`);
     };
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, []);
+    tick(); const id=setInterval(tick,1000); return()=>clearInterval(id);
+  },[]);
   return t;
 }
 
 /* ════════════════════════════════════════════════════════════
-   ROOT PAGE
-   Architecture:
-   • Slide 1 is `sticky top-0` — it pins behind Slide 2 as you scroll.
-   • Slide 2 glides over it naturally with native scroll (no React state updates).
-   • CSS custom properties (--scroll-vh, --scroll-total) are set on <html>
-     by a passive scroll listener — ZERO React re-renders on scroll.
-   • The hero content fades & lifts using CSS calc() on those vars.
+   ROOT PAGE — STICKY CURTAIN SNAP ARCHITECTURE
+════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════
+   ROOT PAGE — CUSTOM JS SCROLL ENGINE
 ════════════════════════════════════════════════════════════ */
 export default function Home() {
   const clock = useClock();
 
-  /* ── Zero-render scroll driver ─────────────────────── */
+  // 0 = Black Scene, 1 = White Scene, 2 = Charcoal Scene
+  const [activeScene, setActiveScene] = useState(0); 
+  const isAnimating = useRef(false);
+  const s1Ref = useRef<HTMLDivElement>(null); // White scroll container
+  const s2Ref = useRef<HTMLDivElement>(null); // Charcoal scroll container
+
+  // The Custom Wheel Engine
   useEffect(() => {
-    const update = () => {
-      const sy  = window.scrollY;
-      const vh  = window.innerHeight;
-      const dh  = document.documentElement.scrollHeight - vh;
-      document.documentElement.style.setProperty("--scroll-vh",    String(Math.min(sy / vh, 1)));
-      document.documentElement.style.setProperty("--scroll-total", String(dh > 0 ? sy / dh : 0));
+    const handleWheel = (e: WheelEvent) => {
+      // 1. If an animation is currently happening, block all scrolling
+      if (isAnimating.current) {
+        e.preventDefault();
+        return;
+      }
+
+      // 2. We are on the Black Scene
+      if (activeScene === 0) {
+        if (e.deltaY > 15) { // Scroll Down
+          e.preventDefault();
+          transitionTo(1);
+        }
+      } 
+      // 3. We are on the White Scene
+      else if (activeScene === 1) {
+        const el = s1Ref.current;
+        if (!el) return;
+        
+        const atTop = el.scrollTop <= 0;
+        const atBottom = Math.ceil(el.scrollTop + el.clientHeight) >= el.scrollHeight - 5;
+
+        // If at the top and scrolling up -> Go to Black Scene
+        if (e.deltaY < -15 && atTop) {
+          e.preventDefault();
+          transitionTo(0);
+        } 
+        // If at the bottom and scrolling down -> Go to Charcoal Scene
+        else if (e.deltaY > 15 && atBottom) {
+          e.preventDefault();
+          transitionTo(2);
+        }
+        // Otherwise, allow normal scrolling inside the white scene
+      } 
+      // 4. We are on the Charcoal Scene
+      else if (activeScene === 2) {
+        const el = s2Ref.current;
+        if (!el) return;
+        
+        const atTop = el.scrollTop <= 0;
+        // If at the top and scrolling up -> Go back to White Scene
+        if (e.deltaY < -15 && atTop) {
+          e.preventDefault();
+          transitionTo(1);
+        }
+      }
     };
-    window.addEventListener("scroll", update, { passive:true });
-    update();
-    return () => window.removeEventListener("scroll", update);
-  }, []);
+
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    return () => window.removeEventListener("wheel", handleWheel);
+  }, [activeScene]);
+
+  // Handle the single-flow lock
+  const transitionTo = (sceneIndex: number) => {
+    isAnimating.current = true;
+    setActiveScene(sceneIndex);
+    // Lock the screen for exactly 1 second while the CSS transition plays out
+    setTimeout(() => {
+      isAnimating.current = false;
+    }, 1000); 
+  };
 
   return (
     <>
-      <PrecisionCursor />
-      <HudScrollbar />
+      <PrecisionCursor/>
+      <HudScrollbar/>
 
-      <div className="relative w-full bg-[#040404]">
+      <div className="relative w-screen h-screen overflow-hidden bg-[#050505]">
 
-        {/* ══ SLIDE 1 — pinned hero ══════════════════════════ */}
-        <div className="sticky top-0 h-screen w-full overflow-hidden z-0">
-
-          {/* Fade + lift using CSS vars — NO React state */}
-          <div className="absolute inset-0"
-            style={{ opacity:"calc(1 - var(--scroll-vh,0) * 2.2)",
-                     transform:"translateY(calc(var(--scroll-vh,0) * -55px))",
-                     willChange:"transform,opacity" }}>
-
-            <BackgroundStage />
-
-            {/* NAV */}
-            <nav className="absolute top-0 left-0 w-full z-[100] flex justify-between items-center px-12 py-9"
-              style={{ borderBottom:"1px solid rgba(175,175,175,0.05)" }}>
-              <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:21, letterSpacing:"0.18em", color:"#DEDEDE" }}>
-                RA.
-              </div>
-              <div className="flex gap-10" style={{ fontFamily:"'DM Mono',monospace", fontSize:8.5, letterSpacing:"0.48em", textTransform:"uppercase" }}>
-                {["Architecture","Projects","Contact"].map(n=>(
-                  <span key={n} data-cursor-expand
-                    style={{ color:"rgba(195,195,195,0.36)", transition:"color 0.25s" }}
-                    onMouseEnter={e=>{ (e.currentTarget as HTMLElement).style.color="rgba(225,225,225,0.88)"; }}
-                    onMouseLeave={e=>{ (e.currentTarget as HTMLElement).style.color="rgba(195,195,195,0.36)"; }}
-                  >{n}</span>
-                ))}
-              </div>
-              <div className="flex items-center gap-2"
-                style={{ fontFamily:"'DM Mono',monospace", fontSize:8.5, letterSpacing:"0.3em",
-                  textTransform:"uppercase", color:"rgba(195,195,195,0.28)" }}>
-                <div className="animate-status" style={{ width:5, height:5, borderRadius:"50%", background:"#8A8A8A" }} />
-                Open to work
-              </div>
-            </nav>
-
-            {/* HERO GRID */}
-            <div className="flex h-full w-full items-center px-10 md:px-24 pt-16">
-
-              {/* LEFT */}
-              <div className="w-full md:w-1/2 flex flex-col justify-center">
-                <div className="animate-fade-rise flex items-center gap-4 mb-7">
-                  <div style={{ width:35, height:1, background:"rgba(195,195,195,0.2)" }} />
-                  <p style={{ fontFamily:"'DM Mono',monospace", fontSize:8.5, letterSpacing:"0.56em",
-                    textTransform:"uppercase", color:"rgba(195,195,195,0.36)" }}>Full-Stack Engineer</p>
-                </div>
-
-                {/* Name — overflow-hidden clip for the slam effect */}
-                <div style={{ overflow:"hidden", lineHeight:0.86, marginBottom:3 }}>
-                  <h1 className="animate-name-1"
-                    style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:"clamp(88px,10.5vw,158px)",
-                      letterSpacing:"0.025em", color:"#FFFFFF", display:"block" }}>RUPESH</h1>
-                </div>
-                <div style={{ overflow:"hidden", lineHeight:0.86 }}>
-                  <h1 className="animate-name-2"
-                    style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:"clamp(88px,10.5vw,158px)",
-                      letterSpacing:"0.025em", color:"transparent",
-                      WebkitTextStroke:"1.5px rgba(215,215,215,0.3)", display:"block" }}>AGARWAL</h1>
-                </div>
-
-                {/* Cormorant italic tagline */}
-                <p className="animate-fade-rise-2"
-                  style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(13px,1.1vw,17px)",
-                    fontStyle:"italic", fontWeight:300, color:"rgba(185,185,185,0.38)",
-                    lineHeight:1.85, marginTop:22, letterSpacing:"0.04em" }}>
-                  Decoding the future of interactive interfaces — specialised in high-performance web architecture.
-                </p>
-
-                {/* Mono annotation */}
-                <p className="animate-fade-rise-2"
-                  style={{ fontFamily:"'DM Mono',monospace", fontSize:"clamp(8px,0.82vw,10.5px)",
-                    color:"rgba(185,185,185,0.2)", lineHeight:2.3, marginTop:10, letterSpacing:"0.09em" }}>
-                  <span style={{ color:"rgba(185,185,185,0.09)" }}>{"// "}</span>
-                  NEXT.JS · NODE · WEBGL · REAL-TIME SYSTEMS
-                </p>
-
-                {/* Scroll cue */}
-                <div className="animate-fade-rise-3 flex items-center gap-3 mt-11"
-                  style={{ fontFamily:"'DM Mono',monospace", fontSize:7.5, letterSpacing:"0.48em",
-                    textTransform:"uppercase", color:"rgba(185,185,185,0.18)" }}>
-                  <div style={{ display:"flex", flexDirection:"column" as const, alignItems:"center", gap:3 }}>
-                    {[0,1,2].map(i=>(
-                      <div key={i} className="animate-scroll-drop"
-                        style={{ width:1, height:10, background:"rgba(175,175,175,0.42)", animationDelay:`${i*0.28}s` }} />
-                    ))}
-                  </div>
-                  Scroll to explore
-                </div>
-              </div>
-
-              {/* RIGHT — sphere */}
-              <div className="w-full md:w-1/2 h-full flex items-center justify-center">
-                <div className="animate-sphere-float relative"
-                  style={{ width:"clamp(310px,38vw,520px)", height:"clamp(310px,38vw,520px)" }}>
-                  <div className="absolute inset-0 rounded-full pointer-events-none"
-                    style={{ border:"1px solid rgba(150,150,150,0.07)",
-                      boxShadow:"0 0 70px rgba(125,125,125,0.04), inset 0 0 70px rgba(125,125,125,0.03)" }} />
-                  <div className="absolute inset-0"><ChromeSphere /></div>
-                  {/* Ground reflection */}
-                  <div className="absolute pointer-events-none"
-                    style={{ bottom:"-7%", left:"14%", right:"14%", height:46,
-                      background:"radial-gradient(ellipse, rgba(130,130,130,0.09) 0%, transparent 70%)",
-                      filter:"blur(9px)" }} />
-                </div>
-              </div>
-            </div>
-
-            {/* STATS BAR — numbers animate in on load */}
-            <div className="animate-fade-rise-4 absolute bottom-0 left-0 right-0 flex items-center justify-between px-12 py-5"
-              style={{ borderTop:"1px solid rgba(175,175,175,0.05)" }}>
-              {[
-                { n:"24+", l:"Projects Shipped", cls:"stat-num stat-num-1" },
-                { n:"18+", l:"Technologies",     cls:"stat-num stat-num-2" },
-                { n:"3+",  l:"Years Experience", cls:"stat-num stat-num-3" },
-              ].map((s,i)=>(
-                <div key={i} className="flex flex-col gap-[3px]" style={{ overflow:"hidden" }}>
-                  <span className={s.cls} style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:28, lineHeight:1, color:"#D5D5D5", display:"block" }}>{s.n}</span>
-                  <span style={{ fontFamily:"'DM Mono',monospace", fontSize:7.5, letterSpacing:"0.46em",
-                    textTransform:"uppercase", color:"rgba(190,190,190,0.26)" }}>{s.l}</span>
-                </div>
+        {/* ══ SCENE 0: BLACK HERO (Always at the back) ═══════════════ */}
+        <div className="absolute inset-0 w-full h-full z-0 flex flex-col justify-center">
+          {/* NAV */}
+          <nav className="absolute top-0 left-0 w-full z-[100] flex justify-between items-center px-12 py-9"
+            style={{borderBottom:"1px solid rgba(175,175,175,0.05)"}}>
+            <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:21,letterSpacing:"0.18em",color:"#DEDEDE"}}>RA.</div>
+            <div className="flex gap-10" style={{fontFamily:"'DM Mono',monospace",fontSize:8.5,letterSpacing:"0.48em",textTransform:"uppercase"}}>
+              {["Architecture","Projects","Contact"].map(n=>(
+                <span key={n} data-cursor-expand style={{color:"rgba(195,195,195,0.36)",transition:"color 0.25s"}}
+                  onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.color="rgba(225,225,225,0.88)";}}
+                  onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.color="rgba(195,195,195,0.36)";}}>{n}</span>
               ))}
-              <div style={{ textAlign:"right" as const }}>
-                <span style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:22, letterSpacing:"0.1em",
-                  color:"rgba(190,190,190,0.58)", display:"block" }}>{clock || "00:00:00"}</span>
-                <span style={{ fontFamily:"'DM Mono',monospace", fontSize:7.5, letterSpacing:"0.3em",
-                  textTransform:"uppercase", color:"rgba(190,190,190,0.2)" }}>India Standard Time</span>
+            </div>
+            <div className="flex items-center gap-2"
+              style={{fontFamily:"'DM Mono',monospace",fontSize:8.5,letterSpacing:"0.3em",textTransform:"uppercase",color:"rgba(195,195,195,0.28)"}}>
+              <div className="animate-status" style={{width:5,height:5,borderRadius:"50%",background:"#8A8A8A"}}/>
+              Open to work
+            </div>
+          </nav>
+
+          {/* HERO CONTENT */}
+          <div className="relative z-10 flex h-full w-full items-center px-10 md:px-24 pt-16">
+            <div className="w-full md:w-1/2 flex flex-col justify-center">
+              <div className="animate-fade-rise flex items-center gap-4 mb-7">
+                <div style={{width:35,height:1,background:"rgba(195,195,195,0.2)"}}/>
+                <p style={{fontFamily:"'DM Mono',monospace",fontSize:8.5,letterSpacing:"0.56em",textTransform:"uppercase",color:"rgba(195,195,195,0.36)"}}>Full-Stack Engineer</p>
+              </div>
+              <div style={{overflow:"hidden",lineHeight:0.86,marginBottom:3}}>
+                <h1 className="animate-name-1" style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(88px,10.5vw,158px)",letterSpacing:"0.025em",color:"#FFFFFF",display:"block"}}>RUPESH</h1>
+              </div>
+              <div style={{overflow:"hidden",lineHeight:0.86}}>
+                <h1 className="animate-name-2" style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(88px,10.5vw,158px)",letterSpacing:"0.025em",color:"transparent",WebkitTextStroke:"1.5px rgba(215,215,215,0.3)",display:"block"}}>AGARWAL</h1>
+              </div>
+              <p className="animate-fade-rise-2" style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"clamp(13px,1.1vw,17px)",fontStyle:"italic",fontWeight:300,color:"rgba(185,185,185,0.38)",lineHeight:1.85,marginTop:22,letterSpacing:"0.04em"}}>
+                Decoding the future of interactive interfaces — specialised in high-performance web architecture.
+              </p>
+              <div className="animate-fade-rise-3 flex items-center gap-3 mt-11"
+                style={{fontFamily:"'DM Mono',monospace",fontSize:7.5,letterSpacing:"0.48em",textTransform:"uppercase",color:"rgba(185,185,185,0.18)"}}>
+                <div style={{display:"flex",flexDirection:"column" as const,alignItems:"center",gap:3}}>
+                  {[0,1,2].map(i=>(<div key={i} className="animate-scroll-drop" style={{width:1,height:10,background:"rgba(175,175,175,0.4)",animationDelay:`${i*0.28}s`}}/>))}
+                </div>
+                Scroll to explore
               </div>
             </div>
 
+            {/* MINIMALIST ZERO-LAG COMPASS ASSET */}
+            <div className="w-full md:w-1/2 h-full flex items-center justify-center">
+              <div className="relative flex items-center justify-center pointer-events-none"
+                style={{ width: "clamp(260px, 35vw, 480px)", height: "clamp(260px, 35vw, 480px)" }}>
+                <div className="absolute inset-0 rounded-full border border-[rgba(255,255,255,0.03)] border-t-[rgba(255,255,255,0.25)] animate-[spin_12s_linear_infinite]" />
+                <div className="absolute inset-8 rounded-full border border-[rgba(255,255,255,0.04)] border-l-[rgba(255,255,255,0.35)] animate-[spin_8s_linear_infinite_reverse]" />
+                <div className="absolute inset-16 rounded-full border border-[rgba(255,255,255,0.05)] border-b-[rgba(255,255,255,0.5)] animate-[spin_16s_linear_infinite]" />
+                <div className="absolute w-2 h-2 bg-white rounded-full shadow-[0_0_20px_4px_rgba(255,255,255,0.8)]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.04)_0%,transparent_60%)]" />
+              </div>
+            </div>
+          </div>
+
+          {/* STATS BAR */}
+          <div className="animate-fade-rise-4 absolute bottom-0 left-0 right-0 flex items-center justify-between px-12 py-5"
+            style={{borderTop:"1px solid rgba(175,175,175,0.05)"}}>
+            {[{n:"24+",l:"Projects Shipped",cls:"stat-num stat-num-1"},{n:"18+",l:"Technologies",cls:"stat-num stat-num-2"},{n:"3+",l:"Years Experience",cls:"stat-num stat-num-3"}].map((s,i)=>(
+              <div key={i} className="flex flex-col gap-[3px]" style={{overflow:"hidden"}}>
+                <span className={s.cls} style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:28,lineHeight:1,color:"#D5D5D5",display:"block"}}>{s.n}</span>
+                <span style={{fontFamily:"'DM Mono',monospace",fontSize:7.5,letterSpacing:"0.46em",textTransform:"uppercase",color:"rgba(190,190,190,0.26)"}}>{s.l}</span>
+              </div>
+            ))}
+            <div style={{textAlign:"right" as const}}>
+              <span style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:22,letterSpacing:"0.1em",color:"rgba(190,190,190,0.58)",display:"block"}}>{clock||"00:00:00"}</span>
+              <span style={{fontFamily:"'DM Mono',monospace",fontSize:7.5,letterSpacing:"0.3em",textTransform:"uppercase",color:"rgba(190,190,190,0.2)"}}>India Standard Time</span>
+            </div>
           </div>
         </div>
 
-        {/* ══ SLIDE 2 — glides naturally over pinned hero ═══ */}
-        <div className="relative z-10 w-full"
-          style={{ boxShadow:"0 -28px 70px rgba(0,0,0,0.65), 0 -2px 0 rgba(255,255,255,0.08)" }}>
-          <SlideTwo />
+        {/* ══ SCENE 1: WHITE WORLD (Bottom Left Corner Reveal) ═══════ */}
+        <div 
+          ref={s1Ref}
+          className="absolute inset-0 w-full h-full z-10 overflow-y-auto"
+          style={{ 
+            clipPath: activeScene >= 1 ? "circle(150% at 0% 100%)" : "circle(0% at 0% 100%)",
+            transition: "clip-path 1s cubic-bezier(0.65, 0, 0.05, 1)",
+            pointerEvents: activeScene >= 1 ? "auto" : "none",
+            scrollbarWidth: "none",
+          }}>
+          {/* THE FIX: Pass the scrollRef here! */}
+          <SceneTwo scrollRef={s1Ref} /> 
+        </div>
+
+        {/* ══ SCENE 2: CHARCOAL ENGINE ROOM (Slides Up) ══════════════ */}
+        <div 
+          ref={s2Ref}
+          className="absolute inset-0 w-full h-full z-20 overflow-y-auto"
+          style={{ 
+            transform: activeScene === 2 ? "translateY(0%)" : "translateY(100%)",
+            transition: "transform 1s cubic-bezier(0.65, 0, 0.05, 1)",
+            pointerEvents: activeScene === 2 ? "auto" : "none",
+            boxShadow: "0 -30px 80px rgba(0,0,0,0.9)",
+            scrollbarWidth: "none",
+          }}>
+          <SceneThree/>
         </div>
 
       </div>
