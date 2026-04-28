@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import SceneOne from "./SceneOne";
+import TransitionSequence from "./TransitionSequence";
 import SceneTwo from "./SceneTwo";
 import SceneThree from "./SceneThree";
 
@@ -47,28 +48,6 @@ function PrecisionCursor() {
   );
 }
 
-/* ════════════════════════════════════════════════════════════
-   HUD SCROLLBAR
-════════════════════════════════════════════════════════════ */
-function HudScrollbar() {
-  return (
-    <div className="fixed right-7 top-1/2 -translate-y-1/2 z-[9000] pointer-events-none"
-      style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:10,height:300}}>
-      <span style={{fontFamily:"'DM Mono',monospace",fontSize:7,letterSpacing:"0.4em",textTransform:"uppercase",color:"rgba(160,160,160,0.45)",marginBottom:4}}>01</span>
-      <div style={{width:1,flex:1,background:"rgba(150,150,150,0.16)",position:"relative",overflow:"hidden"}}>
-        <div style={{position:"absolute",top:0,left:0,width:"100%",height:"100%",
-          background:"linear-gradient(to bottom,rgba(180,180,180,0.45),rgba(255,255,255,0.8))",
-          transformOrigin:"top",transform:"scaleY(var(--scroll-total,0))",transition:"transform 0.06s linear"}}/>
-      </div>
-      <div className="hud-dot" style={{width:3,height:3,borderRadius:"50%",background:"rgba(200,200,200,0.55)"}}/>
-      <span style={{fontFamily:"'DM Mono',monospace",fontSize:7,letterSpacing:"0.4em",textTransform:"uppercase",color:"rgba(160,160,160,0.45)",marginTop:4}}>03</span>
-    </div>
-  );
-}
-
-/* ════════════════════════════════════════════════════════════
-   IST CLOCK
-════════════════════════════════════════════════════════════ */
 function useClock() {
   const [t, setT] = useState("");
   useEffect(()=>{
@@ -81,112 +60,56 @@ function useClock() {
   return t;
 }
 
-/* ════════════════════════════════════════════════════════════
-   ROOT PAGE — ORCHESTRATOR
-════════════════════════════════════════════════════════════ */
 export default function Home() {
   const clock = useClock();
+  
+  const [phase, setPhase] = useState<"scene1" | "transition" | "scene2and3">("scene1");
+  const s2ScrollRef = useRef<HTMLDivElement>(null);
 
-  // 0 = Black Scene, 1 = White Scene, 2 = Charcoal Scene
-  const [activeScene, setActiveScene] = useState(0); 
-  const isAnimating = useRef(false);
-  const s1Ref = useRef<HTMLDivElement>(null); 
-  const s2Ref = useRef<HTMLDivElement>(null); 
-
-  // The Custom Wheel Engine
-  useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
-      if (isAnimating.current) {
-        e.preventDefault();
-        return;
-      }
-
-      if (activeScene === 0) {
-        if (e.deltaY > 15) { 
-          e.preventDefault();
-          transitionTo(1);
-        }
-      } 
-      else if (activeScene === 1) {
-        const el = s1Ref.current;
-        if (!el) return;
-        
-        const atTop = el.scrollTop <= 0;
-        const atBottom = Math.ceil(el.scrollTop + el.clientHeight) >= el.scrollHeight - 5;
-
-        if (e.deltaY < -15 && atTop) {
-          e.preventDefault();
-          transitionTo(0);
-        } 
-        else if (e.deltaY > 15 && atBottom) {
-          e.preventDefault();
-          transitionTo(2);
-        }
-      } 
-      else if (activeScene === 2) {
-        const el = s2Ref.current;
-        if (!el) return;
-        
-        const atTop = el.scrollTop <= 0;
-        if (e.deltaY < -15 && atTop) {
-          e.preventDefault();
-          transitionTo(1);
-        }
-      }
-    };
-
-    window.addEventListener("wheel", handleWheel, { passive: false });
-    return () => window.removeEventListener("wheel", handleWheel);
-  }, [activeScene]);
-
-  const transitionTo = (sceneIndex: number) => {
-    isAnimating.current = true;
-    setActiveScene(sceneIndex);
-    setTimeout(() => {
-      isAnimating.current = false;
-    }, 1000); 
+  const handleS2Wheel = (e: React.WheelEvent) => {
+    if (!s2ScrollRef.current) return;
+    if (s2ScrollRef.current.scrollTop <= 0 && e.deltaY < -20) {
+      setPhase("scene1");
+    }
   };
 
   return (
-    <>
+    <div className="relative w-screen h-screen overflow-hidden bg-[#050505]">
       <PrecisionCursor/>
-      <HudScrollbar/>
 
-      <div className="relative w-screen h-screen overflow-hidden bg-[#050505]">
-
-        {/* ══ SCENE 0: BLACK HERO ═══════════════ */}
+      {/* ── PHASE 1 & TRANSITION ── */}
+      {/* Notice how SceneOne Stays mounted during the transition phase! */}
+      {(phase === "scene1" || phase === "transition") && (
         <div className="absolute inset-0 w-full h-full z-0">
-          <SceneOne clock={clock} />
+          <SceneOne 
+            clock={clock} 
+            onReachBottom={() => {
+              if (phase === "scene1") setPhase("transition");
+            }} 
+          />
         </div>
+      )}
 
-        {/* ══ SCENE 1: WHITE WORLD ═══════ */}
-        <div 
-          ref={s1Ref}
-          className="absolute inset-0 w-full h-full z-10 overflow-y-auto"
-          style={{ 
-            clipPath: activeScene >= 1 ? "circle(150% at 0% 100%)" : "circle(0% at 0% 100%)",
-            transition: "clip-path 1s cubic-bezier(0.65, 0, 0.05, 1)",
-            pointerEvents: activeScene >= 1 ? "auto" : "none",
-            scrollbarWidth: "none",
-          }}>
-          <SceneTwo /> 
+      {/* ── PHASE 2: THE VAULT DOOR DROP ── */}
+      {/* Mounts ON TOP of Scene 1 (z-50) so we can see the doors cover it */}
+      {phase === "transition" && (
+        <div className="absolute inset-0 w-full h-full z-50">
+          <TransitionSequence onComplete={() => setPhase("scene2and3")} />
         </div>
+      )}
 
-        {/* ══ SCENE 2: CHARCOAL ENGINE ROOM ══════════════ */}
+      {/* ── PHASE 3: PROJECTS & SKILLS ARCHIVE ── */}
+      {phase === "scene2and3" && (
         <div 
-          ref={s2Ref}
-          className="absolute inset-0 w-full h-full z-20 overflow-y-auto"
-          style={{ 
-            transform: activeScene === 2 ? "translateY(0%)" : "translateY(100%)",
-            transition: "transform 1s cubic-bezier(0.65, 0, 0.05, 1)",
-            pointerEvents: activeScene === 2 ? "auto" : "none",
-            boxShadow: "0 -30px 80px rgba(0,0,0,0.9)",
-            scrollbarWidth: "none",
-          }}>
+          ref={s2ScrollRef}
+          onWheel={handleS2Wheel}
+          className="absolute inset-0 w-full h-full z-10 overflow-y-auto bg-[#F7F7F7]" 
+          style={{ scrollbarWidth: "none" }}
+        >
+          <SceneTwo />
           <SceneThree />
         </div>
-
-      </div>
-    </>
+      )}
+    </div>
   );
 }
