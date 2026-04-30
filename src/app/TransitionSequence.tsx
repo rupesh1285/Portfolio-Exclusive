@@ -19,6 +19,14 @@ export default function TransitionSequence({ onComplete }: { onComplete?: () => 
     document.body.style.overflow = "hidden";
 
     const ctx = gsap.context(() => {
+      
+      // ── INFINITE AURORA ANIMATIONS (Outside the main timeline) ──
+      // By keeping these separate, they don't block the onComplete trigger!
+      gsap.to(".aurora-1", { x: "15vw", y: "15vh", scale: 1.2, duration: 8, ease: "sine.inOut", repeat: -1, yoyo: true });
+      gsap.to(".aurora-2", { x: "-15vw", y: "-15vh", scale: 1.4, duration: 10, ease: "sine.inOut", repeat: -1, yoyo: true });
+      gsap.to(".aurora-3", { x: "20vw", y: "-20vh", scale: 1.1, duration: 9, ease: "sine.inOut", repeat: -1, yoyo: true });
+
+      // ── MAIN SEQUENCE TIMELINE ──
       const tl = gsap.timeline({
         onComplete: () => {
           if (onCompleteRef.current) onCompleteRef.current();
@@ -50,7 +58,7 @@ export default function TransitionSequence({ onComplete }: { onComplete?: () => 
           ease: "power2.in",
         }, "-=0.2")
 
-      // 5. The Text Reveal (Sped up to 1.5s to match the faster sequence)
+      // 5. The Text Reveal
         .fromTo(textRef.current, 
           { opacity: 0, y: 15, letterSpacing: "0.1em", scale: 0.95 }, 
           { opacity: 1, y: 0, letterSpacing: "0.5em", scale: 1, duration: 1.5, ease: "power2.out" }, 
@@ -60,7 +68,6 @@ export default function TransitionSequence({ onComplete }: { onComplete?: () => 
       // ════════ THE FAST OPENING SEQUENCE ════════
 
       // 6. The Disengage (Lights power off, Text blurs out)
-      // Slashed the pause time down to 0.5 seconds for maximum intensity
         .to(".status-led, .light-trail", {
           opacity: 0,
           duration: 0.15,
@@ -91,7 +98,7 @@ export default function TransitionSequence({ onComplete }: { onComplete?: () => 
           ease: "power2.in"
         }, "<")
 
-      // 8. The Explosive Pull Apart (Duration remains a snappy 1.2s)
+      // 8. The Explosive Pull Apart
         .to(".shutter-top", {
           yPercent: 0,
           duration: 1.2, 
@@ -103,7 +110,20 @@ export default function TransitionSequence({ onComplete }: { onComplete?: () => 
           duration: 1.2, 
           ease: "expo.inOut",
           force3D: true
-        }, "<");
+        }, "<")
+
+      // 9. THE MASSIVE "CREATIONS" REVEAL
+        .fromTo(".creations-text", {
+          opacity: 0,
+          scale: 1.4, // Starts massive, rushing towards the screen
+          filter: "blur(12px)"
+        }, {
+          opacity: 1,
+          scale: 1, // Snaps into perfect size
+          filter: "blur(0px)",
+          duration: 1.8,
+          ease: "expo.out"
+        }, "<+=0.2"); // Triggers just a split second after the doors begin to move
 
     }, containerRef);
 
@@ -113,14 +133,40 @@ export default function TransitionSequence({ onComplete }: { onComplete?: () => 
     };
   }, []);
 
-  // EXACT SAME LOCK PATH (Untouched)
   const edgePath = "M 0,480 L 420,480 L 470,530 L 530,530 L 580,480 L 1000,480";
 
   return (
     <div ref={containerRef} className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden z-[9999]">
       
-      {/* ── THE BLINDING WHITE DIMENSION REVEAL ── */}
-      <div className="white-reveal absolute inset-0 w-full h-full bg-[#f8f9fa] opacity-0 z-[15] shadow-[inset_0_0_150px_rgba(255,255,255,1)]" />
+      {/* ── THE BLINDING NEON WHITE REVEAL SCREEN w/ AURORA ── */}
+      <div className="white-reveal absolute inset-0 w-full h-full bg-[#f8f9fa] opacity-0 z-[15] overflow-hidden">
+        
+        {/* Animated Aurora Blobs (Blurred into a smooth mesh gradient) */}
+        <div className="aurora-1 absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full mix-blend-normal opacity-40 blur-[120px]" 
+          style={{ background: "radial-gradient(circle, #00f3ff, transparent 70%)" }} />
+          
+        <div className="aurora-2 absolute top-[20%] right-[-10%] w-[60vw] h-[60vw] rounded-full mix-blend-normal opacity-30 blur-[150px]" 
+          style={{ background: "radial-gradient(circle, #ff00ea, transparent 70%)" }} />
+          
+        <div className="aurora-3 absolute bottom-[-20%] left-[20%] w-[55vw] h-[55vw] rounded-full mix-blend-normal opacity-35 blur-[140px]" 
+          style={{ background: "radial-gradient(circle, #7000ff, transparent 70%)" }} />
+      </div>
+
+      {/* ── THE TRANSPARENT "CREATIONS" TEXT ── */}
+      <div className="creations-text absolute inset-0 flex items-center justify-center z-[16] opacity-0 pointer-events-none">
+        <h1 style={{ 
+          fontFamily: "'Inter', 'SF Pro Display', sans-serif", 
+          fontWeight: 900,
+          fontSize: '14vw', 
+          color: 'transparent', 
+          WebkitTextStroke: '3px rgba(10, 10, 12, 0.95)', // The premium dark outline masking the aurora
+          textTransform: 'uppercase',
+          letterSpacing: '0.04em',
+          margin: 0
+        }}>
+          Creations
+        </h1>
+      </div>
 
       {/* ── PREMIUM CLASSY BACKDROP ── */}
       <div className="radial-dim absolute inset-0 w-full h-full opacity-0 z-0" 
