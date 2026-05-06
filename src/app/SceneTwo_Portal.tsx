@@ -114,10 +114,12 @@ export default function SceneTwo_Portal({ onComplete }: { onComplete: () => void
   const VW = 1000;
   const VH = 600;
   const CY  = 308;   // vertical centre of the letters
-  const SLOT = 91;   // width per letter slot (Bebas Neue at 148px ≈ 91px/letter)
+  const SLOT = 91;   // width per letter slot at 148px ≈ 91px/letter
   const WORD_W = SLOT * LETTERS.length;
   const START_X = (VW - WORD_W) / 2 + SLOT / 2;
   const LINE_Y  = CY + 84;  // horizontal framing lines sit here
+  const FONT_DISPLAY = "'Cinzel', 'Times New Roman', serif";
+  const FONT_MONO = "'Space Mono', 'DM Mono', monospace";
 
   return (
     <div
@@ -140,7 +142,7 @@ export default function SceneTwo_Portal({ onComplete }: { onComplete: () => void
               <text key={i}
                 x={START_X + i * SLOT} y={CY}
                 dominantBaseline="central" textAnchor="middle"
-                fontFamily="'Bebas Neue', sans-serif" fontWeight="400"
+                fontFamily={FONT_DISPLAY} fontWeight="500"
                 fontSize="148" letterSpacing="2"
               >{letter}</text>
             ))}
@@ -154,11 +156,22 @@ export default function SceneTwo_Portal({ onComplete }: { onComplete: () => void
                 x={START_X + i * SLOT} y={CY}
                 dominantBaseline="central" textAnchor="middle"
                 fill="black"
-                fontFamily="'Bebas Neue', sans-serif" fontWeight="400"
+                fontFamily={FONT_DISPLAY} fontWeight="500"
                 fontSize="148" letterSpacing="2"
               >{letter}</text>
             ))}
           </mask>
+
+          <linearGradient id="bg-film" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%"   stopColor="#0C0C0F" />
+            <stop offset="55%"  stopColor="#151520" />
+            <stop offset="100%" stopColor="#07070A" />
+          </linearGradient>
+          <radialGradient id="bg-vignette" cx="50%" cy="40%" r="70%">
+            <stop offset="0%"   stopColor="rgba(0,0,0,0)" />
+            <stop offset="65%"  stopColor="rgba(0,0,0,0.25)" />
+            <stop offset="100%" stopColor="rgba(0,0,0,0.75)" />
+          </radialGradient>
 
           <radialGradient id="bg1" cx="35%" cy="30%" r="65%">
             <stop offset="0%"   stopColor="#FFFFFF" stopOpacity="0.95" />
@@ -205,7 +218,21 @@ export default function SceneTwo_Portal({ onComplete }: { onComplete: () => void
             </feMerge>
           </filter>
 
+          <filter id="film-grain" x="-20%" y="-20%" width="140%" height="140%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="8" result="noise" />
+            <feColorMatrix in="noise" type="saturate" values="0" result="mono" />
+            <feComponentTransfer in="mono" result="grain">
+              <feFuncA type="table" tableValues="0 0.08" />
+            </feComponentTransfer>
+            <feBlend in="SourceGraphic" in2="grain" mode="soft-light" />
+          </filter>
+
         </defs>
+
+        {/* Cinematic background */}
+        <rect width="100%" height="100%" fill="url(#bg-film)" />
+        <rect width="100%" height="100%" fill="url(#bg-vignette)" />
+        <rect width="100%" height="100%" filter="url(#film-grain)" opacity="0.35" />
 
         {/* Black surround — only the letter holes are transparent */}
         <rect width="100%" height="100%" fill="#050505" mask="url(#text-mask)" />
@@ -271,10 +298,10 @@ export default function SceneTwo_Portal({ onComplete }: { onComplete: () => void
               dominantBaseline="central"
               textAnchor="middle"
               fill="none"
-              stroke="rgba(255,255,255,0.20)"
+              stroke="rgba(255,255,255,0.28)"
               strokeWidth="1.5"
-              fontFamily="'Bebas Neue', sans-serif"
-              fontWeight="400"
+              fontFamily={FONT_DISPLAY}
+              fontWeight="500"
               fontSize="148"
               style={{ opacity: 0 }}
             >{letter}</text>
@@ -290,9 +317,9 @@ export default function SceneTwo_Portal({ onComplete }: { onComplete: () => void
             y={CY}
             dominantBaseline="central"
             textAnchor="middle"
-            fill="rgba(255,255,255,0.50)"
-            fontFamily="'Bebas Neue', sans-serif"
-            fontWeight="400"
+            fill="rgba(255,255,255,0.58)"
+            fontFamily={FONT_DISPLAY}
+            fontWeight="500"
             fontSize="148"
             style={{ opacity: 0 }}
           >{letter}</text>
@@ -329,20 +356,20 @@ export default function SceneTwo_Portal({ onComplete }: { onComplete: () => void
             x={VW / 2} y={LINE_Y + 20}
             dominantBaseline="central" textAnchor="middle"
             fill="rgba(255,255,255,0.26)"
-            fontFamily="'DM Mono', monospace"
-            fontSize="10.5" letterSpacing="4.5"
+            fontFamily={FONT_MONO}
+            fontSize="11" letterSpacing="5"
           >PORTAL · 001</text>
 
           {/* Corner labels */}
           <text x={38} y={CY - 92}
             fill="rgba(255,255,255,0.10)"
-            fontFamily="'DM Mono', monospace" fontSize="8.5" letterSpacing="2"
+            fontFamily={FONT_MONO} fontSize="8.5" letterSpacing="2.4"
           >X:0500  Y:0300</text>
 
           <text x={VW - 38} y={CY - 92}
             textAnchor="end"
             fill="rgba(255,255,255,0.10)"
-            fontFamily="'DM Mono', monospace" fontSize="8.5" letterSpacing="2"
+            fontFamily={FONT_MONO} fontSize="8.5" letterSpacing="2.4"
           >ENTRY VECTOR LOCKED</text>
 
         </g>
