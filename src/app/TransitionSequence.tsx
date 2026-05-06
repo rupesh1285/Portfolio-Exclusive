@@ -45,7 +45,7 @@ export default function TransitionSequence({ onComplete }: { onComplete?: () => 
         
         // Shudder & Flash
         .to(containerRef.current, { y: 3, yoyo: true, repeat: 4, duration: 0.03, ease: "sine.inOut" }, "+=0.1")
-        .to(".white-reveal", { opacity: 1, duration: 0.1, ease: "power2.in" }, "<")
+        .to(".black-reveal", { opacity: 1, duration: 0.1, ease: "power2.in" }, "<")
         
         // RIP OPEN (0.8s snap)
         .to(".shutter-top", { yPercent: 0, duration: 0.8, ease: "expo.inOut", force3D: true }, "<+=0.05")

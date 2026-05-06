@@ -96,7 +96,7 @@ export default function Home() {
         <div 
           ref={s2ScrollRef}
           onWheel={handleS2Wheel}
-          className="absolute inset-0 w-full h-full z-10 overflow-y-auto bg-[#F7F7F7]" 
+          className="absolute inset-0 w-full h-full z-10 overflow-y-auto bg-[#050505]" 
           style={{ scrollbarWidth: "none" }}
         >
           <SceneTwo />

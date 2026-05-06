@@ -43,15 +43,12 @@ export default function SceneTwo_Portal({ onComplete }: { onComplete: () => void
       gsap.to("#tb6", { attr: { cx: "-=32", cy: "+=12" }, duration: 6.3, ease: "sine.inOut", repeat: -1, yoyo: true });
 
       // ── Initial states ──
+      // Falling letter outlines start above screen
       gsap.set(letterRefs.current.filter(Boolean), {
-        opacity: 0, y: -72, skewX: -6, transformOrigin: "50% 100%",
+        opacity: 0, y: -80, skewX: -10, transformOrigin: "50% 100%",
       });
-      gsap.set(clipRefs.current.filter(Boolean), {
-        attr: { y: CY - 72 },
-      });
-      gsap.set(maskRefs.current.filter(Boolean), {
-        attr: { y: CY - 72 },
-      });
+      gsap.set(clipRefs.current.filter(Boolean), { attr: { y: CY } });
+      gsap.set(maskRefs.current.filter(Boolean), { attr: { y: CY } });
       gsap.set(impactRefs.current.filter(Boolean), { opacity: 0 });
       gsap.set(lineLeftRef.current,  { scaleX: 0, opacity: 0, transformOrigin: "right center" });
       gsap.set(lineRightRef.current, { scaleX: 0, opacity: 0, transformOrigin: "left center" });
@@ -76,25 +73,22 @@ export default function SceneTwo_Portal({ onComplete }: { onComplete: () => void
       LETTERS.forEach((_, i) => {
         const clipTarget = clipRefs.current[i];
         const maskTarget = maskRefs.current[i];
-        const letterTarget = letterRefs.current[i];
         const pos = `<+=${i === 0 ? 0 : 0.068}`;
 
-        tl.to([clipTarget, maskTarget].filter(Boolean), {
-            attr: { y: CY },
-            duration: 0.38,
-            ease: "back.out(3.2)",
-          }, pos)
-          .fromTo(letterTarget!, {
-            opacity: 0,
-            y: -72,
-            skewX: -6,
-          }, {
+        // Letter outline slams in from above with overshoot + skew
+        tl.to(letterRefs.current[i]!, {
             opacity: 1,
             y: 0,
             skewX: 0,
             duration: 0.38,
             ease: "back.out(3.2)",
           }, pos)
+          // Clip + mask snap to final position simultaneously — reveals bubble fill
+          .to([clipTarget, maskTarget].filter(Boolean), {
+            attr: { y: CY },
+            duration: 0.38,
+            ease: "back.out(3.2)",
+          }, "<")
           .fromTo(impactRefs.current[i]!,
             { opacity: 0.8 },
             { opacity: 0, duration: 0.32, ease: "power2.out" },
@@ -140,6 +134,7 @@ export default function SceneTwo_Portal({ onComplete }: { onComplete: () => void
   const WORD_W = SLOT * LETTERS.length;
   const START_X = (VW - WORD_W) / 2 + SLOT / 2;
   const LINE_Y  = CY + 84;  // horizontal framing lines sit here
+  const START_Y = -200;
   const FONT_DISPLAY = "'Cinzel', 'Times New Roman', serif";
   const FONT_MONO = "'Space Mono', 'DM Mono', monospace";
 
@@ -301,6 +296,23 @@ export default function SceneTwo_Portal({ onComplete }: { onComplete: () => void
 
           <rect width="100%" height="100%" fill="rgba(200,200,200,0.12)" />
         </g>
+
+        {/* ── GHOST LETTERS — hollow placeholder outlines, always visible from start ── */}
+        {LETTERS.map((letter, i) => (
+          <text
+            key={i}
+            x={START_X + i * SLOT}
+            y={CY}
+            dominantBaseline="central"
+            textAnchor="middle"
+            fill="none"
+            stroke="rgba(255,255,255,0.08)"
+            strokeWidth="1"
+            fontFamily={FONT_DISPLAY}
+            fontWeight="500"
+            fontSize="148"
+          >{letter}</text>
+        ))}
 
         {/* ── CRT SCAN LINE ── */}
         <line
