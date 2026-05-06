@@ -25,6 +25,8 @@ export default function SceneTwo_Portal({ onComplete }: { onComplete: () => void
   const sublabelRef   = useRef<SVGGElement>(null);
   const letterRefs    = useRef<(SVGTextElement | null)[]>([]);
   const impactRefs    = useRef<(SVGTextElement | null)[]>([]);
+  const clipRefs      = useRef<(SVGTextElement | null)[]>([]);
+  const maskRefs      = useRef<(SVGTextElement | null)[]>([]);
   const onCompleteRef = useRef(onComplete);
 
   useEffect(() => { onCompleteRef.current = onComplete; }, [onComplete]);
@@ -42,7 +44,13 @@ export default function SceneTwo_Portal({ onComplete }: { onComplete: () => void
 
       // ── Initial states ──
       gsap.set(letterRefs.current.filter(Boolean), {
-        opacity: 0, y: -72, skewX: -10, transformOrigin: "50% 100%",
+        opacity: 0, y: -72, skewX: -6, transformOrigin: "50% 100%",
+      });
+      gsap.set(clipRefs.current.filter(Boolean), {
+        attr: { y: CY - 72 },
+      });
+      gsap.set(maskRefs.current.filter(Boolean), {
+        attr: { y: CY - 72 },
       });
       gsap.set(impactRefs.current.filter(Boolean), { opacity: 0 });
       gsap.set(lineLeftRef.current,  { scaleX: 0, opacity: 0, transformOrigin: "right center" });
@@ -66,13 +74,27 @@ export default function SceneTwo_Portal({ onComplete }: { onComplete: () => void
 
       // ── 2. LETTER SLAM (L→R stagger) ──
       LETTERS.forEach((_, i) => {
-        tl.to(letterRefs.current[i]!, {
+        const clipTarget = clipRefs.current[i];
+        const maskTarget = maskRefs.current[i];
+        const letterTarget = letterRefs.current[i];
+        const pos = `<+=${i === 0 ? 0 : 0.068}`;
+
+        tl.to([clipTarget, maskTarget].filter(Boolean), {
+            attr: { y: CY },
+            duration: 0.38,
+            ease: "back.out(3.2)",
+          }, pos)
+          .fromTo(letterTarget!, {
+            opacity: 0,
+            y: -72,
+            skewX: -6,
+          }, {
             opacity: 1,
             y: 0,
             skewX: 0,
             duration: 0.38,
             ease: "back.out(3.2)",
-          }, `<+=${i === 0 ? 0 : 0.068}`)
+          }, pos)
           .fromTo(impactRefs.current[i]!,
             { opacity: 0.8 },
             { opacity: 0, duration: 0.32, ease: "power2.out" },
@@ -137,9 +159,10 @@ export default function SceneTwo_Portal({ onComplete }: { onComplete: () => void
         <defs>
 
           {/* Clips bubble fill strictly to letter shapes */}
-          <clipPath id="text-clip">
+          <clipPath id="text-clip" clipPathUnits="userSpaceOnUse">
             {LETTERS.map((letter, i) => (
               <text key={i}
+                ref={el => { clipRefs.current[i] = el; }}
                 x={START_X + i * SLOT} y={CY}
                 dominantBaseline="central" textAnchor="middle"
                 fontFamily={FONT_DISPLAY} fontWeight="500"
@@ -149,10 +172,11 @@ export default function SceneTwo_Portal({ onComplete }: { onComplete: () => void
           </clipPath>
 
           {/* Mask: punches holes in the black surround */}
-          <mask id="text-mask">
+          <mask id="text-mask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse">
             <rect width="100%" height="100%" fill="white" />
             {LETTERS.map((letter, i) => (
               <text key={i}
+                ref={el => { maskRefs.current[i] = el; }}
                 x={START_X + i * SLOT} y={CY}
                 dominantBaseline="central" textAnchor="middle"
                 fill="black"
