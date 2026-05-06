@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import SceneOne from "./SceneOne";
 import TransitionSequence from "./TransitionSequence";
+import SceneTwo_Portal from "./SceneTwo_Portal";
 import SceneTwo from "./SceneTwo";
 import SceneThree from "./SceneThree";
 
@@ -63,7 +64,8 @@ function useClock() {
 export default function Home() {
   const clock = useClock();
   
-  const [phase, setPhase] = useState<"scene1" | "transition" | "scene2and3">("scene1");
+  // Cleaned up state: scene1 -> vault -> portal -> scene2and3
+  const [phase, setPhase] = useState<"scene1" | "vault" | "portal" | "scene2and3">("scene1");
   const s2ScrollRef = useRef<HTMLDivElement>(null);
 
   const handleS2Wheel = (e: React.WheelEvent) => {
@@ -77,29 +79,20 @@ export default function Home() {
     <div className="relative w-screen h-screen overflow-hidden bg-[#050505]">
       <PrecisionCursor/>
 
-      {/* ── PHASE 1 & TRANSITION ── */}
-      {/* Notice how SceneOne Stays mounted during the transition phase! */}
-      {(phase === "scene1" || phase === "transition") && (
+      {(phase === "scene1" || phase === "vault") && (
         <div className="absolute inset-0 w-full h-full z-0">
-          <SceneOne 
-            clock={clock} 
-            onReachBottom={() => {
-              if (phase === "scene1") setPhase("transition");
-            }} 
-          />
+          <SceneOne clock={clock} onReachBottom={() => { if (phase === "scene1") setPhase("vault"); }} />
         </div>
       )}
 
-      {/* ── PHASE 2: THE VAULT DOOR DROP ── */}
-      {/* Mounts ON TOP of Scene 1 (z-50) so we can see the doors cover it */}
-      {phase === "transition" && (
+      {phase === "vault" && (
         <div className="absolute inset-0 w-full h-full z-50">
-          <TransitionSequence onComplete={() => setPhase("scene2and3")} />
+          <TransitionSequence onComplete={() => setPhase("portal")} />
         </div>
       )}
 
-      {/* ── PHASE 3: PROJECTS & SKILLS ARCHIVE ── */}
-      {phase === "scene2and3" && (
+      {/* ── SCENE TWO IS RENDERED BENEATH THE PORTAL ── */}
+      {(phase === "portal" || phase === "scene2and3") && (
         <div 
           ref={s2ScrollRef}
           onWheel={handleS2Wheel}
@@ -110,6 +103,15 @@ export default function Home() {
           <SceneThree />
         </div>
       )}
+
+      {/* ── THE PORTAL MASK ── */}
+      {/* Sits on top of Scene Two and punches a transparent hole through it */}
+      {phase === "portal" && (
+        <div className="absolute inset-0 w-full h-full z-[60] pointer-events-none">
+          <SceneTwo_Portal onComplete={() => setPhase("scene2and3")} />
+        </div>
+      )}
+
     </div>
   );
 }
