@@ -59,7 +59,7 @@ export default function TransitionSequence({ onComplete }: { onComplete?: () => 
 
   return (
     <div ref={containerRef} className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden z-[9999]">
-      <div className="white-reveal absolute inset-0 w-full h-full bg-[#f8f9fa] opacity-0 z-[15]" />
+      <div className="black-reveal absolute inset-0 w-full h-full bg-[#050505] opacity-0 z-[15]" />
       <div className="radial-dim absolute inset-0 w-full h-full opacity-0 z-0" style={{ background: "radial-gradient(circle at center, transparent 0%, #000000 100%)" }} />
       <div className="solid-dim absolute inset-0 w-full h-full bg-[#030303] opacity-0 z-10" />
 
