@@ -97,7 +97,12 @@ export default function Home() {
           ref={s2ScrollRef}
           onWheel={handleS2Wheel}
           className="absolute inset-0 w-full h-full z-10 overflow-y-auto bg-[#050505]" 
-          style={{ scrollbarWidth: "none" }}
+          style={{
+            scrollbarWidth: "none",
+            backgroundImage:
+              "radial-gradient(60% 55% at 50% 35%, rgba(140,140,160,0.18) 0%, rgba(10,10,12,0.82) 55%, rgba(5,5,5,1) 100%), linear-gradient(135deg, #0b0b0f 0%, #101018 45%, #050506 100%)",
+            backgroundBlendMode: "screen, normal",
+          }}
         >
           <SceneTwo />
           <SceneThree />
