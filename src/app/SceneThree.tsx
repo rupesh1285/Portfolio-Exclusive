@@ -29,7 +29,14 @@ export default function SceneThree() {
   const tickerItems=["React","Next.js","TypeScript","Node.js","PostgreSQL","Redis","WebGL","Three.js","Docker","GraphQL","AWS","Figma"];
 
   return (
-    <div className="relative w-full overflow-hidden min-h-screen" style={{background:"#111318"}}>
+    <div
+      className="relative w-full overflow-hidden min-h-screen"
+      style={{
+        background: "#111318",
+        contentVisibility: "auto",
+        containIntrinsicSize: "1200px 900px",
+      } as React.CSSProperties}
+    >
       <div className="absolute inset-0 pointer-events-none" style={{
         backgroundImage:`repeating-linear-gradient(-45deg,transparent 0,transparent 38px,rgba(255,255,255,0.007) 38px,rgba(255,255,255,0.007) 39px)`,
       }}/>

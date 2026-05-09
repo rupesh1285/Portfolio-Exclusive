@@ -128,7 +128,15 @@ export default function SceneTwo() {
   const ticker = ["Full-Stack Engineering", "Interactive Interfaces", "Real-Time Systems", "3D Web Experiences", "Performance Architecture"];
 
   return (
-    <div ref={wrapperRef} className="relative w-full min-h-screen overflow-x-clip" style={{ backgroundColor: "#F7F7F7" }}>
+    <div
+      ref={wrapperRef}
+      className="relative w-full min-h-screen overflow-x-clip"
+      style={{
+        backgroundColor: "#F7F7F7",
+        contentVisibility: "auto",
+        containIntrinsicSize: "1200px 900px",
+      } as React.CSSProperties}
+    >
       
       {/* ── 3D GLASS BUBBLES BACKGROUND ── */}
       <div className="absolute inset-0 w-full h-full pointer-events-none z-[2]">

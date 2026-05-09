@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import SceneOne from "./SceneOne";
-import TransitionSequence from "./TransitionSequence";
-import SceneTwo_Portal from "./SceneTwo_Portal";
-import SceneTwo from "./SceneTwo";
-import SceneThree from "./SceneThree";
+
+const TransitionSequence = dynamic(() => import("./TransitionSequence"), { ssr: false });
+const SceneTwo_Portal = dynamic(() => import("./SceneTwo_Portal"), { ssr: false });
+const SceneTwo = dynamic(() => import("./SceneTwo"), { ssr: false });
+const SceneThree = dynamic(() => import("./SceneThree"), { ssr: false });
 
 /* ════════════════════════════════════════════════════════════
    PRECISION CURSOR
@@ -74,6 +76,20 @@ export default function Home() {
       setPhase("scene1");
     }
   };
+
+  useEffect(() => {
+    void import("./SceneTwo");
+    void import("./SceneThree");
+  }, []);
+
+  useEffect(() => {
+    if (phase === "vault") {
+      void import("./TransitionSequence");
+    }
+    if (phase === "portal") {
+      void import("./SceneTwo_Portal");
+    }
+  }, [phase]);
 
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-[#050505]">
