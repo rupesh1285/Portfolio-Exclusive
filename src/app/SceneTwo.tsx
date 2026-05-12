@@ -1,10 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import { useEffect, useRef } from "react";
 
 const mono = { fontFamily: "'DM Mono', ui-monospace, monospace" } as const;
 const bebas = { fontFamily: "'Bebas Neue', sans-serif" } as const;
@@ -127,7 +123,7 @@ const projects: Project[] = [
   },
 ];
 
-/** Static decorative field — no JS, no blur, GPU-friendly */
+/** One paint-friendly stack: merged gradients + pattern (no animation). */
 function SceneTwoBackdrop() {
   return (
     <div
@@ -135,73 +131,114 @@ function SceneTwoBackdrop() {
       aria-hidden
       style={{ contain: "strict" }}
     >
-      {/* Warm paper base + cool edge */}
+      {/* Base + washes in a single layer */}
       <div
         className="absolute inset-0"
         style={{
           background: `
-            linear-gradient(165deg, #e8e4dc 0%, #f2f0eb 38%, #faf8f5 62%, #e6e3dd 100%)
+            linear-gradient(168deg, #ddd5c8 0%, #ebe6de 22%, #f5f2ec 48%, #faf8f4 72%, #d8d0c6 100%),
+            radial-gradient(ellipse 90% 55% at 8% 12%, rgba(255,252,248,0.95) 0%, transparent 52%),
+            radial-gradient(ellipse 70% 50% at 92% 8%, rgba(140,130,118,0.14) 0%, transparent 48%),
+            radial-gradient(ellipse 60% 45% at 70% 88%, rgba(120,110,100,0.1) 0%, transparent 55%),
+            radial-gradient(circle at 50% 50%, rgba(255,255,255,0.35) 0%, transparent 62%)
           `,
         }}
       />
-      {/* Large wash orbs (static) */}
+
+      {/* Isometric hatch — one repeating layer */}
       <div
-        className="absolute -left-[20%] top-[-15%] h-[55vmin] w-[55vmin] rounded-full opacity-50"
-        style={{
-          background: "radial-gradient(circle at 40% 40%, rgba(255,255,255,0.85), transparent 68%)",
-        }}
-      />
-      <div
-        className="absolute -right-[12%] top-[30%] h-[45vmin] w-[45vmin] rounded-full opacity-35"
-        style={{
-          background: "radial-gradient(circle at 50% 50%, rgba(180,175,168,0.35), transparent 70%)",
-        }}
-      />
-      <div
-        className="absolute bottom-[-20%] left-[25%] h-[50vmin] w-[50vmin] rounded-full opacity-30"
-        style={{
-          background: "radial-gradient(circle at 50% 50%, rgba(200,195,188,0.25), transparent 72%)",
-        }}
-      />
-      {/* Fine grid */}
-      <div
-        className="absolute inset-0 opacity-[0.45]"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px)
-          `,
-          backgroundSize: "56px 56px",
-          maskImage: "radial-gradient(ellipse 85% 70% at 50% 35%, black 12%, transparent 100%)",
-        }}
-      />
-      {/* Micro-dot texture */}
-      <div
-        className="absolute inset-0 opacity-[0.35]"
-        style={{
-          backgroundImage: "radial-gradient(rgba(0,0,0,0.09) 1px, transparent 1px)",
-          backgroundSize: "10px 10px",
-          maskImage: "linear-gradient(to bottom, black 0%, transparent 92%)",
-        }}
-      />
-      {/* Diagonal hairlines */}
-      <div
-        className="absolute inset-0 opacity-[0.12]"
+        className="absolute inset-0 opacity-[0.14]"
         style={{
           backgroundImage: `repeating-linear-gradient(
-            -28deg,
-            transparent 0,
-            transparent 80px,
-            rgba(0,0,0,0.06) 80px,
-            rgba(0,0,0,0.06) 81px
+            -32deg,
+            transparent,
+            transparent 11px,
+            rgba(0,0,0,0.055) 11px,
+            rgba(0,0,0,0.055) 12px
+          ),
+          repeating-linear-gradient(
+            32deg,
+            transparent,
+            transparent 11px,
+            rgba(0,0,0,0.04) 11px,
+            rgba(0,0,0,0.04) 12px
           )`,
+          maskImage: "radial-gradient(ellipse 95% 80% at 50% 40%, black 0%, transparent 78%)",
         }}
       />
-      {/* Bottom vignette into Scene 3 */}
+
+      {/* Registration cross + rings (SVG, flat) */}
+      <svg
+        className="absolute left-1/2 top-[12%] h-[min(90vw,720px)] w-[min(90vw,720px)] -translate-x-1/2 opacity-[0.11]"
+        viewBox="0 0 400 400"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle cx="200" cy="200" r="198" stroke="currentColor" strokeWidth="0.5" className="text-black" />
+        <circle cx="200" cy="200" r="160" stroke="currentColor" strokeWidth="0.35" strokeDasharray="4 6" className="text-black" />
+        <circle cx="200" cy="200" r="120" stroke="currentColor" strokeWidth="0.35" className="text-black" />
+        <line x1="200" y1="0" x2="200" y2="400" stroke="currentColor" strokeWidth="0.35" className="text-black" />
+        <line x1="0" y1="200" x2="400" y2="200" stroke="currentColor" strokeWidth="0.35" className="text-black" />
+        <line x1="40" y1="40" x2="360" y2="360" stroke="currentColor" strokeWidth="0.25" opacity="0.5" className="text-black" />
+        <line x1="360" y1="40" x2="40" y2="360" stroke="currentColor" strokeWidth="0.25" opacity="0.5" className="text-black" />
+      </svg>
+
+      {/* Giant typographic watermark */}
       <div
-        className="absolute inset-x-0 bottom-0 h-[min(40%,320px)]"
+        className="absolute left-1/2 top-[28%] w-[200%] -translate-x-1/2 -rotate-[9deg] select-none text-center"
+        style={bebas}
+      >
+        <span className="block text-[clamp(5rem,22vw,14rem)] leading-none tracking-[0.04em] text-black/[0.045]">
+          SELECTED
+        </span>
+        <span className="-mt-2 block text-[clamp(4rem,18vw,11rem)] leading-none tracking-[0.32em] text-transparent" style={{ WebkitTextStroke: "1px rgba(0,0,0,0.07)" }}>
+          WORK
+        </span>
+      </div>
+
+      {/* Inset architectural frame */}
+      <div
+        className="absolute inset-3 rounded-sm border border-black/[0.07] md:inset-5"
         style={{
-          background: "linear-gradient(to top, rgba(0,0,0,0.06), transparent)",
+          background:
+            "linear-gradient(to right, rgba(0,0,0,0.06) 0, transparent 80px, transparent calc(100% - 80px), rgba(0,0,0,0.06) 100%)",
+        }}
+      />
+      <div className="absolute inset-3 rounded-sm border border-white/40 md:inset-5" />
+
+      {/* Corner brackets */}
+      {(
+        [
+          "left-5 top-5 md:left-8 md:top-8",
+          "right-5 top-5 md:right-8 md:top-8 rotate-90",
+          "left-5 bottom-5 md:left-8 md:bottom-8 -rotate-90",
+          "right-5 bottom-5 md:right-8 md:bottom-8 rotate-180",
+        ] as const
+      ).map((pos) => (
+        <div
+          key={pos}
+          className={`pointer-events-none absolute h-7 w-7 border-black/[0.12] ${pos}`}
+          style={{ borderTopWidth: 1, borderLeftWidth: 1, borderStyle: "solid" }}
+        />
+      ))}
+
+      {/* Module numbers strip (decorative) */}
+      <div
+        className="absolute bottom-24 left-0 right-0 flex justify-between px-6 opacity-[0.07] md:px-12"
+        style={mono}
+      >
+        {["A1", "A2", "B1", "B2", "C1", "C2", "D1"].map((m) => (
+          <span key={m} className="text-[10px] tracking-[0.4em]">
+            {m}
+          </span>
+        ))}
+      </div>
+
+      {/* Bottom handoff */}
+      <div
+        className="absolute inset-x-0 bottom-0 h-[min(38%,300px)]"
+        style={{
+          background: "linear-gradient(to top, rgba(17,19,24,0.09), transparent)",
         }}
       />
     </div>
@@ -212,27 +249,22 @@ function ProjectVisual({ id, accent }: { id: string; accent: string }) {
   return (
     <div
       data-cursor-dark
-      className={`group relative aspect-[16/11] w-full overflow-hidden rounded-2xl border border-black/[0.07] bg-gradient-to-br shadow-[0_20px_50px_rgba(0,0,0,0.06)] ${accent}`}
+      className={`group relative aspect-[16/11] w-full overflow-hidden rounded-2xl border border-black/[0.08] bg-gradient-to-br shadow-[0_16px_40px_rgba(0,0,0,0.055)] ${accent}`}
       style={{ contain: "layout paint" }}
     >
       <div
-        className="absolute inset-0 opacity-[0.3]"
+        className="pointer-events-none absolute inset-0 opacity-25"
         style={{
-          backgroundImage: `repeating-linear-gradient(-12deg, transparent 0, transparent 14px, rgba(0,0,0,0.035) 14px, rgba(0,0,0,0.035) 15px)`,
+          backgroundImage: `repeating-linear-gradient(-12deg, transparent 0, transparent 16px, rgba(0,0,0,0.04) 16px, rgba(0,0,0,0.04) 17px)`,
         }}
       />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_70%_30%,rgba(255,255,255,0.55),transparent_55%)]" />
-      <div className="pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full border border-black/[0.05] transition-transform duration-700 ease-out group-hover:scale-[1.04]" />
-      <div className="pointer-events-none absolute -bottom-12 -left-10 h-48 w-48 rounded-full border border-black/[0.06] transition-transform duration-700 ease-out group-hover:-translate-y-1" />
-      <div
-        className="absolute left-6 top-6 flex items-center gap-2 rounded-full border border-black/[0.08] bg-white/90 px-3 py-1.5 text-[9px] uppercase tracking-[0.35em] text-black/50"
-        style={mono}
-      >
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_55%_at_72%_28%,rgba(255,255,255,0.5),transparent_58%)]" />
+      <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-black/[0.1] bg-white/92 px-3 py-1.5 text-[9px] uppercase tracking-[0.35em] text-black/52" style={mono}>
         <span className="h-1 w-1 shrink-0 rounded-full bg-emerald-600/90" />
         {id}
       </div>
       <p
-        className="pointer-events-none absolute bottom-6 left-6 max-w-[58%] text-[clamp(1.75rem,4.5vw,3rem)] leading-none tracking-[0.02em] text-black/[0.08] transition-colors duration-300 group-hover:text-black/14"
+        className="pointer-events-none absolute bottom-5 left-5 max-w-[55%] text-[clamp(1.65rem,4vw,2.75rem)] leading-none tracking-[0.02em] text-black/[0.09] transition-colors duration-200 group-hover:text-black/14"
         style={bebas}
       >
         Preview
@@ -243,79 +275,39 @@ function ProjectVisual({ id, accent }: { id: string; accent: string }) {
 
 export default function SceneTwo() {
   const rootRef = useRef<HTMLDivElement>(null);
-  const introRef = useRef<HTMLElement>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const root = rootRef.current;
-    const scroller = document.querySelector(".main-scroll") as HTMLElement | null;
-    if (!root || !scroller) return;
+    const scroller = document.querySelector(".main-scroll");
+    if (!root || !(scroller instanceof HTMLElement)) return;
 
-    const stCommon = {
-      scroller,
-      invalidateOnRefresh: true,
-      fastScrollEnd: true,
-    } as const;
+    const nodes = root.querySelectorAll<HTMLElement>(".s2-reveal");
+    if (nodes.length === 0) return;
 
-    const ctx = gsap.context(() => {
-      if (introRef.current) {
-        gsap.from(introRef.current, {
-          y: 28,
-          opacity: 0,
-          duration: 0.7,
-          ease: "power2.out",
-          scrollTrigger: {
-            ...stCommon,
-            trigger: introRef.current,
-            start: "top 90%",
-            toggleActions: "play none none none",
-          },
-        });
-      }
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.add("s2-inview");
+          io.unobserve(entry.target);
+        }
+      },
+      { root: scroller, threshold: 0.06, rootMargin: "0px 0px -6% 0px" },
+    );
 
-      root.querySelectorAll("[data-s2-project]").forEach((section) => {
-        gsap.from(section, {
-          y: 32,
-          opacity: 0,
-          duration: 0.55,
-          ease: "power2.out",
-          scrollTrigger: {
-            ...stCommon,
-            trigger: section as HTMLElement,
-            start: "top 90%",
-            toggleActions: "play none none none",
-          },
-        });
-      });
-    }, root);
-
-    let resizeT: ReturnType<typeof setTimeout> | undefined;
-    const onResize = () => {
-      clearTimeout(resizeT);
-      resizeT = setTimeout(() => ScrollTrigger.refresh(), 120);
-    };
-    window.addEventListener("resize", onResize, { passive: true });
-    requestAnimationFrame(() => ScrollTrigger.refresh());
-
-    return () => {
-      clearTimeout(resizeT);
-      window.removeEventListener("resize", onResize);
-      ctx.revert();
-    };
+    nodes.forEach((el) => io.observe(el));
+    return () => io.disconnect();
   }, []);
 
   return (
     <div id="work-region" ref={rootRef} className="relative overflow-x-clip text-[#0c0c0c]">
       <SceneTwoBackdrop />
 
-      {/* Edge frame */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-px bg-gradient-to-r from-transparent via-black/12 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-px bg-gradient-to-r from-transparent via-black/15 to-transparent" />
 
-      <header
-        ref={introRef}
-        className="relative z-10 mx-auto max-w-[1400px] px-5 pb-8 pt-20 md:px-10 md:pb-12 md:pt-28 lg:px-14"
-      >
-        <p className="mb-6 flex items-center gap-3 text-[9px] uppercase tracking-[0.55em] text-black/45" style={mono}>
-          <span className="h-px w-12 bg-black/22" />
+      <header className="s2-reveal relative z-10 mx-auto max-w-[1400px] px-5 pb-8 pt-20 md:px-10 md:pb-12 md:pt-28 lg:px-14">
+        <p className="mb-6 flex items-center gap-3 text-[9px] uppercase tracking-[0.55em] text-black/48" style={mono}>
+          <span className="h-px w-12 bg-black/25" />
           Selected work
         </p>
         <h1 className="max-w-[14ch] text-[clamp(3.5rem,10vw,8.5rem)] leading-[0.88] tracking-[0.02em]" style={bebas}>
@@ -325,44 +317,53 @@ export default function SceneTwo() {
             THAT SHIP.
           </span>
         </h1>
-        <p className="mt-8 max-w-xl text-[14px] leading-[1.8] text-black/52" style={mono}>
+        <p className="mt-8 max-w-xl text-[14px] leading-[1.8] text-black/54" style={mono}>
           Sample deck intro — replace with how you frame case studies: constraints, your role, and the delta you
           created. The rows below are structured so swapping copy stays effortless.
         </p>
       </header>
 
       <div className="relative z-10 mx-auto max-w-[1400px] px-5 pb-28 md:px-10 lg:px-14">
-        {projects.map((p) => (
+        {projects.map((p, i) => (
           <article
             key={p.id}
             data-s2-project
-            className="mb-6 rounded-3xl border border-black/[0.08] bg-[#fdfcf9] p-6 shadow-[0_2px_0_rgba(255,255,255,0.9)_inset,0_18px_40px_rgba(0,0,0,0.04)] last:mb-0 md:mb-8 md:p-10 lg:p-12"
-            style={{ contain: "layout paint" }}
+            className="s2-reveal relative mb-6 rounded-3xl border border-black/[0.1] bg-[#fcfaf6] p-6 shadow-[0_1px_0_rgba(255,255,255,0.95)_inset,0_14px_32px_rgba(0,0,0,0.045)] last:mb-0 md:mb-8 md:p-10 lg:p-12"
+            style={{
+              contain: "layout paint",
+              transitionDelay: `${Math.min(i, 8) * 45}ms`,
+            }}
           >
-            <div className="grid items-start gap-10 lg:grid-cols-12 lg:gap-12">
+            <div
+              className={`absolute left-0 top-8 bottom-8 w-[3px] rounded-full md:top-10 md:bottom-10 ${
+                i % 3 === 0 ? "bg-black/18" : i % 3 === 1 ? "bg-black/12" : "bg-black/[0.09]"
+              }`}
+              aria-hidden
+            />
+            <div className="grid items-start gap-10 pl-1 lg:grid-cols-12 lg:gap-12 lg:pl-2">
               <div className="lg:col-span-5">
                 <div className="flex flex-wrap items-end justify-between gap-4 lg:block">
-                  <span className="text-[clamp(3.5rem,8vw,6rem)] leading-none text-black/[0.14]" style={bebas}>
+                  <span className="text-[clamp(3.5rem,8vw,6rem)] leading-none text-black/[0.16]" style={bebas}>
                     {p.index}
                   </span>
-                  <span className="text-[10px] uppercase tracking-[0.35em] text-black/38 lg:mt-4" style={mono}>
+                  <span className="text-[10px] uppercase tracking-[0.35em] text-black/40 lg:mt-4" style={mono}>
                     {p.year} · {p.role}
                   </span>
                 </div>
                 <h2 className="mt-4 text-[clamp(2rem,4.2vw,3.25rem)] leading-[0.95] tracking-[0.03em]" style={bebas}>
                   {p.title}
                 </h2>
-                <p className="mt-5 text-[13px] leading-[1.85] text-black/52" style={mono}>
+                <p className="mt-5 text-[13px] leading-[1.85] text-black/54" style={mono}>
                   {p.blurb}
                 </p>
-                <p className="mt-4 text-[12px] leading-[1.75] text-black/40" style={mono}>
+                <p className="mt-4 text-[12px] leading-[1.75] text-black/42" style={mono}>
                   {p.detail}
                 </p>
                 <div className="mt-8 flex flex-wrap gap-2">
                   {p.tags.map((t) => (
                     <span
                       key={t}
-                      className="rounded-full border border-black/[0.08] bg-black/[0.025] px-3 py-1.5 text-[9px] uppercase tracking-[0.2em] text-black/58"
+                      className="rounded-full border border-black/[0.1] bg-black/[0.03] px-3 py-1.5 text-[9px] uppercase tracking-[0.2em] text-black/60"
                       style={mono}
                     >
                       {t}
@@ -373,7 +374,7 @@ export default function SceneTwo() {
                   <a
                     data-cursor-expand
                     href="#"
-                    className="rounded-full border border-black/18 bg-black px-6 py-3 text-[9px] uppercase tracking-[0.28em] text-white transition-[transform,box-shadow] hover:shadow-md active:scale-[0.98]"
+                    className="rounded-full border border-black/18 bg-black px-6 py-3 text-[9px] uppercase tracking-[0.28em] text-white transition-shadow hover:shadow-md"
                     style={mono}
                   >
                     Live demo
@@ -381,16 +382,16 @@ export default function SceneTwo() {
                   <a
                     data-cursor-expand
                     href="#"
-                    className="rounded-full border border-black/15 px-6 py-3 text-[9px] uppercase tracking-[0.28em] text-black/72 transition-colors hover:border-black/28 hover:text-black"
+                    className="rounded-full border border-black/14 px-6 py-3 text-[9px] uppercase tracking-[0.28em] text-black/74 transition-colors hover:border-black/26 hover:text-black"
                     style={mono}
                   >
                     Case write-up
                   </a>
                 </div>
-                <div className="mt-10 grid grid-cols-2 gap-4 border-t border-black/[0.07] pt-8 sm:max-w-sm">
+                <div className="mt-10 grid grid-cols-2 gap-4 border-t border-black/[0.08] pt-8 sm:max-w-sm">
                   {p.metrics.map((m) => (
                     <div key={m.k}>
-                      <p className="text-[8px] uppercase tracking-[0.35em] text-black/38" style={mono}>
+                      <p className="text-[8px] uppercase tracking-[0.35em] text-black/40" style={mono}>
                         {m.k}
                       </p>
                       <p className="mt-1 text-2xl tracking-wide text-black/88" style={bebas}>
@@ -408,7 +409,7 @@ export default function SceneTwo() {
         ))}
       </div>
 
-      <div className="relative z-10 h-px bg-gradient-to-r from-transparent via-black/12 to-transparent" />
+      <div className="relative z-10 h-px bg-gradient-to-r from-transparent via-black/14 to-transparent" />
     </div>
   );
 }

@@ -34,6 +34,26 @@ html::-webkit-scrollbar { display: none; }
 
 .main-scroll::-webkit-scrollbar { display: none; }
 
+/* Scene 2 — lightweight scroll reveals (no GSAP / ScrollTrigger) */
+.s2-reveal {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.s2-reveal.s2-inview {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .s2-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 * { cursor: none !important; }
 
 /* ── Film grain ────────────────────────────── */
