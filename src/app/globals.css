@@ -32,6 +32,8 @@ html, body {
 }
 html::-webkit-scrollbar { display: none; }
 
+.main-scroll::-webkit-scrollbar { display: none; }
+
 * { cursor: none !important; }
 
 /* ── Film grain ────────────────────────────── */

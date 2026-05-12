@@ -1,261 +1,365 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-export default function SceneOne({ clock, onReachBottom }: { clock: string, onReachBottom: () => void }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const hasTriggered = useRef(false);
-  const [isInitiating, setIsInitiating] = useState(false);
+const mono = { fontFamily: "'DM Mono', ui-monospace, monospace" } as const;
+const bebas = { fontFamily: "'Bebas Neue', sans-serif" } as const;
+const cormorant = { fontFamily: "'Cormorant Garamond', Georgia, serif" } as const;
 
-  // ── 1. THE CINEMATIC ENTRY ANIMATIONS ──
+export default function SceneOne({ clock }: { clock: string }) {
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  // Hero entrance
   useEffect(() => {
-    if (!containerRef.current) return;
-
+    if (!rootRef.current) return;
     const ctx = gsap.context(() => {
-      // Threshold 0.35 means 35% of the section MUST be visible before animating
-      // This prevents the "too early" off-screen triggering
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const el = entry.target;
-
-            // 1. Hero Reveal (Slow, majestic upward slide)
-            if (el.classList.contains("anim-hero")) {
-              gsap.to(el.querySelectorAll(".hero-line"), { 
-                y: 0, opacity: 1, duration: 1.8, ease: "expo.out", stagger: 0.15 
-              });
-            }
-            
-            // 2. About Reveal (Graphic slides right, text cascades up)
-            if (el.classList.contains("anim-about")) {
-              // The 2D Core
-              gsap.to(el.querySelector(".about-left"), { 
-                x: 0, opacity: 1, duration: 1.8, ease: "expo.out", delay: 0.1 
-              });
-              // The Text cascading smoothly
-              gsap.to(el.querySelectorAll(".about-right-line"), { 
-                y: 0, opacity: 1, duration: 1.6, ease: "power3.out", stagger: 0.15, delay: 0.3 
-              });
-            }
-
-            // 3. Philosophy Reveal (Deep, slow zoom and fade)
-            if (el.classList.contains("anim-philosophy")) {
-              gsap.to(el.querySelectorAll(".phil-line"), { 
-                scale: 1, opacity: 1, duration: 2.2, ease: "power2.out", stagger: 0.25 
-              });
-            }
-
-            observer.unobserve(el); // Only animate once
-          }
-        });
-      }, { threshold: 0.35 }); 
-
-      // Attach observer to our section wrappers
-      document.querySelectorAll(".anim-section").forEach(sec => observer.observe(sec));
-
-      return () => observer.disconnect();
-    }, containerRef);
-
+      const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+      tl.from(".s1-hero-mask-inner", {
+        yPercent: 110,
+        rotate: 2,
+        opacity: 0,
+        duration: 1.25,
+        stagger: 0.11,
+      })
+        .from(
+          ".s1-hero-float",
+          { y: 36, opacity: 0, filter: "blur(12px)", duration: 1, ease: "power3.out" },
+          "-=0.85",
+        )
+        .from(
+          ".s1-hero-rail",
+          { opacity: 0, x: -12, duration: 0.8, ease: "power2.out" },
+          "-=0.9",
+        )
+        .from(
+          ".s1-hero-orbit",
+          { scale: 0.92, opacity: 0, duration: 1.1, ease: "power3.out" },
+          "-=1",
+        )
+        .from(".s1-hero-foot", { y: 16, opacity: 0, duration: 0.7 }, "-=0.55");
+    }, rootRef);
     return () => ctx.revert();
   }, []);
 
-  // ── 2. THE AUTO-LOCK TRANSITION TRIGGER ──
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    if (hasTriggered.current) return;
+  // Scroll-driven section reveals
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target as HTMLElement;
+          if (el.classList.contains("s1-block-about")) {
+            gsap.fromTo(
+              el.querySelectorAll(".s1-ab"),
+              { y: 48, opacity: 0, filter: "blur(8px)" },
+              { y: 0, opacity: 1, filter: "blur(0px)", duration: 1, stagger: 0.08, ease: "power3.out" },
+            );
+          }
+          if (el.classList.contains("s1-block-pillars")) {
+            gsap.fromTo(
+              el.querySelectorAll(".s1-pillar"),
+              { y: 56, opacity: 0 },
+              { y: 0, opacity: 1, duration: 0.95, stagger: 0.12, ease: "power3.out" },
+            );
+          }
+          if (el.classList.contains("s1-block-timeline")) {
+            gsap.fromTo(
+              el.querySelectorAll(".s1-tl"),
+              { x: -24, opacity: 0 },
+              { x: 0, opacity: 1, duration: 0.75, stagger: 0.06, ease: "power2.out" },
+            );
+          }
+          if (el.classList.contains("s1-block-manifesto")) {
+            gsap.fromTo(
+              el.querySelector(".s1-man-line"),
+              { y: 32, opacity: 0 },
+              { y: 0, opacity: 1, duration: 1.1, ease: "power3.out" },
+            );
+          }
+          obs.unobserve(el);
+        });
+      },
+      { threshold: 0.2, rootMargin: "0px 0px -6% 0px" },
+    );
+    root.querySelectorAll(".s1-io").forEach((n) => obs.observe(n));
+    return () => obs.disconnect();
+  }, []);
 
-    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
-    
-    // When the user hits the absolute bottom (Philosophy is perfectly centered)
-    if (scrollTop > 100 && Math.ceil(scrollTop + clientHeight) >= scrollHeight - 5) {
-      hasTriggered.current = true;
-      setIsInitiating(true); 
-      
-      // Physically lock the scrollbar so the user is trapped for the cinematic
-      e.currentTarget.style.overflow = "hidden";
-
-      // The 1.5 Second Dramatic Pause before the doors slam
-      setTimeout(() => {
-        onReachBottom();
-      }, 1500);
-    }
-  };
+  const tape = [
+    "Systems design",
+    "Real-time interfaces",
+    "Performance budgets",
+    "API architecture",
+    "Design systems",
+    "WebGL & motion",
+  ];
 
   return (
-    <div ref={containerRef} className="absolute inset-0 w-full h-full bg-[#050505] overflow-hidden">
-      
-      {/* ── FIXED NAVBAR ── */}
-      <nav className="absolute top-0 left-0 w-full z-[100] flex justify-between items-center px-12 py-9 pointer-events-none"
-        style={{borderBottom:"1px solid rgba(175,175,175,0.05)"}}>
-        <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:21,letterSpacing:"0.18em",color:"#DEDEDE"}} className="pointer-events-auto">RA.</div>
-        <div className="flex gap-10 pointer-events-auto" style={{fontFamily:"'DM Mono',monospace",fontSize:8.5,letterSpacing:"0.48em",textTransform:"uppercase"}}>
-          {["Architecture","Projects","Contact"].map(n=>(
-            <span key={n} data-cursor-expand style={{color:"rgba(195,195,195,0.36)",transition:"color 0.25s"}}
-              onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.color="rgba(225,225,225,0.88)";}}
-              onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.color="rgba(195,195,195,0.36)";}}>{n}</span>
+    <div ref={rootRef} className="relative bg-[#030303] text-[#e6e6e6]">
+      {/* Depth */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.45]"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
+          `,
+          backgroundSize: "72px 72px",
+          maskImage: "radial-gradient(ellipse 70% 60% at 50% 40%, black 20%, transparent 100%)",
+        }}
+      />
+      <div className="pointer-events-none absolute inset-0 animate-grain opacity-[0.035]" />
+
+      <nav
+        className="sticky top-0 z-40 flex items-center justify-between border-b border-white/[0.06] bg-[#030303]/75 px-5 py-5 backdrop-blur-md md:px-10"
+        style={mono}
+      >
+        <span data-cursor-expand className="text-[11px] tracking-[0.35em] text-white/90" style={bebas}>
+          RA.
+        </span>
+        <div className="flex gap-8 text-[9px] uppercase tracking-[0.42em] text-white/35">
+          {["Work", "Profile", "Contact"].map((n) => (
+            <button
+              key={n}
+              type="button"
+              data-cursor-expand
+              className="transition-colors hover:text-white/80"
+              onClick={() => {
+                const id = n === "Work" ? "work-region" : undefined;
+                if (id) document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
+              {n}
+            </button>
           ))}
         </div>
-        <div className="flex items-center gap-2 pointer-events-auto" style={{fontFamily:"'DM Mono',monospace",fontSize:8.5,letterSpacing:"0.3em",textTransform:"uppercase",color:"rgba(195,195,195,0.28)"}}>
-          <div className="animate-status" style={{width:5,height:5,borderRadius:"50%",background:"#8A8A8A"}}/>
-          Open to work
+        <div className="hidden items-center gap-2 text-[9px] uppercase tracking-[0.28em] text-white/30 sm:flex">
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400/90" />
+          Available Q2
         </div>
       </nav>
 
-      {/* ── FIXED STATS FOOTER ── */}
-      <div className="absolute bottom-0 left-0 right-0 z-[100] flex items-center justify-between px-12 py-5 pointer-events-none" 
-        style={{borderTop:"1px solid rgba(175,175,175,0.05)"}}>
-        {[{n:"24+",l:"Projects Shipped"},{n:"18+",l:"Technologies"},{n:"3+",l:"Years Experience"}].map((s,i)=>(
-          <div key={i} className="flex flex-col gap-[3px]">
-            <span style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:28,lineHeight:1,color:"#D5D5D5"}}>{s.n}</span>
-            <span style={{fontFamily:"'DM Mono',monospace",fontSize:7.5,letterSpacing:"0.46em",textTransform:"uppercase",color:"rgba(190,190,190,0.26)"}}>{s.l}</span>
+      {/* ── Hero: baseline mega-type + floating thesis + orbit ring (not 50/50) ── */}
+      <section className="relative min-h-[100dvh] overflow-hidden px-4 pb-10 pt-6 md:px-8 lg:px-12">
+        <div className="s1-hero-rail pointer-events-none absolute left-3 top-28 hidden flex-col gap-6 text-[9px] uppercase tracking-[0.5em] text-white/25 lg:flex">
+          <span className="max-w-[10em] leading-relaxed">Portfolio · sample copy</span>
+          <div className="h-24 w-px bg-gradient-to-b from-white/25 to-transparent" />
+          <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>Scroll</span>
+        </div>
+
+        {/* Orbit decoration — behind float card */}
+        <div className="s1-hero-orbit pointer-events-none absolute right-[-18%] top-[8%] h-[min(72vw,520px)] w-[min(72vw,520px)] md:right-[-8%]">
+          <div className="absolute inset-0 rounded-full border border-white/[0.07]" />
+          <div className="absolute inset-[10%] rounded-full border border-white/[0.05] border-t-white/20" />
+          <div className="absolute inset-[22%] rounded-full border border-dashed border-white/[0.08]" />
+          <div
+            className="absolute left-1/2 top-1/2 h-[1px] w-[120%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-transparent via-white/15 to-transparent"
+            style={{ transform: "translate(-50%, -50%) rotate(-18deg)" }}
+          />
+        </div>
+
+        {/* Floating thesis cluster — offset, overlaps void */}
+        <div
+          className="s1-hero-float relative z-10 mx-auto mt-8 w-full max-w-md border border-white/[0.09] bg-[#080808]/80 p-6 shadow-[0_40px_120px_rgba(0,0,0,0.55)] backdrop-blur-xl md:ml-auto md:mr-6 md:mt-14 lg:mr-16 lg:mt-20"
+          style={mono}
+        >
+          <p className="mb-3 text-[9px] uppercase tracking-[0.55em] text-white/40">Full-stack engineer</p>
+          <p className="text-[13px] leading-[1.75] text-white/55">
+            Sample positioning statement — replace with your north star: how you think about product,
+            latency, and craft when you ship software at the edge of the browser.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-3 border-t border-white/[0.06] pt-5 text-[9px] uppercase tracking-[0.28em] text-white/35">
+            <span>Remote / India</span>
+            <span className="text-white/15">·</span>
+            <span>{clock || "—:—:—"} IST</span>
           </div>
-        ))}
-        <div style={{textAlign:"right" as const}}>
-          <span style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:22,letterSpacing:"0.1em",color:"rgba(190,190,190,0.58)",display:"block"}}>{clock||"00:00:00"}</span>
-          <span style={{fontFamily:"'DM Mono',monospace",fontSize:7.5,letterSpacing:"0.3em",textTransform:"uppercase",color:"rgba(190,190,190,0.2)"}}>India Standard Time</span>
+        </div>
+
+        {/* Baseline-anchored typography */}
+        <div className="relative z-[5] mt-[min(22vh,180px)] flex flex-col justify-end md:mt-[min(18vh,200px)]">
+          <p
+            className="s1-hero-mask-inner mb-2 text-[10px] uppercase tracking-[0.65em] text-white/30 md:pl-1"
+            style={mono}
+          >
+            Rupesh Agarwal
+          </p>
+          <div className="overflow-hidden">
+            <h1
+              className="s1-hero-mask-inner leading-[0.82] tracking-[0.02em] text-white"
+              style={{
+                ...bebas,
+                fontSize: "clamp(4.2rem, 14vw, 11rem)",
+              }}
+            >
+              RUPESH
+            </h1>
+          </div>
+          <div className="-mt-1 overflow-hidden md:-mt-2">
+            <h1
+              className="s1-hero-mask-inner leading-[0.82] tracking-[0.28em] text-transparent"
+              style={{
+                ...bebas,
+                fontSize: "clamp(2.4rem, 7.5vw, 5.5rem)",
+                WebkitTextStroke: "1.2px rgba(255,255,255,0.35)",
+              }}
+            >
+              AGARWAL
+            </h1>
+          </div>
+          <p
+            className="s1-hero-mask-inner mt-6 max-w-xl text-[clamp(15px,1.35vw,19px)] font-light italic leading-relaxed text-white/40 md:pl-1"
+            style={cormorant}
+          >
+            Sample hero line — replace later: I build resilient backends and cinematic frontends where
+            every transition earns its milliseconds.
+          </p>
+        </div>
+
+        <div
+          className="s1-hero-foot pointer-events-none absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 md:bottom-10"
+          style={mono}
+        >
+          <span className="text-[8px] uppercase tracking-[0.5em] text-white/25">Continue</span>
+          <div className="flex h-10 w-px overflow-hidden bg-white/[0.12]">
+            <div className="animate-scroll-drop h-1/2 w-full bg-gradient-to-b from-white/50 to-transparent" />
+          </div>
+        </div>
+      </section>
+
+      {/* Marquee */}
+      <div className="s1-block-marquee overflow-hidden border-y border-white/[0.06] bg-[#050505] py-3.5">
+        <div className="ticker-inner flex items-center gap-10">
+          {[...tape, ...tape, ...tape, ...tape].map((t, i) => (
+            <span
+              key={`${t}-${i}`}
+              className="shrink-0 text-[9px] uppercase tracking-[0.55em] text-white/30"
+              style={mono}
+            >
+              {t}
+              <span className="ml-10 text-white/12">✦</span>
+            </span>
+          ))}
         </div>
       </div>
 
-      {/* ── THE SCROLLABLE WINDOW ── */}
-      <div 
-        ref={scrollRef}
-        onScroll={handleScroll} 
-        className="absolute inset-0 w-full h-full overflow-y-auto z-10" 
-        style={{ scrollbarWidth: "none", scrollBehavior: "smooth" }}
-      >
-        <div className="relative w-full flex flex-col pt-[100px]">
-          
-          {/* ════ SECTION 1: THE INTRO HERO ════ */}
-          <div className="anim-section anim-hero relative w-full h-[85vh] flex items-center px-10 md:px-24 shrink-0">
-            <div className="w-full md:w-1/2 flex flex-col justify-center">
-              
-              <div className="hero-line opacity-0 translate-y-16 flex items-center gap-4 mb-7">
-                <div style={{width:35,height:1,background:"rgba(195,195,195,0.2)"}}/>
-                <p style={{fontFamily:"'DM Mono',monospace",fontSize:8.5,letterSpacing:"0.56em",textTransform:"uppercase",color:"rgba(195,195,195,0.36)"}}>Full-Stack Engineer</p>
-              </div>
-              
-              <div style={{overflow:"hidden",lineHeight:0.86,marginBottom:3}}>
-                <h1 className="hero-line opacity-0 translate-y-[80px]" style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(88px,10.5vw,158px)",letterSpacing:"0.025em",color:"#FFFFFF",display:"block"}}>RUPESH</h1>
-              </div>
-              <div style={{overflow:"hidden",lineHeight:0.86}}>
-                <h1 className="hero-line opacity-0 translate-y-[80px]" style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(88px,10.5vw,158px)",letterSpacing:"0.025em",color:"transparent",WebkitTextStroke:"1.5px rgba(215,215,215,0.3)",display:"block"}}>AGARWAL</h1>
-              </div>
-              
-              <p className="hero-line opacity-0 translate-y-12" style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"clamp(13px,1.1vw,17px)",fontStyle:"italic",fontWeight:300,color:"rgba(185,185,185,0.38)",lineHeight:1.85,marginTop:22,letterSpacing:"0.04em"}}>
-                Decoding the future of interactive interfaces — specialised in high-performance web architecture.
+      {/* About */}
+      <section className="s1-io s1-block-about border-b border-white/[0.05] px-5 py-24 md:px-10 lg:px-16">
+        <div className="mb-14 flex items-center gap-4">
+          <div className="h-px w-10 bg-white/20" />
+          <p className="text-[9px] uppercase tracking-[0.55em] text-white/35" style={mono}>
+            01 — Profile
+          </p>
+        </div>
+        <div className="grid gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-24">
+          <h2 className="s1-ab text-[clamp(2.5rem,5vw,4rem)] leading-[0.95] tracking-[0.02em]" style={bebas}>
+            CLARITY AT
+            <br />
+            <span className="text-transparent" style={{ WebkitTextStroke: "1px rgba(255,255,255,0.28)" }}>
+              SCALE.
+            </span>
+          </h2>
+          <div className="space-y-6">
+            <p className="s1-ab text-[13px] leading-[1.85] text-white/45" style={mono}>
+              Sample bio paragraph one — mention your stack, what you optimize for, and the kinds of teams
+              you like to join. This block is intentionally long so you can see rhythm and line length.
+            </p>
+            <p className="s1-ab text-[13px] leading-[1.85] text-white/45" style={mono}>
+              Second paragraph: shipped systems, teaching yourself new runtimes, obsession with DX, or how
+              you prototype in days and harden in weeks. Replace all of this with your voice.
+            </p>
+            <blockquote
+              className="s1-ab border-l border-white/20 py-1 pl-6 text-[17px] leading-relaxed text-white/55 italic"
+              style={cormorant}
+            >
+              “Sample pull quote — the line people remember when they close the tab.”
+            </blockquote>
+          </div>
+        </div>
+      </section>
+
+      {/* Pillars */}
+      <section className="s1-io s1-block-pillars px-5 py-24 md:px-10 lg:px-16">
+        <div className="mb-12 flex items-center gap-4">
+          <div className="h-px w-10 bg-white/20" />
+          <p className="text-[9px] uppercase tracking-[0.55em] text-white/35" style={mono}>
+            02 — Capabilities
+          </p>
+        </div>
+        <div className="grid gap-6 md:grid-cols-3">
+          {[
+            {
+              t: "Architecture",
+              d: "Sample: service boundaries, caching, queues, and schema design for products that outgrow the MVP.",
+            },
+            {
+              t: "Interfaces",
+              d: "Sample: motion-first UI, accessible components, and layouts that stay sharp from mobile to ultrawide.",
+            },
+            {
+              t: "Delivery",
+              d: "Sample: CI pipelines, observability, and pragmatic tradeoffs so teams ship without fearing Friday deploys.",
+            },
+          ].map((x) => (
+            <div
+              key={x.t}
+              className="s1-pillar group border border-white/[0.07] bg-white/[0.02] p-8 transition-colors hover:border-white/[0.14] hover:bg-white/[0.035]"
+            >
+              <h3 className="mb-4 text-xl tracking-[0.08em] text-white/90" style={bebas}>
+                {x.t}
+              </h3>
+              <p className="text-[12px] leading-[1.75] text-white/40" style={mono}>
+                {x.d}
               </p>
-              
-              <div className="hero-line opacity-0 translate-y-8 flex items-center gap-3 mt-11" style={{fontFamily:"'DM Mono',monospace",fontSize:7.5,letterSpacing:"0.48em",textTransform:"uppercase",color:"rgba(185,185,185,0.18)"}}>
-                <div style={{display:"flex",flexDirection:"column" as const,alignItems:"center",gap:3}}>
-                  {[0,1,2].map(i=>(<div key={i} className="animate-scroll-drop" style={{width:1,height:10,background:"rgba(175,175,175,0.4)",animationDelay:`${i*0.28}s`}}/>))}
-                </div>
-                Scroll to initiate
-              </div>
             </div>
-
-            <div className="w-full md:w-1/2 h-full flex items-center justify-center">
-              <div className="hero-line opacity-0 translate-y-16 relative flex items-center justify-center pointer-events-none" style={{ width: "clamp(260px, 35vw, 480px)", height: "clamp(260px, 35vw, 480px)" }}>
-                <div className="absolute inset-0 rounded-full border border-[rgba(255,255,255,0.03)] border-t-[rgba(255,255,255,0.25)] animate-[spin_12s_linear_infinite]" />
-                <div className="absolute inset-8 rounded-full border border-[rgba(255,255,255,0.04)] border-l-[rgba(255,255,255,0.35)] animate-[spin_8s_linear_infinite_reverse]" />
-                <div className="absolute inset-16 rounded-full border border-[rgba(255,255,255,0.05)] border-b-[rgba(255,255,255,0.5)] animate-[spin_16s_linear_infinite]" />
-                <div className="absolute w-2 h-2 bg-white rounded-full shadow-[0_0_20px_4px_rgba(255,255,255,0.8)]" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.04)_0%,transparent_60%)]" />
-              </div>
-            </div>
-          </div>
-
-          {/* ════ SECTION 2: THE ABOUT ════ */}
-          <div className="anim-section anim-about relative w-full min-h-screen px-10 md:px-24 py-32 border-t border-[rgba(255,255,255,0.03)] flex flex-col justify-center">
-            
-            <div className="about-right-line opacity-0 translate-y-12 flex items-center gap-4 mb-20">
-              <div style={{width:32,height:1,background:"rgba(195,195,195,0.2)"}}/>
-              <p style={{fontFamily:"'DM Mono',monospace",fontSize:8.5,letterSpacing:"0.56em",textTransform:"uppercase",color:"rgba(195,195,195,0.36)"}}>01. Identification</p>
-            </div>
-
-            <div className="flex flex-col md:flex-row gap-16 md:gap-24 items-center">
-              
-              {/* LEFT: 2D Component */}
-              <div className="about-left opacity-0 -translate-x-[100px] w-full md:w-1/2 flex items-center justify-center">
-                <div className="relative w-64 h-64 md:w-80 md:h-80 flex items-center justify-center">
-                  <div className="absolute inset-0 border-[1px] border-dashed border-[rgba(255,255,255,0.15)] rounded-full animate-[spin_30s_linear_infinite]" />
-                  <div className="absolute inset-8 border-[1px] border-[rgba(255,255,255,0.08)] animate-[spin_20s_linear_infinite_reverse]" />
-                  <div className="absolute inset-16 border-[1px] border-[rgba(255,255,255,0.2)] rounded-full border-t-transparent border-b-transparent animate-[spin_10s_linear_infinite]" />
-                  <div className="absolute w-12 h-12 bg-[rgba(255,255,255,0.03)] backdrop-blur-md border border-[rgba(255,255,255,0.3)] shadow-[0_0_30px_rgba(255,255,255,0.1)] animate-pulse" style={{ transform: "rotate(45deg)" }} />
-                  <div className="absolute top-0 right-0 w-2 h-2 bg-white" />
-                  <div className="absolute bottom-0 left-0 w-2 h-2 bg-[rgba(255,255,255,0.2)]" />
-                  <span className="absolute -bottom-8 font-mono text-[9px] tracking-[0.3em] text-[rgba(255,255,255,0.2)]">SYS.CORE // V2.0.4</span>
-                </div>
-              </div>
-
-              {/* RIGHT: Cascading Text Bio */}
-              <div className="w-full md:w-1/2 flex flex-col">
-                <h2 className="about-right-line opacity-0 translate-y-12" style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(40px,5vw,80px)",lineHeight:0.9,color:"#FFFFFF",letterSpacing:"0.02em", marginBottom: 24}}>
-                   ENGINEERING <br/>
-                   <span style={{color:"transparent",WebkitTextStroke:"1px rgba(255,255,255,0.4)"}}>THE UNSEEN.</span>
-                </h2>
-                <p className="about-right-line opacity-0 translate-y-12" style={{fontFamily:"'DM Mono',monospace",fontSize:13,color:"rgba(255,255,255,0.45)",lineHeight:1.8, marginBottom: 24}}>
-                  I am a Full-Stack Software Engineer focused on building robust, scalable architectures and merging them with highly interactive, cinematic frontend experiences. 
-                </p>
-                <p className="about-right-line opacity-0 translate-y-12" style={{fontFamily:"'DM Mono',monospace",fontSize:13,color:"rgba(255,255,255,0.45)",lineHeight:1.8}}>
-                  Currently pursuing a B.Tech in Computer Science at IIIT Sonepat. My work heavily involves the MERN stack, WebGL, and complex system automation.
-                </p>
-
-                <div className="about-right-line opacity-0 translate-y-12 grid grid-cols-2 gap-6 mt-16 pt-12 border-t border-[rgba(255,255,255,0.05)]">
-                  <div>
-                    <span style={{fontFamily:"'DM Mono',monospace",fontSize:8.5,letterSpacing:"0.3em",textTransform:"uppercase",color:"#FFF",display:"block",marginBottom:8}}>System Architecture</span>
-                    <span style={{fontFamily:"'DM Mono',monospace",fontSize:11,color:"rgba(255,255,255,0.3)",lineHeight:1.5}}>Designing resilient backends with Node.js and PostgreSQL.</span>
-                  </div>
-                  <div>
-                    <span style={{fontFamily:"'DM Mono',monospace",fontSize:8.5,letterSpacing:"0.3em",textTransform:"uppercase",color:"#FFF",display:"block",marginBottom:8}}>Fluid Interfaces</span>
-                    <span style={{fontFamily:"'DM Mono',monospace",fontSize:11,color:"rgba(255,255,255,0.3)",lineHeight:1.5}}>Crafting zero-lag UI with React, Next.js, and GSAP.</span>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          {/* ════ SECTION 3: THE PHILOSOPHY (Auto-Trigger) ════ */}
-          {/* Removed the extra padding. This is exactly 100vh tall and sits at the dead bottom. */}
-          <div className="anim-section anim-philosophy relative w-full h-screen bg-[#050505] flex flex-col items-center justify-center px-10 overflow-hidden">
-             
-             <div className="max-w-4xl mx-auto text-center relative z-10">
-               
-               <div className="phil-line opacity-0 scale-95 flex items-center justify-center gap-4 mb-10">
-                 <div style={{width:20,height:1,background:"rgba(195,195,195,0.2)"}}/>
-                 <p style={{fontFamily:"'DM Mono',monospace",fontSize:9,letterSpacing:"0.5em",textTransform:"uppercase",color:"rgba(255,255,255,0.3)"}}>The Philosophy</p>
-                 <div style={{width:20,height:1,background:"rgba(195,195,195,0.2)"}}/>
-               </div>
-               
-               <h2 className="phil-line opacity-0 scale-95" style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(50px,7vw,100px)",lineHeight:0.9,color:"#FFFFFF",letterSpacing:"0.02em"}}>
-                  CODE IS <span style={{color:"transparent",WebkitTextStroke:"1px rgba(255,255,255,0.4)"}}>POETRY.</span><br/>
-                  SYSTEMS ARE <span style={{color:"transparent",WebkitTextStroke:"1px rgba(255,255,255,0.4)"}}>ART.</span>
-               </h2>
-               
-               <p className="phil-line opacity-0 scale-95" style={{fontFamily:"'DM Mono',monospace",fontSize:13,color:"rgba(255,255,255,0.45)",marginTop:40,lineHeight:1.8,maxWidth:"600px",marginLeft:"auto",marginRight:"auto"}}>
-                 I bridge the gap between heavy backend architecture and fluid, cinematic frontend experiences. Every pixel is calculated. Every millisecond is optimized.
-               </p>
-               
-               {/* The Sequence Initiator UI: Appears exactly when the section hits the center and locks */}
-               <div className={`mt-16 mx-auto flex flex-col items-center transition-opacity duration-700 ${isInitiating ? "opacity-100" : "opacity-0"}`}>
-                 <p style={{fontFamily:"'DM Mono',monospace",fontSize:8,letterSpacing:"0.4em",color:"#FFF",marginBottom:12}}>INITIATING SEQUENCE</p>
-                 <div className="w-[1px] h-16 bg-[rgba(255,255,255,0.1)] relative overflow-hidden">
-                   <div className="absolute top-0 left-0 w-full bg-white origin-top" 
-                        style={{ 
-                          height: "100%", 
-                          transform: isInitiating ? "scaleY(1)" : "scaleY(0)", 
-                          transition: "transform 1.4s linear" 
-                        }} 
-                   />
-                 </div>
-               </div>
-             
-             </div>
-          </div>
-          
+          ))}
         </div>
-      </div>
+      </section>
+
+      {/* Timeline strip */}
+      <section className="s1-io s1-block-timeline border-y border-white/[0.06] bg-[#050505] px-5 py-16 md:px-10 lg:px-16">
+        <div className="mb-10 flex items-center gap-4">
+          <div className="h-px w-10 bg-white/20" />
+          <p className="text-[9px] uppercase tracking-[0.55em] text-white/35" style={mono}>
+            03 — Selected moments
+          </p>
+        </div>
+        <div className="grid gap-8 md:grid-cols-4">
+          {[
+            { y: "2026", l: "Sample — led platform migration" },
+            { y: "2025", l: "Sample — real-time dashboard launch" },
+            { y: "2024", l: "Sample — design system v2" },
+            { y: "2023", l: "Sample — first production GraphQL API" },
+          ].map((row) => (
+            <div key={row.y} className="s1-tl">
+              <p className="mb-2 text-3xl text-white/90" style={bebas}>
+                {row.y}
+              </p>
+              <p className="text-[11px] leading-relaxed text-white/38" style={mono}>
+                {row.l}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Manifesto exit */}
+      <section className="s1-io s1-block-manifesto px-5 py-28 md:px-10 lg:px-16">
+        <p
+          className="s1-man-line mx-auto max-w-4xl text-center text-[clamp(1.75rem,3.8vw,3rem)] leading-[1.15] tracking-[0.03em] text-white/88"
+          style={bebas}
+        >
+          SAMPLE MANIFESTO LINE — REPLACE WITH YOURS. PRECISION IS THE DEFAULT. MOTION IS THE REWARD.
+        </p>
+        <p
+          className="mx-auto mt-8 max-w-xl text-center text-[14px] leading-relaxed text-white/35"
+          style={cormorant}
+        >
+          End of Scene 1 — scroll enters the work section. White field below is intentional contrast.
+        </p>
+      </section>
     </div>
   );
 }

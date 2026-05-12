@@ -1,283 +1,414 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-export default function SceneTwo() {
-  const refs = useRef<(HTMLElement | null)[]>([]);
-  const deckRef = useRef<HTMLDivElement>(null);
-  const bgRef = useRef<HTMLDivElement>(null);
-  const wrapperRef = useRef<HTMLDivElement>(null); 
+gsap.registerPlugin(ScrollTrigger);
 
-  const [sysY, setSysY] = useState(0);
+const mono = { fontFamily: "'DM Mono', ui-monospace, monospace" } as const;
+const bebas = { fontFamily: "'Bebas Neue', sans-serif" } as const;
 
-  // ── THE GRAND DISPERSAL & SCENE ENTRANCE ──
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline();
+type Project = {
+  id: string;
+  index: string;
+  title: string;
+  role: string;
+  year: string;
+  blurb: string;
+  detail: string;
+  tags: string[];
+  metrics: { k: string; v: string }[];
+  accent: string;
+};
 
-      // 1. PHASE ONE: The Idle (0s to 1.4s)
-      // While the Portal is flying through, the bubbles sit bunched up in the center behind the text
-      tl.fromTo(".bubble-1", { top: "25%", left: "30%", width: "25vw", height: "25vw" }, { top: "22%", left: "28%", duration: 1.4, ease: "sine.inOut" }, 0)
-        .fromTo(".bubble-2", { top: "35%", right: "30%", width: "20vw", height: "20vw" }, { top: "38%", right: "28%", duration: 1.4, ease: "sine.inOut" }, 0)
-        .fromTo(".bubble-3", { bottom: "35%", left: "45%", width: "15vw", height: "15vw" }, { bottom: "32%", left: "43%", duration: 1.4, ease: "sine.inOut" }, 0);
+const projects: Project[] = [
+  {
+    id: "aurora",
+    index: "01",
+    title: "Aurora Console",
+    role: "Lead frontend · sample",
+    year: "2025",
+    blurb:
+      "Unified operations dashboard with sub-50ms updates across 12 chart surfaces. Sample copy — replace with your problem statement and outcome metrics.",
+    detail:
+      "Shipped incremental static regeneration paths, edge caching, and a tokenized design system so PMs could assemble new views without engineering every time.",
+    tags: ["Next.js", "TypeScript", "Redis", "WebSockets"],
+    metrics: [
+      { k: "Latency p95", v: "38ms" },
+      { k: "Uptime", v: "99.98%" },
+    ],
+    accent: "from-zinc-200 via-neutral-100 to-stone-300",
+  },
+  {
+    id: "lattice",
+    index: "02",
+    title: "Lattice Commerce",
+    role: "Full-stack · sample",
+    year: "2025",
+    blurb:
+      "Headless storefront experiment with optimistic carts and inventory reconciliation. Replace with your stack and constraints.",
+    detail:
+      "Built checkout resilience with idempotency keys, saga-style rollbacks, and a storybook-driven component library shared with native clients.",
+    tags: ["Node.js", "PostgreSQL", "GraphQL", "Stripe"],
+    metrics: [
+      { k: "Conv. lift", v: "+4.2%" },
+      { k: "API errors", v: "-62%" },
+    ],
+    accent: "from-neutral-100 via-zinc-100 to-stone-200",
+  },
+  {
+    id: "signal",
+    index: "03",
+    title: "Signal Desk",
+    role: "Realtime systems · sample",
+    year: "2024",
+    blurb:
+      "Live incident workspace for distributed teams — presence, timelines, and annotated traces in one surface.",
+    detail:
+      "WebSocket fan-out with Redis streams, backpressure tuning, and accessibility pass on every interactive control.",
+    tags: ["React", "Go", "Kafka", "OpenTelemetry"],
+    metrics: [
+      { k: "Concurrent rooms", v: "3k+" },
+      { k: "MTTR delta", v: "-18%" },
+    ],
+    accent: "from-stone-200 via-neutral-50 to-zinc-200",
+  },
+  {
+    id: "meridian",
+    index: "04",
+    title: "Meridian Atlas",
+    role: "WebGL + app shell · sample",
+    year: "2024",
+    blurb:
+      "Geospatial explorer layering vector tiles with GPU-filtered overlays — sample narrative for your maps or 3D work.",
+    detail:
+      "Custom shaders for elevation shading, LOD streaming, and graceful CPU fallback when WebGL2 is unavailable.",
+    tags: ["Three.js", "MapLibre", "Web Workers", "Vite"],
+    metrics: [
+      { k: "Draw calls", v: "-40%" },
+      { k: "Session length", v: "2.4×" },
+    ],
+    accent: "from-zinc-100 via-stone-100 to-neutral-200",
+  },
+  {
+    id: "forge",
+    index: "05",
+    title: "Forge CI",
+    role: "Platform · sample",
+    year: "2023",
+    blurb:
+      "Pipeline analytics product — flaky test detection, queue heatmaps, and owner routing. Placeholder until you paste the real story.",
+    detail:
+      "Ingested build metadata into ClickHouse, exposed SQL-backed charts, and shipped Slack actions for one-click retries.",
+    tags: ["Docker", "ClickHouse", "Temporal", "AWS"],
+    metrics: [
+      { k: "CI minutes saved", v: "820k/mo" },
+      { k: "MTTD flake", v: "-31%" },
+    ],
+    accent: "from-neutral-100 via-zinc-50 to-stone-200",
+  },
+  {
+    id: "vault",
+    index: "06",
+    title: "Vault Notes",
+    role: "Product engineer · sample",
+    year: "2023",
+    blurb:
+      "Offline-first notes client with conflict-free sync and encrypted attachments — sample positioning for productivity work.",
+    detail:
+      "CRDT-backed document model, WASM crypto hooks, and progressive web install flows tuned for emerging markets.",
+    tags: ["CRDT", "SQLite", "WASM", "PWA"],
+    metrics: [
+      { k: "Sync roundtrip", v: "120ms" },
+      { k: "NPS", v: "54" },
+    ],
+    accent: "from-stone-100 via-neutral-100 to-zinc-200",
+  },
+];
 
-      // 2. PHASE TWO: The Dispersal (Starts at 1.4s, exactly as the portal zooms past)
-      // The bubbles aggressively fly out to act as permanent background accents
-      tl.to(".bubble-1", { top: "-5%", left: "5%", width: "40vw", height: "40vw", duration: 1.8, ease: "expo.out" }, 1.4)
-        .to(".bubble-2", { top: "25%", right: "-5%", width: "35vw", height: "35vw", duration: 1.8, ease: "expo.out" }, 1.4)
-        .to(".bubble-3", { bottom: "10%", left: "15%", width: "25vw", height: "25vw", duration: 1.8, ease: "expo.out" }, 1.4);
-
-      // 3. PHASE THREE: The Content Entrance
-      // The UI elements cascade into place while the bubbles settle
-      tl.fromTo(".s2-ticker", 
-        { y: -60, opacity: 0 }, 
-        { y: 0, opacity: 1, duration: 1.2, ease: "expo.out" }, 
-        1.6 
-      )
-      .fromTo(".s2-honeycomb", 
-        { scale: 0.5, opacity: 0, rotation: -45, x: 100 }, 
-        { scale: 1, opacity: 1, rotation: 0, x: 0, duration: 2.0, ease: "expo.out" }, 
-        1.6
-      )
-      .fromTo(".s2-header-elem", 
-        { y: 80, opacity: 0, filter: "blur(15px)" }, 
-        { y: 0, opacity: 1, filter: "blur(0px)", duration: 1.5, stagger: 0.15, ease: "power3.out" }, 
-        1.8
-      )
-      .fromTo(".s2-project-card", 
-        { opacity: 0, y: 150, scale: 0.95, filter: "blur(10px)" }, 
-        { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 1.5, stagger: 0.15, ease: "power3.out" }, 
-        2.0
-      );
-
-    }, wrapperRef);
-    return () => ctx.revert();
-  }, []);
-
-
-  // OBSERVER FOR SCROLL ANIMATIONS
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      entries => entries.forEach(e => { if (e.isIntersecting) (e.target as HTMLElement).classList.add("in-view"); }),
-      { threshold: 0.07, rootMargin: "0px 0px -40px 0px" }
-    );
-    refs.current.forEach(el => { if (el) obs.observe(el); });
-    return () => obs.disconnect();
-  }, []);
-
-  // CATERPILLAR MATH ENGINE
-  useEffect(() => {
-    const scrollParent = deckRef.current?.closest('.overflow-y-auto') || window;
-    const onScroll = () => {
-      if (!deckRef.current) return;
-      const vh = window.innerHeight;
-      const rect = deckRef.current.getBoundingClientRect();
-      const TICKER_H = 44; const GAP = 32; const TITLE_OFFSET = 100; 
-      const BASE_TOP = TICKER_H + GAP; 
-      const CARD_H = vh - TICKER_H - (GAP * 2); 
-      const SAFE_BOTTOM = vh - 16; 
-      const scrolledPast = Math.max(0, BASE_TOP - rect.top);
-      const SPACING = CARD_H + (vh * 0.10); 
-      const t = scrolledPast / SPACING; 
-      const N = projects.length;
-      const maxShift = (idx: number) => Math.max(0, BASE_TOP + idx * TITLE_OFFSET + CARD_H - SAFE_BOTTOM);
-
-      let shift = 0;
-      for (let i = 0; i < N; i++) {
-        if (t >= i) { shift = maxShift(i); } 
-        else if (t > i - 1) {
-          const prevShift = i === 0 ? 0 : maxShift(i - 1);
-          shift = prevShift + (maxShift(i) - prevShift) * (t - (i - 1));
-          break; 
-        }
-      }
-      deckRef.current.style.setProperty('--stack-shift', `${Math.max(0, shift)}px`);
-    };
-    scrollParent.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
-    onScroll(); 
-    return () => {
-      scrollParent.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, []);
-
-  // PARALLAX ENGINE
-  useEffect(() => {
-    const scrollParent = deckRef.current?.closest('.overflow-y-auto') || window;
-    const onScrollBg = () => {
-      if (!bgRef.current) return;
-      const st = scrollParent === window ? window.scrollY : (scrollParent as HTMLElement).scrollTop;
-      bgRef.current.style.setProperty('--py', `${st}px`);
-      setSysY(st);
-    };
-    scrollParent.addEventListener("scroll", onScrollBg, { passive: true });
-    onScrollBg(); 
-    return () => scrollParent.removeEventListener("scroll", onScrollBg);
-  }, []);
-
-  const projects = [
-    { num: "01", title: "Finalist", tags: ["React", "MongoDB", "Algorithms"], desc: "Advanced workspace for software engineers to practice coding algorithms and track performance with a high-fidelity UI.", link: "#" },
-    { num: "02", title: "Formatter.AI", tags: ["Python", "React", "Automation"], desc: "Intelligent code management engine handling deduplication, syntax formatting, and automated structural indentation.", link: "#" },
-    { num: "03", title: "MyCampus", tags: ["Express", "Node.js", "PostgreSQL"], desc: "Full-stack academic management system developed for comprehensive institutional oversight and deployment.", link: "#" },
-    { num: "04", title: "NeuralCommerce", tags: ["Node.js", "ML", "Redis"], desc: "AI-driven e-commerce engine with real-time personalisation at scale.", link: "#" },
-    { num: "05", title: "ArchitectOS", tags: ["Three.js", "React", "WebGL"], desc: "3D building visualisation platform rendering spatial architectural layouts.", link: "#" },
-  ];
-
-  const ticker = ["Full-Stack Engineering", "Interactive Interfaces", "Real-Time Systems", "3D Web Experiences", "Performance Architecture"];
-
+/** Static decorative field — no JS, no blur, GPU-friendly */
+function SceneTwoBackdrop() {
   return (
     <div
-      ref={wrapperRef}
-      className="relative w-full min-h-screen overflow-x-clip"
-      style={{
-        backgroundColor: "#F7F7F7",
-        contentVisibility: "auto",
-        containIntrinsicSize: "1200px 900px",
-      } as React.CSSProperties}
+      className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+      aria-hidden
+      style={{ contain: "strict" }}
     >
-      
-      {/* ── 3D GLASS BUBBLES BACKGROUND ── */}
-      <div className="absolute inset-0 w-full h-full pointer-events-none z-[2]">
-        <div className="bubble-1 absolute rounded-full border-[1.5px] border-white/60 bg-gradient-to-br from-white/30 to-transparent backdrop-blur-xl shadow-[inset_0_0_60px_rgba(255,255,255,0.9),0_20px_40px_rgba(0,0,0,0.05)] will-change-transform">
-          <div className="absolute top-[12%] left-[18%] w-[25%] h-[12%] bg-white/90 rounded-[100%] rotate-[-30deg] blur-[2px]" />
-          <div className="absolute bottom-[10%] right-[15%] w-[30%] h-[8%] bg-white/50 rounded-[100%] rotate-[-20deg] blur-[4px]" />
-        </div>
-        <div className="bubble-2 absolute rounded-full border-[1.5px] border-white/70 bg-gradient-to-bl from-white/40 to-transparent backdrop-blur-lg shadow-[inset_0_0_50px_rgba(255,255,255,0.8),0_15px_30px_rgba(0,0,0,0.05)] will-change-transform">
-          <div className="absolute top-[15%] right-[20%] w-[20%] h-[10%] bg-white/90 rounded-[100%] rotate-[25deg] blur-[2px]" />
-          <div className="absolute bottom-[15%] left-[15%] w-[25%] h-[8%] bg-white/40 rounded-[100%] rotate-[20deg] blur-[4px]" />
-        </div>
-        <div className="bubble-3 absolute rounded-full border-[1px] border-white/40 bg-gradient-to-tr from-white/20 to-transparent backdrop-blur-md shadow-[inset_0_0_40px_rgba(255,255,255,0.7)] z-[-1] will-change-transform">
-          <div className="absolute top-[10%] left-[25%] w-[20%] h-[8%] bg-white/80 rounded-[100%] rotate-[-15deg] blur-[2px]" />
-        </div>
+      {/* Warm paper base + cool edge */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `
+            linear-gradient(165deg, #e8e4dc 0%, #f2f0eb 38%, #faf8f5 62%, #e6e3dd 100%)
+          `,
+        }}
+      />
+      {/* Large wash orbs (static) */}
+      <div
+        className="absolute -left-[20%] top-[-15%] h-[55vmin] w-[55vmin] rounded-full opacity-50"
+        style={{
+          background: "radial-gradient(circle at 40% 40%, rgba(255,255,255,0.85), transparent 68%)",
+        }}
+      />
+      <div
+        className="absolute -right-[12%] top-[30%] h-[45vmin] w-[45vmin] rounded-full opacity-35"
+        style={{
+          background: "radial-gradient(circle at 50% 50%, rgba(180,175,168,0.35), transparent 70%)",
+        }}
+      />
+      <div
+        className="absolute bottom-[-20%] left-[25%] h-[50vmin] w-[50vmin] rounded-full opacity-30"
+        style={{
+          background: "radial-gradient(circle at 50% 50%, rgba(200,195,188,0.25), transparent 72%)",
+        }}
+      />
+      {/* Fine grid */}
+      <div
+        className="absolute inset-0 opacity-[0.45]"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px)
+          `,
+          backgroundSize: "56px 56px",
+          maskImage: "radial-gradient(ellipse 85% 70% at 50% 35%, black 12%, transparent 100%)",
+        }}
+      />
+      {/* Micro-dot texture */}
+      <div
+        className="absolute inset-0 opacity-[0.35]"
+        style={{
+          backgroundImage: "radial-gradient(rgba(0,0,0,0.09) 1px, transparent 1px)",
+          backgroundSize: "10px 10px",
+          maskImage: "linear-gradient(to bottom, black 0%, transparent 92%)",
+        }}
+      />
+      {/* Diagonal hairlines */}
+      <div
+        className="absolute inset-0 opacity-[0.12]"
+        style={{
+          backgroundImage: `repeating-linear-gradient(
+            -28deg,
+            transparent 0,
+            transparent 80px,
+            rgba(0,0,0,0.06) 80px,
+            rgba(0,0,0,0.06) 81px
+          )`,
+        }}
+      />
+      {/* Bottom vignette into Scene 3 */}
+      <div
+        className="absolute inset-x-0 bottom-0 h-[min(40%,320px)]"
+        style={{
+          background: "linear-gradient(to top, rgba(0,0,0,0.06), transparent)",
+        }}
+      />
+    </div>
+  );
+}
+
+function ProjectVisual({ id, accent }: { id: string; accent: string }) {
+  return (
+    <div
+      data-cursor-dark
+      className={`group relative aspect-[16/11] w-full overflow-hidden rounded-2xl border border-black/[0.07] bg-gradient-to-br shadow-[0_20px_50px_rgba(0,0,0,0.06)] ${accent}`}
+      style={{ contain: "layout paint" }}
+    >
+      <div
+        className="absolute inset-0 opacity-[0.3]"
+        style={{
+          backgroundImage: `repeating-linear-gradient(-12deg, transparent 0, transparent 14px, rgba(0,0,0,0.035) 14px, rgba(0,0,0,0.035) 15px)`,
+        }}
+      />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_70%_30%,rgba(255,255,255,0.55),transparent_55%)]" />
+      <div className="pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full border border-black/[0.05] transition-transform duration-700 ease-out group-hover:scale-[1.04]" />
+      <div className="pointer-events-none absolute -bottom-12 -left-10 h-48 w-48 rounded-full border border-black/[0.06] transition-transform duration-700 ease-out group-hover:-translate-y-1" />
+      <div
+        className="absolute left-6 top-6 flex items-center gap-2 rounded-full border border-black/[0.08] bg-white/90 px-3 py-1.5 text-[9px] uppercase tracking-[0.35em] text-black/50"
+        style={mono}
+      >
+        <span className="h-1 w-1 shrink-0 rounded-full bg-emerald-600/90" />
+        {id}
       </div>
+      <p
+        className="pointer-events-none absolute bottom-6 left-6 max-w-[58%] text-[clamp(1.75rem,4.5vw,3rem)] leading-none tracking-[0.02em] text-black/[0.08] transition-colors duration-300 group-hover:text-black/14"
+        style={bebas}
+      >
+        Preview
+      </p>
+    </div>
+  );
+}
 
-      {/* ── PREMIUM SWISS BACKGROUND LAYER ── */}
-      <div className="absolute inset-0 z-[1] pointer-events-none">
-        <div ref={bgRef} className="sticky top-0 left-0 w-full h-screen overflow-hidden" style={{ "--py": "0px" } as React.CSSProperties}>
-          <div className="absolute inset-0 opacity-[0.035]" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-          }}/>
-          <div className="absolute inset-0 opacity-[0.4]" style={{ 
-            backgroundImage: 'radial-gradient(#000000 1px, transparent 1px)', 
-            backgroundSize: '48px 48px',
-            backgroundPosition: 'calc(var(--py) * 0.05) calc(var(--py) * 0.05)'
-          }}/>
-          <div className="absolute rounded-full bg-[#E8E8E8]" style={{ width: "80vh", height: "80vh", top: "-10vh", left: "-10vw", transform: "translateY(calc(var(--py) * 0.12))" }} />
-          <div className="absolute rounded-full border-[15px] border-[#E0E0E0]" style={{ width: "60vh", height: "60vh", top: "50vh", left: "-15vw", transform: "translateY(calc(var(--py) * -0.08))" }} />
+export default function SceneTwo() {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const introRef = useRef<HTMLElement>(null);
 
-          <div className="s2-honeycomb absolute right-0 pointer-events-none z-[5]" style={{ top: "0px", width: "560px", height: "560px" }}>
-            <svg width="100%" height="100%" viewBox="0 0 800 800" preserveAspectRatio="xMaxYMin meet" style={{ filter: "drop-shadow(-12px 20px 32px rgba(0,0,0,0.22))" }}>
-              <defs><polygon id="hex" points="150,0 75,129.9 -75,129.9 -150,0 -75,-129.9 75,-129.9" /></defs>
-              <g stroke="#FFFFFF" strokeWidth="28" strokeLinejoin="round" fill="#FFFFFF">
-                <use href="#hex" x="265" y="257.9" /><use href="#hex" x="265" y="517.7" /><use href="#hex" x="490" y="128" /><use href="#hex" x="490" y="387.8" /><use href="#hex" x="490" y="647.6" /><use href="#hex" x="715" y="257.9" /><use href="#hex" x="715" y="517.7" />
-              </g>
-              <g strokeWidth="24" strokeLinejoin="round">
-                <use href="#hex" x="265" y="257.9" fill="#18181B" stroke="#18181B" /><use href="#hex" x="265" y="517.7" fill="#27272A" stroke="#27272A" /><use href="#hex" x="490" y="128" fill="#27272A" stroke="#27272A" /><use href="#hex" x="490" y="387.8" fill="#0A0A0C" stroke="#0A0A0C" /><use href="#hex" x="490" y="647.6" fill="#1C1C1F" stroke="#1C1C1F" /><use href="#hex" x="715" y="257.9" fill="#080808" stroke="#080808" /><use href="#hex" x="715" y="517.7" fill="#18181B" stroke="#18181B" />
-              </g>
-              <circle cx="490" cy="387.8" r="45" fill="none" stroke="#FFFFFF" strokeWidth="1.5" opacity="0.3" strokeDasharray="5 5"/><circle cx="490" cy="387.8" r="28" fill="none" stroke="#FFFFFF" strokeWidth="1.5" opacity="0.2" /><rect x="487" y="384.8" width="6" height="6" fill="#FFFFFF" opacity="0.6"/>
-            </svg>
-          </div>
-        </div>
-      </div>
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    const scroller = document.querySelector(".main-scroll") as HTMLElement | null;
+    if (!root || !scroller) return;
 
-      <div className="s2-ticker sticky top-0 left-0 w-full z-[100] bg-[#F7F7F7]/80 backdrop-blur-md" 
-           style={{ borderBottom: "1px solid rgba(0,0,0,0.08)", height: 44, display: "flex", alignItems: "center", overflow: "hidden" }}>
-        <div className="ticker-inner flex whitespace-nowrap">
-          {[...ticker, ...ticker].map((item, i) => (
-            <span key={i} style={{ fontFamily: "'DM Mono',monospace", fontSize: 8.5, fontWeight: 600, letterSpacing: "0.48em", textTransform: "uppercase", color: "#22222291", padding: "0 44px" }}>
-              {item}<span style={{ marginLeft: 44, color: "#22222291", fontSize: 6.5 }}>●</span>
-            </span>
-          ))}
-        </div>
-      </div>
+    const stCommon = {
+      scroller,
+      invalidateOnRefresh: true,
+      fastScrollEnd: true,
+    } as const;
 
-      <div className="relative z-[20] max-w-[1440px] mx-auto px-6 md:px-12 pt-28">
-        
-        <div className="mb-10">
-          <div className="s2-header-elem flex items-center gap-4 mb-7">
-            <div style={{ width: 32, height: 1, background: "rgba(0,0,0,0.4)" }}/>
-            <p style={{ fontFamily: "'DM Mono',monospace", fontSize: 9, fontWeight: 500, letterSpacing: "0.6em", textTransform: "uppercase", color: "#000000" }}>Selected Work</p>
-          </div>
-          
-          <div className="s2-header-elem flex items-end justify-between gap-8 flex-wrap relative">
-            <h2 className="pl-[24px] md:pl-[48px]" style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: "clamp(60px,8vw,120px)", lineHeight: 0.85, color: "#080808", letterSpacing: "0.015em", zIndex: 10 }}>
-              WHAT I<br/><span style={{ color: "transparent", WebkitTextStroke: "1.5px rgba(0,0,0,0.25)" }}>BUILD.</span>
-            </h2>
-          </div>
-        </div>
+    const ctx = gsap.context(() => {
+      if (introRef.current) {
+        gsap.from(introRef.current, {
+          y: 28,
+          opacity: 0,
+          duration: 0.7,
+          ease: "power2.out",
+          scrollTrigger: {
+            ...stCommon,
+            trigger: introRef.current,
+            start: "top 90%",
+            toggleActions: "play none none none",
+          },
+        });
+      }
 
-        <div ref={deckRef} className="relative w-full flex flex-col" 
-             style={{ gap: "10vh", paddingBottom: "30vh", "--stack-shift": "0px" } as React.CSSProperties}>
-          
-          {projects.map((p, i) => (
-            <div key={p.num}
-              className="s2-project-card sticky w-full flex flex-col"
-              style={{
-                top: `calc(76px + ${i * 100}px - var(--stack-shift, 0px))`,
-                height: "calc(100vh - 108px)", 
-                minHeight: "600px", 
-                background: "#0A0A0C", 
-                borderRadius: "16px",
-                border: "1px solid rgba(255,255,255,0.4)",
-                boxShadow: "0 0 0 10px #080808, 0 -20px 50px rgba(0,0,0,0.8)", 
-                padding: "32px", 
-                zIndex: i + 1, 
-              }}>
-              
-              <div className="flex flex-col shrink-0 mb-6">
-                <div className="flex justify-between items-center h-[58px] mb-2">
-                  <div className="flex items-center gap-6">
-                    <span style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 52, color: "rgba(255,255,255,0.9)", lineHeight: 0.8 }}>{p.num}</span>
-                    <h3 style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: "clamp(32px,3vw,48px)", letterSpacing: "0.04em", color: "#FFFFFF", lineHeight: 0.9 }}>{p.title}</h3>
-                  </div>
-                  <div className="flex gap-4">
-                    <button data-cursor-expand style={{ fontFamily: "'DM Mono',monospace", fontSize: 8.5, letterSpacing: "0.2em", textTransform: "uppercase", padding: "10px 20px", border: "1px solid rgba(255,255,255,0.2)", color: "#FFF", borderRadius: "100px", background: "transparent", transition: "background 0.3s" }}
-                      onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.05)")} onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>GITHUB</button>
-                    <button data-cursor-expand style={{ fontFamily: "'DM Mono',monospace", fontSize: 8.5, letterSpacing: "0.2em", textTransform: "uppercase", padding: "10px 20px", border: "1px solid transparent", color: "#0A0A0C", borderRadius: "100px", background: "#FFF", transition: "transform 0.2s" }}
-                      onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.03)")} onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}>LIVE</button>
-                  </div>
+      root.querySelectorAll("[data-s2-project]").forEach((section) => {
+        gsap.from(section, {
+          y: 32,
+          opacity: 0,
+          duration: 0.55,
+          ease: "power2.out",
+          scrollTrigger: {
+            ...stCommon,
+            trigger: section as HTMLElement,
+            start: "top 90%",
+            toggleActions: "play none none none",
+          },
+        });
+      });
+    }, root);
+
+    let resizeT: ReturnType<typeof setTimeout> | undefined;
+    const onResize = () => {
+      clearTimeout(resizeT);
+      resizeT = setTimeout(() => ScrollTrigger.refresh(), 120);
+    };
+    window.addEventListener("resize", onResize, { passive: true });
+    requestAnimationFrame(() => ScrollTrigger.refresh());
+
+    return () => {
+      clearTimeout(resizeT);
+      window.removeEventListener("resize", onResize);
+      ctx.revert();
+    };
+  }, []);
+
+  return (
+    <div id="work-region" ref={rootRef} className="relative overflow-x-clip text-[#0c0c0c]">
+      <SceneTwoBackdrop />
+
+      {/* Edge frame */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-px bg-gradient-to-r from-transparent via-black/12 to-transparent" />
+
+      <header
+        ref={introRef}
+        className="relative z-10 mx-auto max-w-[1400px] px-5 pb-8 pt-20 md:px-10 md:pb-12 md:pt-28 lg:px-14"
+      >
+        <p className="mb-6 flex items-center gap-3 text-[9px] uppercase tracking-[0.55em] text-black/45" style={mono}>
+          <span className="h-px w-12 bg-black/22" />
+          Selected work
+        </p>
+        <h1 className="max-w-[14ch] text-[clamp(3.5rem,10vw,8.5rem)] leading-[0.88] tracking-[0.02em]" style={bebas}>
+          PROJECTS
+          <br />
+          <span className="text-transparent" style={{ WebkitTextStroke: "1.5px rgba(0,0,0,0.2)" }}>
+            THAT SHIP.
+          </span>
+        </h1>
+        <p className="mt-8 max-w-xl text-[14px] leading-[1.8] text-black/52" style={mono}>
+          Sample deck intro — replace with how you frame case studies: constraints, your role, and the delta you
+          created. The rows below are structured so swapping copy stays effortless.
+        </p>
+      </header>
+
+      <div className="relative z-10 mx-auto max-w-[1400px] px-5 pb-28 md:px-10 lg:px-14">
+        {projects.map((p) => (
+          <article
+            key={p.id}
+            data-s2-project
+            className="mb-6 rounded-3xl border border-black/[0.08] bg-[#fdfcf9] p-6 shadow-[0_2px_0_rgba(255,255,255,0.9)_inset,0_18px_40px_rgba(0,0,0,0.04)] last:mb-0 md:mb-8 md:p-10 lg:p-12"
+            style={{ contain: "layout paint" }}
+          >
+            <div className="grid items-start gap-10 lg:grid-cols-12 lg:gap-12">
+              <div className="lg:col-span-5">
+                <div className="flex flex-wrap items-end justify-between gap-4 lg:block">
+                  <span className="text-[clamp(3.5rem,8vw,6rem)] leading-none text-black/[0.14]" style={bebas}>
+                    {p.index}
+                  </span>
+                  <span className="text-[10px] uppercase tracking-[0.35em] text-black/38 lg:mt-4" style={mono}>
+                    {p.year} · {p.role}
+                  </span>
                 </div>
-                <p style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, lineHeight: 1.6, color: "rgba(255,255,255,0.45)", letterSpacing: "0.03em", maxWidth: "60%", marginLeft: "78px" }}>{p.desc}</p>
-              </div>
-
-              <div className="flex gap-6 w-full flex-1 min-h-0">
-                <div className="relative w-[70%] h-full rounded-[12px] overflow-hidden bg-[#121214] border border-[rgba(255,255,255,0.04)] flex items-center justify-center group" data-cursor-dark>
-                  <img src={`/project${i + 1}.png`} alt={p.title} className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700 z-10" />
-                  <div className="absolute inset-0 flex items-center justify-center z-0 pointer-events-none">
-                     <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, letterSpacing: "0.4em", color: "rgba(255,255,255,0.2)", textTransform: "uppercase" }}>{"// project" + (i + 1) + ".png"}</span>
-                  </div>
-                  <div className="absolute inset-0 pointer-events-none rounded-[12px] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)] z-20" />
+                <h2 className="mt-4 text-[clamp(2rem,4.2vw,3.25rem)] leading-[0.95] tracking-[0.03em]" style={bebas}>
+                  {p.title}
+                </h2>
+                <p className="mt-5 text-[13px] leading-[1.85] text-black/52" style={mono}>
+                  {p.blurb}
+                </p>
+                <p className="mt-4 text-[12px] leading-[1.75] text-black/40" style={mono}>
+                  {p.detail}
+                </p>
+                <div className="mt-8 flex flex-wrap gap-2">
+                  {p.tags.map((t) => (
+                    <span
+                      key={t}
+                      className="rounded-full border border-black/[0.08] bg-black/[0.025] px-3 py-1.5 text-[9px] uppercase tracking-[0.2em] text-black/58"
+                      style={mono}
+                    >
+                      {t}
+                    </span>
+                  ))}
                 </div>
-
-                <div className="w-[30%] h-full bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.04)] rounded-[12px] p-6 flex flex-col gap-6 overflow-y-auto" style={{ scrollbarWidth: "none" }}>
-                  <div>
-                    <p style={{ fontFamily: "'DM Mono',monospace", fontSize: 8, letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 12 }}>Tech Architecture</p>
-                    <div className="flex flex-wrap gap-2">
-                      {p.tags.map(tag => (
-                        <span key={tag} style={{ fontFamily: "'DM Mono',monospace", fontSize: 8.5, letterSpacing: "0.1em", padding: "6px 12px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.7)", borderRadius: "6px" }}>{tag}</span>
-                      ))}
+                <div className="mt-10 flex flex-wrap gap-3">
+                  <a
+                    data-cursor-expand
+                    href="#"
+                    className="rounded-full border border-black/18 bg-black px-6 py-3 text-[9px] uppercase tracking-[0.28em] text-white transition-[transform,box-shadow] hover:shadow-md active:scale-[0.98]"
+                    style={mono}
+                  >
+                    Live demo
+                  </a>
+                  <a
+                    data-cursor-expand
+                    href="#"
+                    className="rounded-full border border-black/15 px-6 py-3 text-[9px] uppercase tracking-[0.28em] text-black/72 transition-colors hover:border-black/28 hover:text-black"
+                    style={mono}
+                  >
+                    Case write-up
+                  </a>
+                </div>
+                <div className="mt-10 grid grid-cols-2 gap-4 border-t border-black/[0.07] pt-8 sm:max-w-sm">
+                  {p.metrics.map((m) => (
+                    <div key={m.k}>
+                      <p className="text-[8px] uppercase tracking-[0.35em] text-black/38" style={mono}>
+                        {m.k}
+                      </p>
+                      <p className="mt-1 text-2xl tracking-wide text-black/88" style={bebas}>
+                        {m.v}
+                      </p>
                     </div>
-                  </div>
-                  <div style={{ width: "100%", height: "1px", background: "rgba(255,255,255,0.05)" }}/>
-                  <div className="flex-1">
-                    <p style={{ fontFamily: "'DM Mono',monospace", fontSize: 8, letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 12 }}>Core Functionality</p>
-                    <ul className="flex flex-col gap-3">
-                      {["Real-time data synchronization", "JWT Authentication Flow", "Optimized WebGL Rendering", "Responsive Fluid Layouts"].map((feature, idx) => (
-                        <li key={idx} className="flex items-start gap-3">
-                          <div className="shrink-0" style={{ width: 4, height: 4, borderRadius: "50%", background: "rgba(255,255,255,0.4)", marginTop: 6 }} />
-                          <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 10, color: "rgba(255,255,255,0.55)", lineHeight: 1.4 }}>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  ))}
                 </div>
+              </div>
+              <div className="lg:col-span-7">
+                <ProjectVisual id={p.id} accent={p.accent} />
               </div>
             </div>
-          ))}
-        </div>
+          </article>
+        ))}
       </div>
+
+      <div className="relative z-10 h-px bg-gradient-to-r from-transparent via-black/12 to-transparent" />
     </div>
   );
 }
