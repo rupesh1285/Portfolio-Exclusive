@@ -24,7 +24,7 @@ export default function SceneOne({ clock }: { clock: string }) {
       })
         .from(
           ".s1-hero-float",
-          { y: 36, opacity: 0, filter: "blur(12px)", duration: 1, ease: "power3.out" },
+          { y: 28, opacity: 0, duration: 1, ease: "power3.out" },
           "-=0.85",
         )
         .from(
@@ -45,7 +45,8 @@ export default function SceneOne({ clock }: { clock: string }) {
   // Scroll-driven section reveals
   useEffect(() => {
     const root = rootRef.current;
-    if (!root) return;
+    const scroller = document.querySelector(".main-scroll");
+    if (!root || !(scroller instanceof HTMLElement)) return;
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -54,8 +55,8 @@ export default function SceneOne({ clock }: { clock: string }) {
           if (el.classList.contains("s1-block-about")) {
             gsap.fromTo(
               el.querySelectorAll(".s1-ab"),
-              { y: 48, opacity: 0, filter: "blur(8px)" },
-              { y: 0, opacity: 1, filter: "blur(0px)", duration: 1, stagger: 0.08, ease: "power3.out" },
+              { y: 40, opacity: 0 },
+              { y: 0, opacity: 1, duration: 1, stagger: 0.08, ease: "power3.out" },
             );
           }
           if (el.classList.contains("s1-block-pillars")) {
@@ -82,7 +83,7 @@ export default function SceneOne({ clock }: { clock: string }) {
           obs.unobserve(el);
         });
       },
-      { threshold: 0.2, rootMargin: "0px 0px -6% 0px" },
+      { threshold: 0.2, rootMargin: "0px 0px -6% 0px", root: scroller },
     );
     root.querySelectorAll(".s1-io").forEach((n) => obs.observe(n));
     return () => obs.disconnect();

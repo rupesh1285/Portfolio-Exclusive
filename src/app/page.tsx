@@ -1,9 +1,20 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { BelowFoldSentinel } from "@/components/ui/BelowFoldSentinel";
+import { useLenis } from "@/hooks/useLenis";
 import SceneOne from "./SceneOne";
-import SceneTwo from "./SceneTwo";
-import SceneThree from "./SceneThree";
+
+const SceneTwo = dynamic(() => import("@/components/scene2/SceneTwo"), {
+  ssr: false,
+  loading: () => <div className="min-h-[50vh] w-full shrink-0 bg-[#e8e4dc]" aria-hidden />,
+});
+
+const SceneThree = dynamic(() => import("./SceneThree"), {
+  ssr: false,
+  loading: () => <div className="min-h-[35vh] w-full shrink-0 bg-[#111318]" aria-hidden />,
+});
 
 function PrecisionCursor() {
   const dotRef = useRef<HTMLDivElement>(null);
@@ -144,18 +155,43 @@ function useClock() {
 export default function Home() {
   const clock = useClock();
   const scrollRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [loadScene2, setLoadScene2] = useState(false);
+  const [loadScene3, setLoadScene3] = useState(false);
+
+  const onRevealScene2 = useCallback(() => setLoadScene2(true), []);
+  const onRevealScene3 = useCallback(() => setLoadScene3(true), []);
+
+  useLenis(scrollRef, contentRef);
+
+  useEffect(() => {
+    const w = window as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number };
+    const ric = w.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 1));
+    const cancel = w.cancelIdleCallback ?? window.clearTimeout;
+    const id = ric(
+      () => {
+        void import("@/components/scene2/SceneTwo");
+        void import("./SceneThree");
+      },
+      { timeout: 5000 },
+    );
+    return () => cancel(id);
+  }, []);
 
   return (
     <div className="relative h-dvh w-screen overflow-hidden bg-[#030303]">
       <PrecisionCursor />
       <div
         ref={scrollRef}
-        className="main-scroll h-full w-full overflow-x-hidden overflow-y-auto"
+        className="main-scroll lenis h-full w-full overflow-x-hidden overflow-y-auto overscroll-y-contain"
         style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
       >
-        <SceneOne clock={clock} />
-        <SceneTwo />
-        <SceneThree />
+        <div ref={contentRef} className="lenis-content">
+          <SceneOne clock={clock} />
+          {!loadScene2 ? <BelowFoldSentinel onReveal={onRevealScene2} prefetchPx={420} /> : null}
+          {loadScene2 ? <SceneTwo onApproachSceneThree={onRevealScene3} /> : null}
+          {loadScene3 ? <SceneThree /> : null}
+        </div>
       </div>
     </div>
   );

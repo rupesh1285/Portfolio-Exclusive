@@ -54,6 +54,14 @@ html::-webkit-scrollbar { display: none; }
   }
 }
 
+/* Lenis + custom scroll root */
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.main-scroll {
+  touch-action: pan-y;
+}
+
 * { cursor: none !important; }
 
 /* ── Film grain ────────────────────────────── */
