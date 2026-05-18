@@ -112,7 +112,7 @@ export default function SceneOne({ clock }: { clock: string }) {
           maskImage: "radial-gradient(ellipse 70% 60% at 50% 40%, black 20%, transparent 100%)",
         }}
       />
-      <div className="pointer-events-none absolute inset-0 animate-grain opacity-[0.035]" />
+      <div className="pointer-events-none absolute -inset-[100px] animate-grain opacity-[0.035]" />
 
       <nav
         className="sticky top-0 z-40 flex items-center justify-between border-b border-white/[0.06] bg-[#030303]/75 px-5 py-5 backdrop-blur-md md:px-10"

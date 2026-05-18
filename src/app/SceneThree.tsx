@@ -1,8 +1,14 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import { BelowFoldSentinel } from "@/components/ui/BelowFoldSentinel";
 
-export default function SceneThree() {
+export type SceneThreeProps = {
+  onApproachSceneFour?: () => void;
+};
+
+export default function SceneThree({ onApproachSceneFour }: SceneThreeProps) {
   const refs = useRef<(HTMLElement|null)[]>([]);
   useEffect(()=>{
     const obs=new IntersectionObserver(
@@ -29,7 +35,11 @@ export default function SceneThree() {
   const tickerItems=["React","Next.js","TypeScript","Node.js","PostgreSQL","Redis","WebGL","Three.js","Docker","GraphQL","AWS","Figma"];
 
   return (
-    <div
+    <motion.div
+      initial={{ clipPath: "inset(50% 0 50% 0)", opacity: 0.8 }}
+      whileInView={{ clipPath: "inset(0% 0 0% 0)", opacity: 1 }}
+      viewport={{ once: true, amount: 0 }}
+      transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
       className="relative w-full overflow-hidden min-h-screen"
       style={{
         background: "#111318",
@@ -73,9 +83,8 @@ export default function SceneThree() {
                 <div className="flex flex-wrap gap-2">
                   {s.items.map(item=>(
                     <span key={item} data-cursor-expand
-                      style={{fontFamily:"'DM Mono',monospace",fontSize:8.5,letterSpacing:"0.25em",padding:"4px 10px",border:"1px solid rgba(255,255,255,0.1)",color:"rgba(195,195,208,0.65)",transition:"border-color 0.25s,color 0.25s"}}
-                      onMouseEnter={e=>{const el=e.currentTarget as HTMLElement;el.style.borderColor="rgba(200,200,210,0.38)";el.style.color="rgba(228,228,238,0.9)";}}
-                      onMouseLeave={e=>{const el=e.currentTarget as HTMLElement;el.style.borderColor="rgba(255,255,255,0.1)";el.style.color="rgba(195,195,208,0.65)";}}
+                      className="transition-colors duration-250 border border-white/10 hover:border-[#c8c8d2]/38 text-[#c3c3d0]/65 hover:text-[#e4e4ee]/90"
+                      style={{fontFamily:"'DM Mono',monospace",fontSize:8.5,letterSpacing:"0.25em",padding:"4px 10px"}}
                     >{item}</span>
                   ))}
                 </div>
@@ -114,6 +123,7 @@ export default function SceneThree() {
           <span style={{fontFamily:"'DM Mono',monospace",fontSize:8.5,letterSpacing:"0.38em",textTransform:"uppercase",color:"rgba(255,255,255,0.14)"}}>Full-Stack Engineer — India</span>
         </div>
       </div>
-    </div>
+      {onApproachSceneFour ? <BelowFoldSentinel onReveal={onApproachSceneFour} prefetchPx={200} /> : null}
+    </motion.div>
   );
 }

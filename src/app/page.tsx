@@ -1,22 +1,35 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useRef, useState } from "react";
+import type { MutableRefObject } from "react";
+import {
+  startTransition,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { BelowFoldSentinel } from "@/components/ui/BelowFoldSentinel";
 import { useLenis } from "@/hooks/useLenis";
 import SceneOne from "./SceneOne";
 
 const SceneTwo = dynamic(() => import("@/components/scene2/SceneTwo"), {
   ssr: false,
-  loading: () => <div className="min-h-[50vh] w-full shrink-0 bg-[#e8e4dc]" aria-hidden />,
+  loading: () => <div className="min-h-[100dvh] w-full shrink-0 bg-[#e8e4dc]" aria-hidden />,
 });
 
 const SceneThree = dynamic(() => import("./SceneThree"), {
   ssr: false,
-  loading: () => <div className="min-h-[35vh] w-full shrink-0 bg-[#111318]" aria-hidden />,
+  loading: () => <div className="min-h-[90dvh] w-full shrink-0 bg-[#111318]" aria-hidden />,
 });
 
-function PrecisionCursor() {
+const SceneFour = dynamic(() => import("./SceneFour"), {
+  ssr: false,
+  loading: () => <div className="min-h-[100dvh] w-full shrink-0 bg-[#e8e4dc]" aria-hidden />,
+});
+
+function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(() => void) | null> }) {
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const ghostRef = useRef<HTMLDivElement>(null);
@@ -31,7 +44,6 @@ function PrecisionCursor() {
         dotRef.current.style.top = e.clientY + "px";
       }
     };
-    let raf = 0;
     const tick = () => {
       const s = st.current;
       s.rx += (s.mx - s.rx) * 0.12;
@@ -46,8 +58,8 @@ function PrecisionCursor() {
         ghostRef.current.style.left = s.gx + "px";
         ghostRef.current.style.top = s.gy + "px";
       }
-      raf = requestAnimationFrame(tick);
     };
+
     const xl = () => {
       if (!ringRef.current) return;
       Object.assign(ringRef.current.style, {
@@ -75,8 +87,8 @@ function PrecisionCursor() {
         background: "transparent",
       });
     };
+
     window.addEventListener("mousemove", onMove);
-    raf = requestAnimationFrame(tick);
     const attach = () => {
       document.querySelectorAll("[data-cursor-expand]").forEach((el) => {
         el.addEventListener("mouseenter", xl);
@@ -88,11 +100,26 @@ function PrecisionCursor() {
       });
     };
     attach();
+
+    if (lenisFrameRef) {
+      lenisFrameRef.current = tick;
+      return () => {
+        lenisFrameRef.current = null;
+        window.removeEventListener("mousemove", onMove);
+      };
+    }
+
+    let raf = 0;
+    const loop = () => {
+      tick();
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
     return () => {
       window.removeEventListener("mousemove", onMove);
       cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [lenisFrameRef]);
 
   return (
     <>
@@ -156,41 +183,67 @@ export default function Home() {
   const clock = useClock();
   const scrollRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const cursorAfterLenis = useRef<(() => void) | null>(null);
   const [loadScene2, setLoadScene2] = useState(false);
   const [loadScene3, setLoadScene3] = useState(false);
+  const [loadScene4, setLoadScene4] = useState(false);
 
-  const onRevealScene2 = useCallback(() => setLoadScene2(true), []);
-  const onRevealScene3 = useCallback(() => setLoadScene3(true), []);
+  const lenisRef = useLenis(scrollRef, contentRef, {
+    onFrame: () => {
+      cursorAfterLenis.current?.();
+    },
+  });
 
-  useLenis(scrollRef, contentRef);
-
-  useEffect(() => {
-    const w = window as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number };
-    const ric = w.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 1));
-    const cancel = w.cancelIdleCallback ?? window.clearTimeout;
-    const id = ric(
-      () => {
-        void import("@/components/scene2/SceneTwo");
-        void import("./SceneThree");
-      },
-      { timeout: 5000 },
-    );
-    return () => cancel(id);
+  const onRevealScene2 = useCallback(() => {
+    startTransition(() => setLoadScene2(true));
   }, []);
+  const onRevealScene3 = useCallback(() => {
+    startTransition(() => setLoadScene3(true));
+  }, []);
+  const onRevealScene4 = useCallback(() => {
+    startTransition(() => setLoadScene4(true));
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!loadScene2 && !loadScene3 && !loadScene4) return;
+    const id = setTimeout(() => {
+      lenisRef.current?.resize();
+    }, 100);
+    return () => clearTimeout(id);
+  }, [loadScene2, loadScene3, loadScene4, lenisRef]);
 
   return (
     <div className="relative h-dvh w-screen overflow-hidden bg-[#030303]">
-      <PrecisionCursor />
+      <PrecisionCursor lenisFrameRef={cursorAfterLenis} />
       <div
         ref={scrollRef}
         className="main-scroll lenis h-full w-full overflow-x-hidden overflow-y-auto overscroll-y-contain"
-        style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
+        style={{
+          scrollbarWidth: "none",
+          WebkitOverflowScrolling: "touch",
+          transform: "translateZ(0)",
+        }}
       >
         <div ref={contentRef} className="lenis-content">
-          <SceneOne clock={clock} />
-          {!loadScene2 ? <BelowFoldSentinel onReveal={onRevealScene2} prefetchPx={420} /> : null}
-          {loadScene2 ? <SceneTwo onApproachSceneThree={onRevealScene3} /> : null}
-          {loadScene3 ? <SceneThree /> : null}
+          <div className="w-full relative">
+            <SceneOne clock={clock} />
+            {!loadScene2 ? <BelowFoldSentinel onReveal={onRevealScene2} prefetchPx={620} /> : null}
+          </div>
+          {loadScene2 ? (
+            <div className="w-full relative">
+              <SceneTwo onApproachSceneThree={onRevealScene3} />
+            </div>
+          ) : null}
+          {loadScene3 ? (
+            <div className="w-full relative">
+              <SceneThree onApproachSceneFour={onRevealScene4} />
+            </div>
+          ) : null}
+          {loadScene4 ? (
+            <div className="w-full relative">
+              <SceneFour />
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

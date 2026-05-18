@@ -66,14 +66,17 @@ html::-webkit-scrollbar { display: none; }
 
 /* ── Film grain ────────────────────────────── */
 @keyframes grainShift {
-  0%  { background-position:  0px  0px; }
-  20% { background-position:-55px 28px; }
-  40% { background-position: 28px-55px; }
-  60% { background-position:-80px 55px; }
-  80% { background-position: 55px-28px; }
-  100%{ background-position:  0px  0px; }
+  0%  { transform: translate3d(0px, 0px, 0); }
+  20% { transform: translate3d(-55px, 28px, 0); }
+  40% { transform: translate3d(28px, -55px, 0); }
+  60% { transform: translate3d(-80px, 55px, 0); }
+  80% { transform: translate3d(55px, -28px, 0); }
+  100%{ transform: translate3d(0px, 0px, 0); }
 }
-.animate-grain { animation: grainShift 0.09s steps(1) infinite; }
+.animate-grain { 
+  animation: grainShift 0.09s steps(1) infinite; 
+  will-change: transform;
+}
 
 /* ── Name slam ─────────────────────────────── */
 @keyframes nameReveal {
@@ -115,7 +118,7 @@ html::-webkit-scrollbar { display: none; }
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
 }
-.ticker-inner { animation: tickerScroll 34s linear infinite; white-space:nowrap; display:inline-flex; }
+.ticker-inner { animation: tickerScroll 34s linear infinite; white-space:nowrap; display:inline-flex; will-change: transform; }
 
 /* ── Stat counter pop ──────────────────────── */
 @keyframes countUp {
@@ -186,7 +189,7 @@ html::-webkit-scrollbar { display: none; }
   from { transform: translateX(-50%); }
   to   { transform: translateX(0); }
 }
-.ticker-rev { animation: tickerRev 40s linear infinite; white-space:nowrap; display:inline-flex; }
+.ticker-rev { animation: tickerRev 40s linear infinite; white-space:nowrap; display:inline-flex; will-change: transform; }
 
 /* ── Cert card hover ───────────────────────── */
 .cert-card {
