@@ -2,27 +2,22 @@
 
 import { useRef } from "react";
 
-import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { bebas, mono } from "./fonts";
 import { SCENE_TWO_PROJECTS } from "./projectData";
 import { ProjectCard } from "./ProjectCard";
 import { SceneTwoBackdrop } from "./SceneTwoBackdrop";
 
 export default function SceneTwo() {
-  const rootRef = useRef<HTMLDivElement>(null);
-  useScrollReveal(rootRef);
-
   return (
     <div
       id="work-region"
-      ref={rootRef}
       className="relative overflow-x-clip text-[#0c0c0c]"
     >
       <SceneTwoBackdrop />
 
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-px bg-gradient-to-r from-transparent via-black/15 to-transparent" />
 
-      <header className="s2-reveal relative z-10 mx-auto max-w-[1400px] px-5 pb-8 pt-20 md:px-10 md:pb-12 md:pt-28 lg:px-14">
+      <header className="relative z-10 mx-auto max-w-[1400px] px-5 pb-8 pt-20 md:px-10 md:pb-12 md:pt-28 lg:px-14">
         <p className="mb-6 flex items-center gap-3 text-[9px] uppercase tracking-[0.55em] text-black/48" style={mono}>
           <span className="h-px w-12 bg-black/25" />
           Selected work

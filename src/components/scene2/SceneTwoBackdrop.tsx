@@ -36,20 +36,6 @@ export const SceneTwoBackdrop = memo(function SceneTwoBackdrop() {
         }}
       />
 
-      <svg
-        className="absolute left-1/2 top-[12%] h-[min(90vw,720px)] w-[min(90vw,720px)] -translate-x-1/2 opacity-[0.11]"
-        viewBox="0 0 400 400"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle cx="200" cy="200" r="198" stroke="currentColor" strokeWidth="0.5" className="text-black" />
-        <circle cx="200" cy="200" r="160" stroke="currentColor" strokeWidth="0.35" strokeDasharray="4 6" className="text-black" />
-        <circle cx="200" cy="200" r="120" stroke="currentColor" strokeWidth="0.35" className="text-black" />
-        <line x1="200" y1="0" x2="200" y2="400" stroke="currentColor" strokeWidth="0.35" className="text-black" />
-        <line x1="0" y1="200" x2="400" y2="200" stroke="currentColor" strokeWidth="0.35" className="text-black" />
-        <line x1="40" y1="40" x2="360" y2="360" stroke="currentColor" strokeWidth="0.25" opacity="0.5" className="text-black" />
-        <line x1="360" y1="40" x2="40" y2="360" stroke="currentColor" strokeWidth="0.25" opacity="0.5" className="text-black" />
-      </svg>
 
       <div
         className="absolute left-1/2 top-[28%] w-[200%] -translate-x-1/2 -rotate-[9deg] select-none text-center"
