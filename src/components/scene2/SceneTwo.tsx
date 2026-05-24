@@ -20,10 +20,10 @@ export default function SceneTwo({ onApproachSceneThree }: SceneTwoProps) {
 
   return (
     <motion.div
-      initial={{ clipPath: "inset(100% 0 0 0)" }}
-      whileInView={{ clipPath: "inset(0% 0 0 0)" }}
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0 }}
-      transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       id="work-region"
       ref={rootRef}
       className="relative overflow-x-clip text-[#0c0c0c]"
@@ -56,7 +56,7 @@ export default function SceneTwo({ onApproachSceneThree }: SceneTwoProps) {
         ))}
       </div>
 
-      {onApproachSceneThree ? <BelowFoldSentinel onReveal={onApproachSceneThree} prefetchPx={360} /> : null}
+      {onApproachSceneThree ? <BelowFoldSentinel onReveal={onApproachSceneThree} prefetchPx={600} /> : null}
 
       <div className="relative z-10 h-px bg-gradient-to-r from-transparent via-black/14 to-transparent" />
     </motion.div>

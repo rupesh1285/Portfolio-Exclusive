@@ -43,15 +43,15 @@ export function useLenis(
     const lenis = new Lenis({
       wrapper,
       content,
-      /** Lower = silkier / less “rigid” wheel interpolation */
-      lerp: 0.048,
-      wheelMultiplier: 0.72,
+      /** Higher lerp = faster convergence = snappier scroll feel */
+      lerp: 0.09,
+      wheelMultiplier: 0.88,
       smoothWheel: true,
       /** Smoothes touch scroll on trackpads / mobile */
       syncTouch: true,
-      syncTouchLerp: 0.085,
+      syncTouchLerp: 0.1,
       touchMultiplier: 0.95,
-      touchInertiaMultiplier: 28,
+      touchInertiaMultiplier: 18,
       autoResize: true,
     });
 

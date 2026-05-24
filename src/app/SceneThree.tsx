@@ -36,10 +36,10 @@ export default function SceneThree({ onApproachSceneFour }: SceneThreeProps) {
 
   return (
     <motion.div
-      initial={{ clipPath: "inset(50% 0 50% 0)", opacity: 0.8 }}
-      whileInView={{ clipPath: "inset(0% 0 0% 0)", opacity: 1 }}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0 }}
-      transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className="relative w-full overflow-hidden min-h-screen"
       style={{
         background: "#111318",
@@ -56,7 +56,7 @@ export default function SceneThree({ onApproachSceneFour }: SceneThreeProps) {
 
       <div className="relative overflow-hidden" style={{borderBottom:"1px solid rgba(255,255,255,0.06)",padding:"13px 0"}}>
         <div className="ticker-rev">
-          {[...tickerItems,...tickerItems,...tickerItems,...tickerItems].map((item,i)=>(
+          {[...tickerItems,...tickerItems].map((item,i)=>(
             <span key={i} style={{fontFamily:"'DM Mono',monospace",fontSize:8.5,letterSpacing:"0.52em",textTransform:"uppercase",color:"rgba(255,255,255,0.16)",padding:"0 36px"}}>
               {item}<span style={{marginLeft:36,color:"rgba(255,255,255,0.07)"}}>◆</span>
             </span>
@@ -123,7 +123,7 @@ export default function SceneThree({ onApproachSceneFour }: SceneThreeProps) {
           <span style={{fontFamily:"'DM Mono',monospace",fontSize:8.5,letterSpacing:"0.38em",textTransform:"uppercase",color:"rgba(255,255,255,0.14)"}}>Full-Stack Engineer — India</span>
         </div>
       </div>
-      {onApproachSceneFour ? <BelowFoldSentinel onReveal={onApproachSceneFour} prefetchPx={200} /> : null}
+      {onApproachSceneFour ? <BelowFoldSentinel onReveal={onApproachSceneFour} prefetchPx={500} /> : null}
     </motion.div>
   );
 }

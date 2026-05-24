@@ -9,15 +9,18 @@ const cormorant = { fontFamily: "'Cormorant Garamond', Georgia, serif" } as cons
 export default function SceneFour() {
   return (
     <motion.div
-      initial={{ clipPath: "circle(0% at 50% 50%)" }}
-      whileInView={{ clipPath: "circle(150% at 50% 50%)" }}
+      initial={{ opacity: 0, scale: 0.97 }}
+      whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true, amount: 0 }}
-      transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
       className="relative min-h-[100dvh] w-full overflow-hidden bg-[#e8e4dc] text-[#0c0c0c] flex flex-col justify-between"
     >
       {/* Background aesthetics */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.04] overflow-hidden">
-        <div className="absolute -inset-[100px] animate-grain" />
+      <div className="absolute inset-0 pointer-events-none opacity-[0.04] overflow-hidden" style={{ contain: "strict" }}>
+        <div className="absolute inset-0" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+          backgroundSize: "200px 200px",
+        }} />
       </div>
       <div className="absolute inset-0 pointer-events-none" style={{
         backgroundImage:`repeating-linear-gradient(-45deg,transparent 0,transparent 38px,rgba(0,0,0,0.015) 38px,rgba(0,0,0,0.015) 39px)`,

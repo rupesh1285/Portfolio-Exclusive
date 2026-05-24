@@ -112,10 +112,10 @@ export default function SceneOne({ clock }: { clock: string }) {
           maskImage: "radial-gradient(ellipse 70% 60% at 50% 40%, black 20%, transparent 100%)",
         }}
       />
-      <div className="pointer-events-none absolute -inset-[100px] animate-grain opacity-[0.035]" />
+
 
       <nav
-        className="sticky top-0 z-40 flex items-center justify-between border-b border-white/[0.06] bg-[#030303]/75 px-5 py-5 backdrop-blur-md md:px-10"
+        className="sticky top-0 z-40 flex items-center justify-between border-b border-white/[0.06] bg-[#030303]/[0.92] px-5 py-5 md:px-10"
         style={mono}
       >
         <span data-cursor-expand className="text-[11px] tracking-[0.35em] text-white/90" style={bebas}>
@@ -164,7 +164,7 @@ export default function SceneOne({ clock }: { clock: string }) {
 
         {/* Floating thesis cluster — offset, overlaps void */}
         <div
-          className="s1-hero-float relative z-10 mx-auto mt-8 w-full max-w-md border border-white/[0.09] bg-[#080808]/80 p-6 shadow-[0_40px_120px_rgba(0,0,0,0.55)] backdrop-blur-xl md:ml-auto md:mr-6 md:mt-14 lg:mr-16 lg:mt-20"
+          className="s1-hero-float relative z-10 mx-auto mt-8 w-full max-w-md border border-white/[0.09] bg-[#080808]/[0.95] p-6 shadow-[0_40px_120px_rgba(0,0,0,0.55)] md:ml-auto md:mr-6 md:mt-14 lg:mr-16 lg:mt-20"
           style={mono}
         >
           <p className="mb-3 text-[9px] uppercase tracking-[0.55em] text-white/40">Full-stack engineer</p>
@@ -233,7 +233,7 @@ export default function SceneOne({ clock }: { clock: string }) {
       {/* Marquee */}
       <div className="s1-block-marquee overflow-hidden border-y border-white/[0.06] bg-[#050505] py-3.5">
         <div className="ticker-inner flex items-center gap-10">
-          {[...tape, ...tape, ...tape, ...tape].map((t, i) => (
+          {[...tape, ...tape].map((t, i) => (
             <span
               key={`${t}-${i}`}
               className="shrink-0 text-[9px] uppercase tracking-[0.55em] text-white/30"

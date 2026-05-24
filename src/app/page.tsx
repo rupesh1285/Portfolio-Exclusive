@@ -227,7 +227,7 @@ export default function Home() {
         <div ref={contentRef} className="lenis-content">
           <div className="w-full relative">
             <SceneOne clock={clock} />
-            {!loadScene2 ? <BelowFoldSentinel onReveal={onRevealScene2} prefetchPx={620} /> : null}
+            {!loadScene2 ? <BelowFoldSentinel onReveal={onRevealScene2} prefetchPx={900} /> : null}
           </div>
           {loadScene2 ? (
             <div className="w-full relative">

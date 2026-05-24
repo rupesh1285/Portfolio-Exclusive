@@ -34,7 +34,7 @@ html::-webkit-scrollbar { display: none; }
 
 .main-scroll::-webkit-scrollbar { display: none; }
 
-/* Scene 2 — lightweight scroll reveals (no GSAP / ScrollTrigger) */
+/* ── Scene 2 — lightweight scroll reveals (no GSAP / ScrollTrigger) ── */
 .s2-reveal {
   opacity: 0;
   transform: translate3d(0, 20px, 0);
@@ -46,13 +46,6 @@ html::-webkit-scrollbar { display: none; }
   opacity: 1;
   transform: translate3d(0, 0, 0);
 }
-@media (prefers-reduced-motion: reduce) {
-  .s2-reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-}
 
 /* Lenis + custom scroll root */
 .lenis.lenis-smooth {
@@ -62,20 +55,23 @@ html::-webkit-scrollbar { display: none; }
   touch-action: pan-y;
 }
 
-* { cursor: none !important; }
+/* Apply cursor:none only to the root — inherits to children without
+   creating per-element style-recalc overhead. */
+html { cursor: none !important; }
 
-/* ── Film grain ────────────────────────────── */
+/* ── Film grain (slowed down: 0.4s instead of 0.09s — ~4.5× fewer repaints) ─── */
 @keyframes grainShift {
   0%  { transform: translate3d(0px, 0px, 0); }
-  20% { transform: translate3d(-55px, 28px, 0); }
-  40% { transform: translate3d(28px, -55px, 0); }
-  60% { transform: translate3d(-80px, 55px, 0); }
-  80% { transform: translate3d(55px, -28px, 0); }
+  25% { transform: translate3d(-55px, 28px, 0); }
+  50% { transform: translate3d(28px, -55px, 0); }
+  75% { transform: translate3d(-80px, 55px, 0); }
   100%{ transform: translate3d(0px, 0px, 0); }
 }
-.animate-grain { 
-  animation: grainShift 0.09s steps(1) infinite; 
+.animate-grain {
+  animation: grainShift 0.4s steps(4) infinite;
   will-change: transform;
+  backface-visibility: hidden;
+  contain: strict;
 }
 
 /* ── Name slam ─────────────────────────────── */
@@ -113,12 +109,17 @@ html::-webkit-scrollbar { display: none; }
 }
 .animate-scroll-drop { animation: scrollDrop 2.6s ease-in-out infinite; }
 
-/* ── Ticker ────────────────────────────────── */
+/* ── Ticker (removed will-change — browser composites fine without it) ── */
 @keyframes tickerScroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
 }
-.ticker-inner { animation: tickerScroll 34s linear infinite; white-space:nowrap; display:inline-flex; will-change: transform; }
+.ticker-inner {
+  animation: tickerScroll 34s linear infinite;
+  white-space: nowrap;
+  display: inline-flex;
+  backface-visibility: hidden;
+}
 
 /* ── Stat counter pop ──────────────────────── */
 @keyframes countUp {
@@ -134,27 +135,20 @@ html::-webkit-scrollbar { display: none; }
 @keyframes hudPulse { 0%,100%{opacity:0.4;} 50%{opacity:1;} }
 .hud-dot { animation: hudPulse 2.8s ease-in-out infinite; }
 
-/* ── Scene 2 reveals ───────────────────────── */
-.s2-reveal {
-  opacity:0; transform:translateY(44px);
-  transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1),
-              transform 0.9s cubic-bezier(0.16,1,0.3,1);
-}
-.s2-reveal.in-view { opacity:1; transform:translateY(0); }
-
+/* ── Scene 2 additional reveals ─────────────── */
 .s2-left {
-  opacity:0; transform:translateX(-52px);
+  opacity:0; transform:translate3d(-52px, 0, 0);
   transition: opacity 0.95s cubic-bezier(0.16,1,0.3,1),
               transform 0.95s cubic-bezier(0.16,1,0.3,1);
 }
-.s2-left.in-view { opacity:1; transform:translateX(0); }
+.s2-left.in-view { opacity:1; transform:translate3d(0, 0, 0); }
 
 .s2-right {
-  opacity:0; transform:translateX(52px);
+  opacity:0; transform:translate3d(52px, 0, 0);
   transition: opacity 0.95s cubic-bezier(0.16,1,0.3,1),
               transform 0.95s cubic-bezier(0.16,1,0.3,1);
 }
-.s2-right.in-view { opacity:1; transform:translateX(0); }
+.s2-right.in-view { opacity:1; transform:translate3d(0, 0, 0); }
 
 /* ── Project row hover ─────────────────────── */
 .proj-row {
@@ -164,18 +158,18 @@ html::-webkit-scrollbar { display: none; }
 
 /* ── Scene 3 reveals ───────────────────────── */
 .s3-reveal {
-  opacity:0; transform:translateY(40px);
+  opacity:0; transform:translate3d(0, 40px, 0);
   transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1),
               transform 0.9s cubic-bezier(0.16,1,0.3,1);
 }
-.s3-reveal.in-view { opacity:1; transform:translateY(0); }
+.s3-reveal.in-view { opacity:1; transform:translate3d(0, 0, 0); }
 
 .s3-left {
-  opacity:0; transform:translateX(-48px);
+  opacity:0; transform:translate3d(-48px, 0, 0);
   transition: opacity 1s cubic-bezier(0.16,1,0.3,1),
               transform 1s cubic-bezier(0.16,1,0.3,1);
 }
-.s3-left.in-view { opacity:1; transform:translateX(0); }
+.s3-left.in-view { opacity:1; transform:translate3d(0, 0, 0); }
 
 /* ── Skill bar grow ────────────────────────── */
 @keyframes barGrow {
@@ -186,10 +180,15 @@ html::-webkit-scrollbar { display: none; }
 
 /* ── Scene 3 reversed ticker ───────────────── */
 @keyframes tickerRev {
-  from { transform: translateX(-50%); }
-  to   { transform: translateX(0); }
+  from { transform: translate3d(-50%, 0, 0); }
+  to   { transform: translate3d(0, 0, 0); }
 }
-.ticker-rev { animation: tickerRev 40s linear infinite; white-space:nowrap; display:inline-flex; will-change: transform; }
+.ticker-rev {
+  animation: tickerRev 40s linear infinite;
+  white-space: nowrap;
+  display: inline-flex;
+  backface-visibility: hidden;
+}
 
 /* ── Cert card hover ───────────────────────── */
 .cert-card {
@@ -210,6 +209,11 @@ html::-webkit-scrollbar { display: none; }
 .animate-blob-float { animation: blobFloat 9s ease-in-out infinite; }
 
 @media (prefers-reduced-motion: reduce) {
+  .s2-reveal, .s3-reveal, .s2-left, .s2-right, .s3-left {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
