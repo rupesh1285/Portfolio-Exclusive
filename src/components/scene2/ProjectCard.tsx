@@ -32,10 +32,10 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
       <div className="relative flex-1 overflow-hidden bg-gray-100">
         <div className={`absolute inset-0 bg-gradient-to-br ${p.accent} transition-transform duration-1000 ease-out group-hover/card:scale-105`} />
         
-        {/* Modern Corner Hover Indicator */}
-        <div className="absolute top-6 right-6 flex items-center opacity-0 group-hover/card:opacity-100 transition-all duration-700 ease-out transform translate-x-4 group-hover/card:translate-x-0 z-20">
-           <span className="text-[9px] uppercase tracking-[0.4em] text-black/80 font-bold bg-white/40 backdrop-blur-md px-3 py-1.5 rounded-sm" style={mono}>
-              [ EXPAND ]
+        {/* Modern Circular Hover Indicator */}
+        <div className="absolute top-4 right-4 flex items-center justify-center w-14 h-14 rounded-full bg-black shadow-lg opacity-0 group-hover/card:opacity-100 transition-all duration-700 ease-out transform scale-50 group-hover/card:scale-100 z-20">
+           <span className="text-[8px] uppercase tracking-[0.2em] text-white font-bold" style={mono}>
+              Expand
            </span>
         </div>
 
