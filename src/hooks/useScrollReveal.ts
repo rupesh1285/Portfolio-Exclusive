@@ -12,8 +12,9 @@ const SCROLLER = ".main-scroll";
 export function useScrollReveal(containerRef: RefObject<HTMLElement | null>) {
   useEffect(() => {
     const root = containerRef.current;
-    const scroller = document.querySelector(SCROLLER);
-    if (!root || !(scroller instanceof HTMLElement)) return;
+    if (!root) return;
+    const scroller = root.closest(".scene-scroll-container");
+    if (!(scroller instanceof HTMLElement)) return;
 
     const nodes = root.querySelectorAll<HTMLElement>(".s2-reveal");
     if (nodes.length === 0) return;

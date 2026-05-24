@@ -2,19 +2,13 @@
 
 import { useRef } from "react";
 
-import { BelowFoldSentinel } from "@/components/ui/BelowFoldSentinel";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { bebas, mono } from "./fonts";
 import { SCENE_TWO_PROJECTS } from "./projectData";
 import { ProjectCard } from "./ProjectCard";
 import { SceneTwoBackdrop } from "./SceneTwoBackdrop";
 
-export type SceneTwoProps = {
-  /** Prefetch / mount Scene 3 when the user nears the end of the work section. */
-  onApproachSceneThree?: () => void;
-};
-
-export default function SceneTwo({ onApproachSceneThree }: SceneTwoProps) {
+export default function SceneTwo() {
   const rootRef = useRef<HTMLDivElement>(null);
   useScrollReveal(rootRef);
 
@@ -52,7 +46,6 @@ export default function SceneTwo({ onApproachSceneThree }: SceneTwoProps) {
         ))}
       </div>
 
-      {onApproachSceneThree ? <BelowFoldSentinel onReveal={onApproachSceneThree} prefetchPx={600} /> : null}
 
       <div className="relative z-10 h-px bg-gradient-to-r from-transparent via-black/14 to-transparent" />
     </div>

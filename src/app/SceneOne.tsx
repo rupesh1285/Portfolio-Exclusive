@@ -45,7 +45,8 @@ export default function SceneOne({ clock }: { clock: string }) {
   // Scroll-driven section reveals
   useEffect(() => {
     const root = rootRef.current;
-    const scroller = document.querySelector(".main-scroll");
+    if (!root) return;
+    const scroller = root.closest(".scene-scroll-container");
     if (!root || !(scroller instanceof HTMLElement)) return;
     const obs = new IntersectionObserver(
       (entries) => {
@@ -129,8 +130,10 @@ export default function SceneOne({ clock }: { clock: string }) {
               data-cursor-expand
               className="transition-colors hover:text-white/80"
               onClick={() => {
-                const id = n === "Work" ? "work-region" : undefined;
-                if (id) document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+                const idx = n === "Work" ? 1 : n === "Contact" ? 3 : 0;
+                if ((window as any).__goToScene) {
+                  (window as any).__goToScene(idx);
+                }
               }}
             >
               {n}

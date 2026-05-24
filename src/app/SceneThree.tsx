@@ -2,18 +2,18 @@
 
 import { useEffect, useRef } from "react";
 
-import { BelowFoldSentinel } from "@/components/ui/BelowFoldSentinel";
 
-export type SceneThreeProps = {
-  onApproachSceneFour?: () => void;
-};
-
-export default function SceneThree({ onApproachSceneFour }: SceneThreeProps) {
+export default function SceneThree() {
+  const rootRef = useRef<HTMLDivElement>(null);
   const refs = useRef<(HTMLElement|null)[]>([]);
   useEffect(()=>{
     const obs=new IntersectionObserver(
       entries=>entries.forEach(e=>{if(e.isIntersecting)(e.target as HTMLElement).classList.add("in-view");}),
-      {threshold:0.07,rootMargin:"0px 0px -40px 0px"}
+      {
+        threshold: 0.07, 
+        rootMargin: "0px 0px -40px 0px",
+        root: rootRef.current?.closest(".scene-scroll-container") || null 
+      }
     );
     refs.current.forEach(el=>{if(el)obs.observe(el);});
     return()=>obs.disconnect();
@@ -36,6 +36,7 @@ export default function SceneThree({ onApproachSceneFour }: SceneThreeProps) {
 
   return (
     <div
+      ref={rootRef}
       className="relative w-full overflow-hidden min-h-screen"
       style={{
         background: "#111318",
@@ -119,7 +120,6 @@ export default function SceneThree({ onApproachSceneFour }: SceneThreeProps) {
           <span style={{fontFamily:"'DM Mono',monospace",fontSize:8.5,letterSpacing:"0.38em",textTransform:"uppercase",color:"rgba(255,255,255,0.14)"}}>Full-Stack Engineer — India</span>
         </div>
       </div>
-      {onApproachSceneFour ? <BelowFoldSentinel onReveal={onApproachSceneFour} prefetchPx={500} /> : null}
     </div>
   );
 }

@@ -32,8 +32,6 @@ html, body {
 }
 html::-webkit-scrollbar { display: none; }
 
-.main-scroll::-webkit-scrollbar { display: none; }
-
 /* ── Scene 2 — lightweight scroll reveals (no GSAP / ScrollTrigger) ── */
 .s2-reveal {
   opacity: 0;
@@ -47,13 +45,30 @@ html::-webkit-scrollbar { display: none; }
   transform: translate3d(0, 0, 0);
 }
 
-/* Lenis + custom scroll root */
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
+/* ── Scene Layers ── */
+.scene-layer {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #030303; /* Default bg, scenes will override */
+  will-change: transform, opacity;
 }
-.main-scroll {
-  touch-action: pan-y;
+.scene-layer.active {
+  pointer-events: auto;
 }
+.scene-scroll-container {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+.scene-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+
 
 /* Apply cursor:none only to the root — inherits to children without
    creating per-element style-recalc overhead. */

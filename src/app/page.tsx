@@ -1,33 +1,12 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import type { MutableRefObject } from "react";
-import {
-  startTransition,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
-import { BelowFoldSentinel } from "@/components/ui/BelowFoldSentinel";
-import { useLenis } from "@/hooks/useLenis";
+import { useEffect, useRef, useState } from "react";
+import SceneManager from "@/components/SceneManager";
 import SceneOne from "./SceneOne";
-
-const SceneTwo = dynamic(() => import("@/components/scene2/SceneTwo"), {
-  ssr: false,
-  loading: () => <div className="min-h-[100dvh] w-full shrink-0 bg-[#e8e4dc]" aria-hidden />,
-});
-
-const SceneThree = dynamic(() => import("./SceneThree"), {
-  ssr: false,
-  loading: () => <div className="min-h-[90dvh] w-full shrink-0 bg-[#111318]" aria-hidden />,
-});
-
-const SceneFour = dynamic(() => import("./SceneFour"), {
-  ssr: false,
-  loading: () => <div className="min-h-[100dvh] w-full shrink-0 bg-[#e8e4dc]" aria-hidden />,
-});
+import SceneTwo from "@/components/scene2/SceneTwo";
+import SceneThree from "./SceneThree";
+import SceneFour from "./SceneFour";
 
 function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(() => void) | null> }) {
   const dotRef = useRef<HTMLDivElement>(null);
@@ -181,71 +160,18 @@ function useClock() {
 
 export default function Home() {
   const clock = useClock();
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const cursorAfterLenis = useRef<(() => void) | null>(null);
-  const [loadScene2, setLoadScene2] = useState(false);
-  const [loadScene3, setLoadScene3] = useState(false);
-  const [loadScene4, setLoadScene4] = useState(false);
-
-  const lenisRef = useLenis(scrollRef, contentRef, {
-    onFrame: () => {
-      cursorAfterLenis.current?.();
-    },
-  });
-
-  const onRevealScene2 = useCallback(() => {
-    startTransition(() => setLoadScene2(true));
-  }, []);
-  const onRevealScene3 = useCallback(() => {
-    startTransition(() => setLoadScene3(true));
-  }, []);
-  const onRevealScene4 = useCallback(() => {
-    startTransition(() => setLoadScene4(true));
-  }, []);
-
-  useLayoutEffect(() => {
-    if (!loadScene2 && !loadScene3 && !loadScene4) return;
-    const id = setTimeout(() => {
-      lenisRef.current?.resize();
-    }, 100);
-    return () => clearTimeout(id);
-  }, [loadScene2, loadScene3, loadScene4, lenisRef]);
 
   return (
     <div className="relative h-dvh w-screen overflow-hidden bg-[#030303]">
-      <PrecisionCursor lenisFrameRef={cursorAfterLenis} />
-      <div
-        ref={scrollRef}
-        className="main-scroll lenis h-full w-full overflow-x-hidden overflow-y-auto overscroll-y-contain"
-        style={{
-          scrollbarWidth: "none",
-          WebkitOverflowScrolling: "touch",
-          transform: "translateZ(0)",
-        }}
-      >
-        <div ref={contentRef} className="lenis-content">
-          <div className="w-full relative">
-            <SceneOne clock={clock} />
-            {!loadScene2 ? <BelowFoldSentinel onReveal={onRevealScene2} prefetchPx={900} /> : null}
-          </div>
-          {loadScene2 ? (
-            <div className="w-full relative">
-              <SceneTwo onApproachSceneThree={onRevealScene3} />
-            </div>
-          ) : null}
-          {loadScene3 ? (
-            <div className="w-full relative">
-              <SceneThree onApproachSceneFour={onRevealScene4} />
-            </div>
-          ) : null}
-          {loadScene4 ? (
-            <div className="w-full relative">
-              <SceneFour />
-            </div>
-          ) : null}
-        </div>
-      </div>
+      <PrecisionCursor />
+      <SceneManager
+        scenes={[
+          <SceneOne key="scene1" clock={clock} />,
+          <SceneTwo key="scene2" />,
+          <SceneThree key="scene3" />,
+          <SceneFour key="scene4" />,
+        ]}
+      />
     </div>
   );
 }
