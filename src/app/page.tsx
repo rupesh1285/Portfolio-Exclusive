@@ -135,7 +135,6 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
           borderRadius: "50%",
           background: "#FFF",
           transform: "translate(-50%,-50%)",
-          mixBlendMode: "difference",
         }}
       />
     </>
