@@ -86,7 +86,7 @@ export default function SceneTwo() {
             <motion.div
               layoutId={`project-${expandedProject.id}`}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-[95vw] max-w-[1500px] rounded-[32px] md:rounded-[40px] bg-white shadow-[0_40px_100px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col lg:flex-row z-10"
+              className="relative w-[95vw] max-w-[1500px] min-h-[75vh] md:min-h-[80vh] rounded-[32px] md:rounded-[40px] bg-white shadow-[0_40px_100px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col lg:flex-row z-10"
             >
               <motion.div 
                 initial={{ opacity: 0 }}
@@ -95,23 +95,12 @@ export default function SceneTwo() {
                 className="absolute inset-0 pointer-events-none z-0 bg-white"
               />
 
-              {/* Close Button */}
-              <motion.button
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1, transition: { delay: 0.3 } }}
-                exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.2 } }}
-                onClick={() => setExpandedId(null)}
-                className="absolute top-4 right-4 lg:top-6 lg:right-6 z-50 bg-black/5 hover:bg-black/10 text-black rounded-full w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center transition-colors text-[14px]"
-              >
-                ✕
-              </motion.button>
-
-              {/* Visual Side - STRICTLY 16:9 Aspect Ratio */}
-              <div className={`relative w-full lg:w-[65%] aspect-video bg-gradient-to-br ${expandedProject.accent} shrink-0`}>
+              {/* Visual Side - 16:9 Aspect Ratio Container inside flex */}
+              <div className={`relative w-full lg:w-[65%] flex items-center justify-center bg-gradient-to-br ${expandedProject.accent} shrink-0`}>
                 <div className="absolute inset-0 bg-white/10 mix-blend-overlay opacity-50" />
                 
                 {/* 16:9 Inner Mockup Area */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="relative w-full aspect-video flex items-center justify-center pointer-events-none">
                    <p className="text-black/40 text-[10px] uppercase tracking-[0.4em] bg-white/50 backdrop-blur-md px-6 py-3 rounded-full" style={mono}>
                      16:9 Preview Space
                    </p>
@@ -121,39 +110,71 @@ export default function SceneTwo() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0, transition: { delay: 0.3 } }}
                   exit={{ opacity: 0, transition: { duration: 0.2 } }}
-                  className="absolute left-6 top-6 lg:left-8 lg:top-8 flex items-center gap-3 rounded-full bg-white/80 backdrop-blur-md px-5 py-2.5 text-[10px] lg:text-[11px] uppercase tracking-[0.3em] text-black/90 shadow-lg" style={mono}
+                  className="absolute left-6 top-6 lg:left-8 lg:top-8 flex items-center gap-3 rounded-full bg-white/80 backdrop-blur-md px-5 py-2.5 text-[10px] lg:text-[11px] uppercase tracking-[0.3em] text-black/90 shadow-lg z-10" style={mono}
                 >
                   <span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
                   Interactive Preview
                 </motion.div>
               </div>
 
-              {/* Content Side - Automatically matches the height of the left side */}
+              {/* Content Side */}
               <motion.div 
                 initial={{ opacity: 0, x: 40 }}
                 animate={{ opacity: 1, x: 0, transition: { delay: 0.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] } }}
                 exit={{ opacity: 0, x: 20, transition: { duration: 0.2 } }}
-                className="relative z-10 w-full lg:w-[35%] p-6 lg:p-8 xl:p-10 flex flex-col overflow-hidden bg-white"
+                className="relative z-10 w-full lg:w-[35%] p-6 lg:p-8 xl:p-10 flex flex-col bg-white"
               >
-                <div className="flex-1 flex flex-col justify-center">
-                  <div className="flex items-center gap-3">
+                {/* Close Button - Moved to the Info Section top-right */}
+                <button
+                  onClick={() => setExpandedId(null)}
+                  className="absolute top-6 right-6 lg:top-8 lg:right-8 z-50 bg-black/5 hover:bg-black/10 text-black rounded-full w-10 h-10 flex items-center justify-center transition-colors text-[14px]"
+                >
+                  ✕
+                </button>
+
+                <div className="flex-1 flex flex-col">
+                  {/* Top Layout: Name & Number */}
+                  <div className="flex justify-between items-start pr-12">
+                    <div>
+                      <span className="text-[9px] lg:text-[10px] uppercase tracking-[0.35em] text-black/40" style={mono}>
+                        {expandedProject.year} · {expandedProject.role}
+                      </span>
+                      <h2 className="mt-2 text-[clamp(1.8rem,2.5vw,2.8rem)] leading-[0.95] tracking-[0.02em] text-black/90" style={bebas}>
+                        {expandedProject.title}
+                      </h2>
+                    </div>
                     <span className="text-[clamp(2.5rem,4vw,4.5rem)] leading-none text-black/10" style={bebas}>
                       {expandedProject.index}
                     </span>
-                    <span className="text-[9px] lg:text-[10px] uppercase tracking-[0.35em] text-black/40" style={mono}>
-                      {expandedProject.year} · {expandedProject.role}
-                    </span>
                   </div>
 
-                  <h2 className="mt-2 lg:mt-4 text-[clamp(1.8rem,2.5vw,2.8rem)] leading-[0.95] tracking-[0.02em] text-black/90" style={bebas}>
-                    {expandedProject.title}
-                  </h2>
+                  {/* Body Content: Blurb vs Highlights Toggle */}
+                  <div className="mt-6 flex flex-col gap-6">
+                    <p className="text-[12px] lg:text-[13px] leading-[1.6] text-black/60" style={mono}>
+                      {expandedProject.blurb}
+                    </p>
 
-                  <p className="mt-3 lg:mt-5 text-[12px] lg:text-[13px] leading-[1.6] text-black/60 line-clamp-6" style={mono}>
-                    {expandedProject.blurb}
-                  </p>
+                    {/* Highlights Section */}
+                    <div className="bg-black/5 rounded-2xl p-6 border border-black/5">
+                      <h3 className="text-[10px] uppercase tracking-[0.3em] text-black/80 mb-4 font-bold" style={mono}>
+                        Project Highlights
+                      </h3>
+                      <p className="text-[12px] leading-[1.6] text-black/60 mb-6" style={mono}>
+                        {expandedProject.detail}
+                      </p>
+                      
+                      <div className="grid grid-cols-2 gap-4">
+                        {expandedProject.metrics.map((m) => (
+                          <div key={m.k} className="flex flex-col gap-1">
+                            <span className="text-[16px] text-black/90 tracking-[0.02em]" style={bebas}>{m.v}</span>
+                            <span className="text-[9px] uppercase tracking-[0.2em] text-black/40" style={mono}>{m.k}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
 
-                  <div className="mt-4 lg:mt-6 flex flex-wrap gap-2">
+                  <div className="mt-6 lg:mt-8 flex flex-wrap gap-2">
                     {expandedProject.tags.map((t) => (
                       <span
                         key={t}
@@ -166,22 +187,15 @@ export default function SceneTwo() {
                   </div>
                 </div>
 
-                <div className="flex flex-row items-center gap-2 pt-4 lg:pt-6 mt-4 lg:mt-auto border-t border-black/10 shrink-0">
+                {/* Bottom Action Button */}
+                <div className="pt-4 lg:pt-6 mt-6 border-t border-black/10 shrink-0">
                   <a
                     data-cursor-expand
                     href="#"
-                    className="flex-1 text-center rounded-full border border-transparent bg-black px-2 py-3 lg:py-4 text-[8px] lg:text-[9px] uppercase tracking-[0.3em] text-white transition-all hover:bg-gray-800 shadow-md whitespace-nowrap"
+                    className="block w-full text-center rounded-full border border-transparent bg-black px-4 py-4 text-[9px] lg:text-[10px] uppercase tracking-[0.3em] text-white transition-all hover:bg-gray-800 shadow-md"
                     style={mono}
                   >
-                    Launch
-                  </a>
-                  <a
-                    data-cursor-expand
-                    href="#"
-                    className="flex-1 text-center rounded-full border border-black/20 bg-white px-2 py-3 lg:py-4 text-[8px] lg:text-[9px] uppercase tracking-[0.3em] text-black/80 transition-colors hover:bg-black/5 whitespace-nowrap"
-                    style={mono}
-                  >
-                    Case study
+                    Launch demo
                   </a>
                 </div>
               </motion.div>
