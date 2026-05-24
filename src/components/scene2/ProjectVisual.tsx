@@ -12,12 +12,7 @@ export const ProjectVisual = memo(function ProjectVisual({ id, accent }: Props) 
       className={`group relative aspect-[16/11] w-full overflow-hidden rounded-2xl border border-black/[0.08] bg-gradient-to-br shadow-md ${accent}`}
       style={{ contain: "layout paint" }}
     >
-      <div
-        className="pointer-events-none absolute inset-0 opacity-25"
-        style={{
-          backgroundImage: `repeating-linear-gradient(-12deg, transparent 0, transparent 16px, rgba(0,0,0,0.04) 16px, rgba(0,0,0,0.04) 17px)`,
-        }}
-      />
+
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_55%_at_72%_28%,rgba(255,255,255,0.5),transparent_58%)]" />
       <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-black/[0.1] bg-white/92 px-3 py-1.5 text-[9px] uppercase tracking-[0.35em] text-black/52" style={mono}>
         <span className="h-1 w-1 shrink-0 rounded-full bg-emerald-600/90" />

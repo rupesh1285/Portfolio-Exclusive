@@ -23,18 +23,6 @@ export const SceneTwoBackdrop = memo(function SceneTwoBackdrop() {
         }}
       />
 
-      <div
-        className="absolute inset-0 opacity-[0.06]"
-        style={{
-          backgroundImage: `repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 10px,
-            rgba(0,0,0,0.5) 10px,
-            rgba(0,0,0,0.5) 11px
-          )`,
-        }}
-      />
 
 
       <div

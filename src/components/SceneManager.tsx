@@ -87,9 +87,13 @@ export default function SceneManager({ scenes }: SceneManagerProps) {
 
     const tl = gsap.timeline({
       onComplete: () => {
-        // Clean up
-        gsap.set(currentLayer, { visibility: "hidden", clearProps: "all" });
-        gsap.set(nextLayer, { clearProps: "all", visibility: "visible", zIndex: 10 });
+        // Immediately hide the outgoing scene BEFORE clearing its transforms.
+        // This prevents it from teleporting back to the center of the screen for 1 frame
+        // before React's state update kicks in to hide it.
+        gsap.set(currentLayer, { visibility: "hidden" });
+        gsap.set(currentLayer, { clearProps: "transform,opacity,zIndex" });
+        
+        gsap.set(nextLayer, { clearProps: "transform,opacity" });
         setActiveScene(nextIndex);
         isAnimating.current = false;
       }
