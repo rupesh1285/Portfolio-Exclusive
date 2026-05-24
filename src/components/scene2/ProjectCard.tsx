@@ -20,46 +20,100 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i }: P
     <article
       data-s2-project
       className={`group/card relative flex flex-col overflow-hidden rounded-[32px] border border-black/5 bg-white shadow-[0_4px_24px_rgba(0,0,0,0.02)] transition-all duration-700 ease-[cubic-bezier(0.2,1,0.2,1)] 
-        hover:shadow-[0_40px_100px_rgba(0,0,0,0.15)] hover:-translate-y-4 hover:scale-[1.03] hover:z-50 
-        group-hover/grid:[&:not(:hover)]:opacity-40 group-hover/grid:[&:not(:hover)]:scale-[0.97] group-hover/grid:[&:not(:hover)]:blur-[2px] group-hover/grid:[&:not(:hover)]:grayscale-[30%]
+        group-hover/grid:[&:not(:hover)]:opacity-30 group-hover/grid:[&:not(:hover)]:scale-[0.97] group-hover/grid:[&:not(:hover)]:blur-[4px] group-hover/grid:[&:not(:hover)]:grayscale-[50%]
+        hover:z-50
         ${spanClass}`}
     >
-      {/* Visual Area */}
-      <div className="relative flex-1 overflow-hidden bg-gray-100">
-        <div className={`absolute inset-0 bg-gradient-to-br ${p.accent} transition-transform duration-1000 ease-out group-hover/card:scale-110`} />
-        <div className="absolute inset-0 bg-white/10 mix-blend-overlay opacity-50 transition-opacity duration-700 group-hover/card:opacity-0" />
-        
-        {/* Floating badge */}
-        <div className="absolute left-6 top-6 flex items-center gap-2 rounded-full bg-white/80 backdrop-blur-md px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-black/80 shadow-sm transition-transform duration-700 group-hover/card:-translate-y-2" style={mono}>
+      {/* -----------------------------
+          BASE CARD (Seen in Grid) 
+          ----------------------------- */}
+      <div className="relative flex-1 overflow-hidden bg-gray-100 group-hover/card:scale-105 transition-transform duration-700">
+        <div className={`absolute inset-0 bg-gradient-to-br ${p.accent}`} />
+        <div className="absolute inset-0 bg-white/10 mix-blend-overlay opacity-50" />
+        <div className="absolute left-6 top-6 flex items-center gap-2 rounded-full bg-white/80 backdrop-blur-md px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-black/80 shadow-sm" style={mono}>
           {p.year}
         </div>
       </div>
 
-      {/* Content Area */}
-      <div className="relative z-10 flex flex-col gap-4 bg-white p-6 md:p-8 shrink-0 transition-transform duration-700 group-hover/card:-translate-y-1">
-        <div className="flex justify-between items-start gap-4">
-          <h2 className="text-[clamp(1.5rem,3vw,3rem)] leading-[0.95] tracking-[0.02em] text-black/90" style={bebas}>
-            {p.title}
-          </h2>
-          <span className="shrink-0 text-[10px] uppercase tracking-[0.3em] text-black/40" style={mono}>
-            {p.role}
-          </span>
-        </div>
-        
-        <p className="text-[13px] leading-[1.6] text-black/60 line-clamp-2 max-w-xl transition-opacity duration-700 group-hover/card:opacity-100" style={mono}>
-          {p.blurb}
-        </p>
+      <div className="relative z-10 flex flex-col gap-2 bg-white p-6 md:p-8 shrink-0">
+        <h2 className="text-[clamp(1.5rem,3vw,3rem)] leading-[0.95] tracking-[0.02em] text-black/90" style={bebas}>
+          {p.title}
+        </h2>
+        <span className="text-[10px] uppercase tracking-[0.3em] text-black/40" style={mono}>
+          {p.role}
+        </span>
+      </div>
 
-        <div className="mt-2 flex flex-wrap gap-2">
-          {p.tags.slice(0, 3).map((t) => (
-            <span
-              key={t}
-              className="rounded-full border border-black/5 bg-black/[0.02] px-3 py-1.5 text-[9px] uppercase tracking-[0.2em] text-black/50 transition-colors duration-500 group-hover/card:bg-black/5 group-hover/card:text-black/70"
-              style={mono}
-            >
-              {t}
-            </span>
-          ))}
+      {/* -----------------------------
+          HOVER EXPANSION (Center Screen) 
+          ----------------------------- */}
+      <div className="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none opacity-0 group-hover/card:opacity-100 transition-all duration-500 backdrop-blur-md bg-black/40">
+        
+        {/* The Massive Window */}
+        <div className="pointer-events-none group-hover/card:pointer-events-auto relative w-[95vw] md:w-[85vw] lg:w-[75vw] max-w-6xl h-[85vh] max-h-[900px] rounded-[40px] bg-white shadow-[0_40px_100px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col lg:flex-row transform scale-95 opacity-0 group-hover/card:scale-100 group-hover/card:opacity-100 transition-all duration-700 ease-[cubic-bezier(0.2,1,0.2,1)]">
+           
+           {/* Visual Side */}
+           <div className={`relative w-full lg:w-[55%] h-[40%] lg:h-full bg-gradient-to-br ${p.accent}`}>
+             <div className="absolute inset-0 bg-white/10 mix-blend-overlay opacity-50" />
+             <div className="absolute left-8 top-8 lg:left-12 lg:top-12 flex items-center gap-3 rounded-full bg-white/80 backdrop-blur-md px-6 py-3 text-[11px] uppercase tracking-[0.3em] text-black/90 shadow-lg" style={mono}>
+               <span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
+               Interactive Preview
+             </div>
+           </div>
+
+           {/* Content Side */}
+           <div className="relative w-full lg:w-[45%] h-[60%] lg:h-full p-8 lg:p-16 flex flex-col justify-between bg-white overflow-y-auto">
+             <div>
+               <div className="flex items-center gap-4">
+                 <span className="text-[clamp(4rem,8vw,8rem)] leading-none text-black/10" style={bebas}>
+                   {p.index}
+                 </span>
+                 <span className="text-[11px] uppercase tracking-[0.35em] text-black/40" style={mono}>
+                   {p.year} · {p.role}
+                 </span>
+               </div>
+               
+               <h2 className="mt-6 lg:mt-10 text-[clamp(2.5rem,5vw,4.5rem)] leading-[0.95] tracking-[0.02em] text-black/90" style={bebas}>
+                 {p.title}
+               </h2>
+               
+               <p className="mt-6 text-[14px] leading-[1.8] text-black/60" style={mono}>
+                 {p.blurb}
+               </p>
+               
+               <div className="mt-10 flex flex-wrap gap-2">
+                 {p.tags.map((t) => (
+                   <span
+                     key={t}
+                     className="rounded-full border border-black/10 bg-black/5 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-black/60 shadow-sm"
+                     style={mono}
+                   >
+                     {t}
+                   </span>
+                 ))}
+               </div>
+             </div>
+
+             <div className="flex flex-wrap gap-4 pt-10 mt-10 border-t border-black/10 shrink-0">
+               <a
+                 data-cursor-expand
+                 href="#"
+                 className="rounded-full border border-transparent bg-black px-8 py-5 text-[10px] lg:text-[11px] uppercase tracking-[0.3em] text-white transition-all hover:bg-gray-800 shadow-md"
+                 style={mono}
+               >
+                 Launch demo
+               </a>
+               <a
+                 data-cursor-expand
+                 href="#"
+                 className="rounded-full border border-black/20 bg-white px-8 py-5 text-[10px] lg:text-[11px] uppercase tracking-[0.3em] text-black/80 transition-colors hover:bg-black/5"
+                 style={mono}
+               >
+                 Read case study
+               </a>
+             </div>
+           </div>
+
         </div>
       </div>
     </article>
