@@ -1,13 +1,24 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { bebas, mono } from "./fonts";
 import { SCENE_TWO_PROJECTS } from "./projectData";
 import { ProjectCard } from "./ProjectCard";
 
 export default function SceneTwo() {
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const expandedProject = SCENE_TWO_PROJECTS.find(p => p.id === expandedId);
+
+  // Prevent background scrolling when modal is open
+  useEffect(() => {
+    if (expandedId) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "unset";
+    return () => { document.body.style.overflow = "unset"; };
+  }, [expandedId]);
+
   return (
-    <div
-      id="work-region"
-      className="relative w-full text-[#0c0c0c] bg-[#fcfaf6]"
-    >
+    <div id="work-region" className="relative w-full text-[#0c0c0c] bg-[#fcfaf6]">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(0,0,0,0.03)_0%,transparent_50%)]" />
 
       <header className="relative z-10 mx-auto max-w-[1400px] px-5 pb-8 pt-20 md:px-10 md:pb-12 md:pt-28 lg:px-14">
@@ -32,7 +43,12 @@ export default function SceneTwo() {
       <div className="relative z-10 mx-auto max-w-[1400px] px-4 pb-32 pt-8 md:px-8 lg:px-12">
         <div className="group/grid grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-8 auto-rows-[250px] md:auto-rows-[300px] lg:auto-rows-[350px]">
           {SCENE_TWO_PROJECTS.map((p, i) => (
-            <ProjectCard key={p.id} project={p} index={i} />
+            <ProjectCard 
+              key={p.id} 
+              project={p} 
+              index={i} 
+              onClick={() => setExpandedId(p.id)} 
+            />
           ))}
         </div>
       </div>
@@ -51,6 +67,100 @@ export default function SceneTwo() {
           <span className="text-black/30 group-hover:text-white/60">→</span>
         </a>
       </div>
+
+      {/* Framer Motion Shared Layout Modal */}
+      <AnimatePresence>
+        {expandedProject && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center pointer-events-auto">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+              className="absolute inset-0 bg-black/40 backdrop-blur-md"
+              onClick={() => setExpandedId(null)}
+            />
+
+            {/* The Expanded Window (morphs from the clicked card) */}
+            <motion.div
+              layoutId={`project-${expandedProject.id}`}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="relative w-[95vw] md:w-[85vw] lg:w-[75vw] max-w-6xl h-[85vh] max-h-[900px] rounded-[40px] bg-white shadow-[0_40px_100px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col lg:flex-row z-10"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setExpandedId(null)}
+                className="absolute top-6 right-6 lg:top-8 lg:right-8 z-50 bg-black/5 hover:bg-black/10 text-black rounded-full w-12 h-12 flex items-center justify-center transition-colors text-[14px]"
+              >
+                ✕
+              </button>
+
+              {/* Visual Side */}
+              <div className={`relative w-full lg:w-[55%] h-[40%] lg:h-full bg-gradient-to-br ${expandedProject.accent}`}>
+                <div className="absolute inset-0 bg-white/10 mix-blend-overlay opacity-50" />
+                <div className="absolute left-8 top-8 lg:left-12 lg:top-12 flex items-center gap-3 rounded-full bg-white/80 backdrop-blur-md px-6 py-3 text-[11px] uppercase tracking-[0.3em] text-black/90 shadow-lg" style={mono}>
+                  <span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
+                  Interactive Preview
+                </div>
+              </div>
+
+              {/* Content Side */}
+              <div className="relative w-full lg:w-[45%] h-[60%] lg:h-full p-8 lg:p-16 flex flex-col justify-between bg-white overflow-y-auto">
+                <div>
+                  <div className="flex items-center gap-4">
+                    <span className="text-[clamp(4rem,8vw,8rem)] leading-none text-black/10" style={bebas}>
+                      {expandedProject.index}
+                    </span>
+                    <span className="text-[11px] uppercase tracking-[0.35em] text-black/40" style={mono}>
+                      {expandedProject.year} · {expandedProject.role}
+                    </span>
+                  </div>
+
+                  <h2 className="mt-6 lg:mt-10 text-[clamp(2.5rem,5vw,4.5rem)] leading-[0.95] tracking-[0.02em] text-black/90" style={bebas}>
+                    {expandedProject.title}
+                  </h2>
+
+                  <p className="mt-6 text-[14px] leading-[1.8] text-black/60" style={mono}>
+                    {expandedProject.blurb}
+                  </p>
+
+                  <div className="mt-10 flex flex-wrap gap-2">
+                    {expandedProject.tags.map((t) => (
+                      <span
+                        key={t}
+                        className="rounded-full border border-black/10 bg-black/5 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-black/60 shadow-sm"
+                        style={mono}
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-4 pt-10 mt-10 border-t border-black/10 shrink-0">
+                  <a
+                    data-cursor-expand
+                    href="#"
+                    className="rounded-full border border-transparent bg-black px-8 py-5 text-[10px] lg:text-[11px] uppercase tracking-[0.3em] text-white transition-all hover:bg-gray-800 shadow-md"
+                    style={mono}
+                  >
+                    Launch demo
+                  </a>
+                  <a
+                    data-cursor-expand
+                    href="#"
+                    className="rounded-full border border-black/20 bg-white px-8 py-5 text-[10px] lg:text-[11px] uppercase tracking-[0.3em] text-black/80 transition-colors hover:bg-black/5"
+                    style={mono}
+                  >
+                    Read case study
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
