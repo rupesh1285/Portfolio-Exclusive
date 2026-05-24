@@ -19,8 +19,7 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
       st.current.mx = e.clientX;
       st.current.my = e.clientY;
       if (dotRef.current) {
-        dotRef.current.style.left = e.clientX + "px";
-        dotRef.current.style.top = e.clientY + "px";
+        dotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
       }
     };
     const tick = () => {
@@ -30,12 +29,10 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
       s.gx += (s.mx - s.gx) * 0.055;
       s.gy += (s.my - s.gy) * 0.055;
       if (ringRef.current) {
-        ringRef.current.style.left = s.rx + "px";
-        ringRef.current.style.top = s.ry + "px";
+        ringRef.current.style.transform = `translate3d(${s.rx}px, ${s.ry}px, 0) translate(-50%, -50%)`;
       }
       if (ghostRef.current) {
-        ghostRef.current.style.left = s.gx + "px";
-        ghostRef.current.style.top = s.gy + "px";
+        ghostRef.current.style.transform = `translate3d(${s.gx}px, ${s.gy}px, 0) translate(-50%, -50%)`;
       }
     };
 
@@ -106,22 +103,24 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
         ref={ghostRef}
         className="fixed pointer-events-none z-[9990]"
         style={{
+          top: 0,
+          left: 0,
           width: 48,
           height: 48,
           borderRadius: "50%",
           border: "1px solid rgba(160,160,160,0.08)",
-          transform: "translate(-50%,-50%)",
         }}
       />
       <div
         ref={ringRef}
         className="fixed pointer-events-none z-[9995]"
         style={{
+          top: 0,
+          left: 0,
           width: 28,
           height: 28,
           borderRadius: "50%",
           border: "1px solid rgba(180,180,180,0.38)",
-          transform: "translate(-50%,-50%)",
           transition:
             "width 0.4s cubic-bezier(0.16,1,0.3,1),height 0.4s cubic-bezier(0.16,1,0.3,1),border-color 0.28s,background 0.28s",
         }}
@@ -130,11 +129,12 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
         ref={dotRef}
         className="fixed pointer-events-none z-[9999]"
         style={{
+          top: 0,
+          left: 0,
           width: 4,
           height: 4,
           borderRadius: "50%",
           background: "#FFF",
-          transform: "translate(-50%,-50%)",
         }}
       />
     </>

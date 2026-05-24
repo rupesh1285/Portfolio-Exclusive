@@ -75,20 +75,7 @@ html::-webkit-scrollbar { display: none; }
    creating per-element style-recalc overhead. */
 html { cursor: none !important; }
 
-/* ── Film grain (slowed down: 0.4s instead of 0.09s — ~4.5× fewer repaints) ─── */
-@keyframes grainShift {
-  0%  { transform: translate3d(0px, 0px, 0); }
-  25% { transform: translate3d(-55px, 28px, 0); }
-  50% { transform: translate3d(28px, -55px, 0); }
-  75% { transform: translate3d(-80px, 55px, 0); }
-  100%{ transform: translate3d(0px, 0px, 0); }
-}
-.animate-grain {
-  animation: grainShift 0.4s steps(4) infinite;
-  will-change: transform;
-  backface-visibility: hidden;
-  contain: strict;
-}
+
 
 /* ── Name slam ─────────────────────────────── */
 @keyframes nameReveal {
