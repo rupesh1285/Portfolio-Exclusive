@@ -107,8 +107,14 @@ export default function SceneTwo() {
               </motion.button>
 
               {/* Visual Side */}
-              <div className={`relative w-full lg:w-[55%] h-[40%] lg:h-full bg-gradient-to-br ${expandedProject.accent}`}>
+              <div className={`relative w-full lg:w-[60%] h-[45%] lg:h-full bg-gradient-to-br ${expandedProject.accent}`}>
                 <div className="absolute inset-0 bg-white/10 mix-blend-overlay opacity-50" />
+                
+                {/* 16:9 Inner Mockup Container (Optional, to enforce ratio) */}
+                <div className="absolute inset-8 lg:inset-16 bg-black/5 rounded-xl border border-black/10 shadow-2xl flex items-center justify-center overflow-hidden">
+                   <p className="text-black/40 text-[10px] uppercase tracking-[0.4em]" style={mono}>16:9 Desktop Preview</p>
+                </div>
+
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0, transition: { delay: 0.3 } }}
@@ -125,31 +131,31 @@ export default function SceneTwo() {
                 initial={{ opacity: 0, x: 40 }}
                 animate={{ opacity: 1, x: 0, transition: { delay: 0.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] } }}
                 exit={{ opacity: 0, x: 20, transition: { duration: 0.2 } }}
-                className="relative z-10 w-full lg:w-[45%] h-[60%] lg:h-full p-8 lg:p-16 flex flex-col justify-between overflow-y-auto"
+                className="relative z-10 w-full lg:w-[40%] h-[55%] lg:h-full p-8 lg:p-12 flex flex-col overflow-hidden"
               >
-                <div>
+                <div className="flex-1 flex flex-col justify-center">
                   <div className="flex items-center gap-4">
-                    <span className="text-[clamp(4rem,8vw,8rem)] leading-none text-black/10" style={bebas}>
+                    <span className="text-[clamp(3.5rem,6vw,6rem)] leading-none text-black/10" style={bebas}>
                       {expandedProject.index}
                     </span>
-                    <span className="text-[11px] uppercase tracking-[0.35em] text-black/40" style={mono}>
+                    <span className="text-[10px] uppercase tracking-[0.35em] text-black/40" style={mono}>
                       {expandedProject.year} · {expandedProject.role}
                     </span>
                   </div>
 
-                  <h2 className="mt-6 lg:mt-10 text-[clamp(2.5rem,5vw,4.5rem)] leading-[0.95] tracking-[0.02em] text-black/90" style={bebas}>
+                  <h2 className="mt-4 lg:mt-8 text-[clamp(2rem,4vw,3.5rem)] leading-[0.95] tracking-[0.02em] text-black/90" style={bebas}>
                     {expandedProject.title}
                   </h2>
 
-                  <p className="mt-6 text-[14px] leading-[1.8] text-black/60" style={mono}>
+                  <p className="mt-4 lg:mt-6 text-[13px] leading-[1.7] text-black/60 line-clamp-4 lg:line-clamp-none" style={mono}>
                     {expandedProject.blurb}
                   </p>
 
-                  <div className="mt-10 flex flex-wrap gap-2">
+                  <div className="mt-6 lg:mt-8 flex flex-wrap gap-2">
                     {expandedProject.tags.map((t) => (
                       <span
                         key={t}
-                        className="rounded-full border border-black/10 bg-black/5 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-black/60 shadow-sm"
+                        className="rounded-full border border-black/10 bg-black/5 px-3 py-1.5 text-[9px] uppercase tracking-[0.2em] text-black/60 shadow-sm"
                         style={mono}
                       >
                         {t}
@@ -158,22 +164,22 @@ export default function SceneTwo() {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-4 pt-10 mt-10 border-t border-black/10 shrink-0">
+                <div className="flex flex-row items-center gap-3 pt-6 lg:pt-8 mt-auto border-t border-black/10 shrink-0">
                   <a
                     data-cursor-expand
                     href="#"
-                    className="rounded-full border border-transparent bg-black px-8 py-5 text-[10px] lg:text-[11px] uppercase tracking-[0.3em] text-white transition-all hover:bg-gray-800 shadow-md"
+                    className="flex-1 text-center rounded-full border border-transparent bg-black px-2 py-4 text-[9px] lg:text-[10px] uppercase tracking-[0.3em] text-white transition-all hover:bg-gray-800 shadow-md whitespace-nowrap"
                     style={mono}
                   >
-                    Launch demo
+                    Launch
                   </a>
                   <a
                     data-cursor-expand
                     href="#"
-                    className="rounded-full border border-black/20 bg-white px-8 py-5 text-[10px] lg:text-[11px] uppercase tracking-[0.3em] text-black/80 transition-colors hover:bg-black/5"
+                    className="flex-1 text-center rounded-full border border-black/20 bg-white px-2 py-4 text-[9px] lg:text-[10px] uppercase tracking-[0.3em] text-black/80 transition-colors hover:bg-black/5 whitespace-nowrap"
                     style={mono}
                   >
-                    Read case study
+                    Case study
                   </a>
                 </div>
               </motion.div>
