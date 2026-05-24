@@ -22,9 +22,8 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
       layoutId={`project-${p.id}`}
       data-s2-project
       onClick={onClick}
-      className={`group/card relative flex flex-col overflow-hidden rounded-[32px] border border-black/5 bg-white shadow-[0_4px_24px_rgba(0,0,0,0.02)] transition-all duration-700 ease-[cubic-bezier(0.2,1,0.2,1)] 
-        hover:z-40 hover:-translate-y-3 hover:shadow-[0_30px_80px_rgba(0,0,0,0.12)] cursor-pointer
-        ${spanClass}`}
+      whileHover={{ y: -12, transition: { duration: 0.5, ease: [0.2, 1, 0.2, 1] } }}
+      className={`group/card relative flex flex-col overflow-hidden rounded-[32px] border border-black/5 bg-white shadow-[0_4px_24px_rgba(0,0,0,0.02)] transition-shadow duration-700 hover:z-40 hover:shadow-[0_30px_80px_rgba(0,0,0,0.12)] cursor-pointer ${spanClass}`}
     >
       {/* -----------------------------
           BASE CARD (Seen in Grid) 
@@ -50,6 +49,8 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
       </div>
 
       <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, transition: { delay: 0.3, duration: 0.4 } }}
         exit={{ opacity: 0, transition: { duration: 0.1 } }}
         className="relative z-10 flex flex-col gap-2 bg-white p-6 md:p-8 shrink-0"
       >
