@@ -9,7 +9,7 @@ export const ProjectVisual = memo(function ProjectVisual({ id, accent }: Props) 
   return (
     <div
       data-cursor-dark
-      className={`group relative aspect-[16/11] w-full overflow-hidden rounded-2xl border border-black/[0.08] bg-gradient-to-br shadow-[0_16px_40px_rgba(0,0,0,0.055)] ${accent}`}
+      className={`group relative aspect-[16/11] w-full overflow-hidden rounded-2xl border border-black/[0.08] bg-gradient-to-br shadow-md ${accent}`}
       style={{ contain: "layout paint" }}
     >
       <div

@@ -24,23 +24,15 @@ export const SceneTwoBackdrop = memo(function SceneTwoBackdrop() {
       />
 
       <div
-        className="absolute inset-0 opacity-[0.14]"
+        className="absolute inset-0 opacity-[0.06]"
         style={{
           backgroundImage: `repeating-linear-gradient(
-            -32deg,
+            45deg,
             transparent,
-            transparent 11px,
-            rgba(0,0,0,0.055) 11px,
-            rgba(0,0,0,0.055) 12px
-          ),
-          repeating-linear-gradient(
-            32deg,
-            transparent,
-            transparent 11px,
-            rgba(0,0,0,0.04) 11px,
-            rgba(0,0,0,0.04) 12px
+            transparent 10px,
+            rgba(0,0,0,0.5) 10px,
+            rgba(0,0,0,0.5) 11px
           )`,
-          maskImage: "radial-gradient(ellipse 95% 80% at 50% 40%, black 0%, transparent 78%)",
         }}
       />
 

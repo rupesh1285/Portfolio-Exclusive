@@ -11,7 +11,7 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i }: P
   return (
     <article
       data-s2-project
-      className="s2-reveal relative mb-6 rounded-3xl border border-black/[0.1] bg-[#fcfaf6] p-6 shadow-[0_1px_0_rgba(255,255,255,0.95)_inset,0_14px_32px_rgba(0,0,0,0.045)] last:mb-0 md:mb-8 md:p-10 lg:p-12"
+      className="s2-reveal relative mb-6 rounded-3xl border border-black/[0.1] bg-[#fcfaf6] p-6 shadow-sm last:mb-0 md:mb-8 md:p-10 lg:p-12"
       style={{
         contain: "layout paint",
         transitionDelay: `${Math.min(i, 8) * 45}ms`,
