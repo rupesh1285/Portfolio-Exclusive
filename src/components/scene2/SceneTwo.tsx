@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion } from "framer-motion";
+
 import { BelowFoldSentinel } from "@/components/ui/BelowFoldSentinel";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { bebas, mono } from "./fonts";
@@ -19,11 +19,7 @@ export default function SceneTwo({ onApproachSceneThree }: SceneTwoProps) {
   useScrollReveal(rootRef);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0 }}
-      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+    <div
       id="work-region"
       ref={rootRef}
       className="relative overflow-x-clip text-[#0c0c0c]"
@@ -59,6 +55,6 @@ export default function SceneTwo({ onApproachSceneThree }: SceneTwoProps) {
       {onApproachSceneThree ? <BelowFoldSentinel onReveal={onApproachSceneThree} prefetchPx={600} /> : null}
 
       <div className="relative z-10 h-px bg-gradient-to-r from-transparent via-black/14 to-transparent" />
-    </motion.div>
+    </div>
   );
 }

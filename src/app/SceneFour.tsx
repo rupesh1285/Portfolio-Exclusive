@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+
 
 const mono = { fontFamily: "'DM Mono', ui-monospace, monospace" } as const;
 const bebas = { fontFamily: "'Bebas Neue', sans-serif" } as const;
@@ -8,11 +8,7 @@ const cormorant = { fontFamily: "'Cormorant Garamond', Georgia, serif" } as cons
 
 export default function SceneFour() {
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.97 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true, amount: 0 }}
-      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+    <div
       className="relative min-h-[100dvh] w-full overflow-hidden bg-[#e8e4dc] text-[#0c0c0c] flex flex-col justify-between"
     >
       {/* Background aesthetics */}
@@ -83,6 +79,6 @@ export default function SceneFour() {
           ))}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

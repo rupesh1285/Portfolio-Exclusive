@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+
 import { BelowFoldSentinel } from "@/components/ui/BelowFoldSentinel";
 
 export type SceneThreeProps = {
@@ -35,11 +35,7 @@ export default function SceneThree({ onApproachSceneFour }: SceneThreeProps) {
   const tickerItems=["React","Next.js","TypeScript","Node.js","PostgreSQL","Redis","WebGL","Three.js","Docker","GraphQL","AWS","Figma"];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0 }}
-      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+    <div
       className="relative w-full overflow-hidden min-h-screen"
       style={{
         background: "#111318",
@@ -124,6 +120,6 @@ export default function SceneThree({ onApproachSceneFour }: SceneThreeProps) {
         </div>
       </div>
       {onApproachSceneFour ? <BelowFoldSentinel onReveal={onApproachSceneFour} prefetchPx={500} /> : null}
-    </motion.div>
+    </div>
   );
 }
