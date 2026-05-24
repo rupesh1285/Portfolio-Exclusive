@@ -86,7 +86,7 @@ export default function SceneTwo() {
             <motion.div
               layoutId={`project-${expandedProject.id}`}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-[95vw] md:w-[85vw] lg:w-[75vw] max-w-6xl h-[85vh] max-h-[900px] rounded-[40px] bg-white shadow-[0_40px_100px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col lg:flex-row z-10"
+              className="relative w-[95vw] lg:w-[85vw] max-w-[1400px] rounded-[40px] bg-white shadow-[0_40px_100px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col lg:flex-row z-10"
             >
               <motion.div 
                 initial={{ opacity: 0 }}
@@ -106,13 +106,15 @@ export default function SceneTwo() {
                 ✕
               </motion.button>
 
-              {/* Visual Side */}
-              <div className={`relative w-full lg:w-[60%] h-[45%] lg:h-full bg-gradient-to-br ${expandedProject.accent}`}>
+              {/* Visual Side - STRICTLY 16:9 Aspect Ratio */}
+              <div className={`relative w-full lg:w-[65%] aspect-video bg-gradient-to-br ${expandedProject.accent}`}>
                 <div className="absolute inset-0 bg-white/10 mix-blend-overlay opacity-50" />
                 
-                {/* 16:9 Inner Mockup Container (Optional, to enforce ratio) */}
-                <div className="absolute inset-8 lg:inset-16 bg-black/5 rounded-xl border border-black/10 shadow-2xl flex items-center justify-center overflow-hidden">
-                   <p className="text-black/40 text-[10px] uppercase tracking-[0.4em]" style={mono}>16:9 Desktop Preview</p>
+                {/* 16:9 Inner Mockup Area - This represents the exact 16:9 boundary */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                   <p className="text-black/40 text-[10px] uppercase tracking-[0.4em] bg-white/50 backdrop-blur-md px-6 py-3 rounded-full" style={mono}>
+                     16:9 Preview Space
+                   </p>
                 </div>
 
                 <motion.div 
@@ -126,16 +128,16 @@ export default function SceneTwo() {
                 </motion.div>
               </div>
 
-              {/* Content Side */}
+              {/* Content Side - Automatically matches the height of the left side */}
               <motion.div 
                 initial={{ opacity: 0, x: 40 }}
                 animate={{ opacity: 1, x: 0, transition: { delay: 0.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] } }}
                 exit={{ opacity: 0, x: 20, transition: { duration: 0.2 } }}
-                className="relative z-10 w-full lg:w-[40%] h-[55%] lg:h-full p-8 lg:p-12 flex flex-col overflow-hidden"
+                className="relative z-10 w-full lg:w-[35%] p-8 lg:p-10 xl:p-12 flex flex-col overflow-hidden bg-white"
               >
                 <div className="flex-1 flex flex-col justify-center">
                   <div className="flex items-center gap-4">
-                    <span className="text-[clamp(3.5rem,6vw,6rem)] leading-none text-black/10" style={bebas}>
+                    <span className="text-[clamp(3.5rem,5vw,5.5rem)] leading-none text-black/10" style={bebas}>
                       {expandedProject.index}
                     </span>
                     <span className="text-[10px] uppercase tracking-[0.35em] text-black/40" style={mono}>
@@ -143,15 +145,15 @@ export default function SceneTwo() {
                     </span>
                   </div>
 
-                  <h2 className="mt-4 lg:mt-8 text-[clamp(2rem,4vw,3.5rem)] leading-[0.95] tracking-[0.02em] text-black/90" style={bebas}>
+                  <h2 className="mt-4 lg:mt-6 text-[clamp(2rem,3.5vw,3rem)] leading-[0.95] tracking-[0.02em] text-black/90" style={bebas}>
                     {expandedProject.title}
                   </h2>
 
-                  <p className="mt-4 lg:mt-6 text-[13px] leading-[1.7] text-black/60 line-clamp-4 lg:line-clamp-none" style={mono}>
+                  <p className="mt-4 lg:mt-5 text-[12px] lg:text-[13px] leading-[1.6] text-black/60 line-clamp-5" style={mono}>
                     {expandedProject.blurb}
                   </p>
 
-                  <div className="mt-6 lg:mt-8 flex flex-wrap gap-2">
+                  <div className="mt-6 flex flex-wrap gap-2">
                     {expandedProject.tags.map((t) => (
                       <span
                         key={t}
@@ -164,11 +166,11 @@ export default function SceneTwo() {
                   </div>
                 </div>
 
-                <div className="flex flex-row items-center gap-3 pt-6 lg:pt-8 mt-auto border-t border-black/10 shrink-0">
+                <div className="flex flex-row items-center gap-3 pt-6 mt-auto border-t border-black/10 shrink-0">
                   <a
                     data-cursor-expand
                     href="#"
-                    className="flex-1 text-center rounded-full border border-transparent bg-black px-2 py-4 text-[9px] lg:text-[10px] uppercase tracking-[0.3em] text-white transition-all hover:bg-gray-800 shadow-md whitespace-nowrap"
+                    className="flex-1 text-center rounded-full border border-transparent bg-black px-2 py-4 text-[9px] uppercase tracking-[0.3em] text-white transition-all hover:bg-gray-800 shadow-md whitespace-nowrap"
                     style={mono}
                   >
                     Launch
@@ -176,7 +178,7 @@ export default function SceneTwo() {
                   <a
                     data-cursor-expand
                     href="#"
-                    className="flex-1 text-center rounded-full border border-black/20 bg-white px-2 py-4 text-[9px] lg:text-[10px] uppercase tracking-[0.3em] text-black/80 transition-colors hover:bg-black/5 whitespace-nowrap"
+                    className="flex-1 text-center rounded-full border border-black/20 bg-white px-2 py-4 text-[9px] uppercase tracking-[0.3em] text-black/80 transition-colors hover:bg-black/5 whitespace-nowrap"
                     style={mono}
                   >
                     Case study
