@@ -2,89 +2,65 @@
 
 import { memo } from "react";
 import type { Project } from "./projectData";
-import { ProjectVisual } from "./ProjectVisual";
 import { bebas, mono } from "./fonts";
 
 type Props = { project: Project; index: number };
 
 export const ProjectCard = memo(function ProjectCard({ project: p, index: i }: Props) {
-  // Calculate dynamic sticky top position. Each card sticks slightly lower than the previous one.
-  const stickyTop = `calc(12vh + ${i * 40}px)`;
+  // Bento Grid Sizing Logic
+  // Project 0: Large (2 cols, 2 rows)
+  // Project 1: Tall (1 col, 2 rows)
+  // Project 2: Wide (2 cols, 1 row)
+  // Project 3: Normal (1 col, 1 row)
+  // Project 4: Full Width footer (3 cols, 1 row)
+  let spanClass = "md:col-span-1 md:row-span-1";
+  if (i === 0) spanClass = "md:col-span-2 md:row-span-2";
+  else if (i === 1) spanClass = "md:col-span-1 md:row-span-2";
+  else if (i === 2) spanClass = "md:col-span-2 md:row-span-1";
+  else if (i === 3) spanClass = "md:col-span-1 md:row-span-1";
+  else if (i === 4) spanClass = "md:col-span-3 md:row-span-1";
 
   return (
     <article
       data-s2-project
-      className="sticky w-full rounded-3xl border border-black/10 bg-white/90 backdrop-blur-md p-6 shadow-[0_-10px_40px_rgba(0,0,0,0.06)] md:p-10 lg:p-12 transform-gpu"
-      style={{ top: stickyTop }}
+      className={`group relative flex flex-col overflow-hidden rounded-[32px] border border-black/5 bg-white shadow-[0_4px_24px_rgba(0,0,0,0.02)] transition-all duration-500 hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1 ${spanClass}`}
     >
-      <div className="grid items-start gap-10 lg:grid-cols-12 lg:gap-12">
-        <div className="lg:col-span-5 flex flex-col justify-between h-full">
-          <div>
-            <div className="flex flex-wrap items-end justify-between gap-4 lg:block">
-              <span className="text-[clamp(3.5rem,8vw,6rem)] leading-none text-black/10" style={bebas}>
-                {p.index}
-              </span>
-              <span className="text-[10px] uppercase tracking-[0.35em] text-black/40 lg:mt-4 block" style={mono}>
-                {p.year} · {p.role}
-              </span>
-            </div>
-            
-            <h2 className="mt-6 text-[clamp(2rem,4.2vw,3.25rem)] leading-[0.95] tracking-[0.03em] text-black/90" style={bebas}>
-              {p.title}
-            </h2>
-            
-            <p className="mt-5 text-[14px] leading-[1.8] text-black/60" style={mono}>
-              {p.blurb}
-            </p>
-            
-            <div className="mt-8 flex flex-wrap gap-2">
-              {p.tags.map((t) => (
-                <span
-                  key={t}
-                  className="rounded-full border border-black/10 bg-black/5 px-3 py-1.5 text-[9px] uppercase tracking-[0.2em] text-black/60"
-                  style={mono}
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-          </div>
+      {/* Visual Area */}
+      <div className="relative flex-1 overflow-hidden bg-gray-100">
+        <div className={`absolute inset-0 bg-gradient-to-br ${p.accent} transition-transform duration-1000 ease-out group-hover:scale-105`} />
+        <div className="absolute inset-0 bg-white/10 mix-blend-overlay opacity-50 transition-opacity duration-500 group-hover:opacity-0" />
+        
+        {/* Floating badge */}
+        <div className="absolute left-6 top-6 flex items-center gap-2 rounded-full bg-white/80 backdrop-blur-md px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-black/80 shadow-sm transition-transform duration-500 group-hover:-translate-y-1" style={mono}>
+          {p.year}
+        </div>
+      </div>
 
-          <div className="mt-12 flex flex-wrap gap-3 pt-6 border-t border-black/10">
-            <a
-              data-cursor-expand
-              href="#"
-              className="rounded-full border border-transparent bg-black px-6 py-3 text-[9px] uppercase tracking-[0.28em] text-white transition-all hover:bg-gray-800"
-              style={mono}
-            >
-              Live demo
-            </a>
-            <a
-              data-cursor-expand
-              href="#"
-              className="rounded-full border border-black/20 px-6 py-3 text-[9px] uppercase tracking-[0.28em] text-black/80 transition-colors hover:bg-black/5 hover:text-black"
-              style={mono}
-            >
-              Case write-up
-            </a>
-          </div>
+      {/* Content Area */}
+      <div className="relative z-10 flex flex-col gap-4 bg-white p-6 md:p-8 shrink-0">
+        <div className="flex justify-between items-start gap-4">
+          <h2 className="text-[clamp(1.5rem,3vw,3rem)] leading-[0.95] tracking-[0.02em] text-black/90" style={bebas}>
+            {p.title}
+          </h2>
+          <span className="shrink-0 text-[10px] uppercase tracking-[0.3em] text-black/40" style={mono}>
+            {p.role}
+          </span>
         </div>
         
-        <div className="lg:col-span-7 rounded-2xl overflow-hidden border border-black/10 shadow-lg relative group">
-          {/* A sleek, minimal visual replacement for the project image */}
-          <div className={`aspect-[16/10] w-full bg-gradient-to-br ${p.accent} relative`}>
-            <div className="absolute inset-0 bg-white/20 mix-blend-overlay group-hover:opacity-0 transition-opacity duration-700" />
-            <div className="absolute left-6 top-6 flex items-center gap-2 rounded-full border border-white/40 bg-white/60 backdrop-blur-md px-4 py-2 text-[10px] uppercase tracking-[0.3em] text-black/80" style={mono}>
-              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
-              {p.id}
-            </div>
-            <p
-              className="absolute bottom-6 left-6 text-[clamp(2rem,4vw,3.5rem)] leading-none tracking-[0.02em] text-black/20 transition-colors duration-500 group-hover:text-black/60"
-              style={bebas}
+        <p className="text-[13px] leading-[1.6] text-black/60 line-clamp-2 max-w-xl" style={mono}>
+          {p.blurb}
+        </p>
+
+        <div className="mt-2 flex flex-wrap gap-2">
+          {p.tags.slice(0, 3).map((t) => (
+            <span
+              key={t}
+              className="rounded-full border border-black/5 bg-black/[0.02] px-3 py-1.5 text-[9px] uppercase tracking-[0.2em] text-black/50"
+              style={mono}
             >
-              Preview
-            </p>
-          </div>
+              {t}
+            </span>
+          ))}
         </div>
       </div>
     </article>

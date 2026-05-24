@@ -1,7 +1,3 @@
-"use client";
-
-import { useRef } from "react";
-
 import { bebas, mono } from "./fonts";
 import { SCENE_TWO_PROJECTS } from "./projectData";
 import { ProjectCard } from "./ProjectCard";
@@ -10,7 +6,7 @@ export default function SceneTwo() {
   return (
     <div
       id="work-region"
-      className="relative overflow-x-clip text-[#0c0c0c] bg-[#fcfaf6]"
+      className="relative w-full text-[#0c0c0c] bg-[#fcfaf6]"
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(0,0,0,0.03)_0%,transparent_50%)]" />
 
@@ -21,7 +17,7 @@ export default function SceneTwo() {
         </p>
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <h2
-            className="max-w-[14ch] text-[clamp(3.5rem,8vw,6.5rem)] leading-[0.9] tracking-[0.02em] text-black/90"
+            className="max-w-[14ch] text-[clamp(4.5rem,10vw,8.5rem)] leading-[0.9] tracking-[0.02em] text-black/90"
             style={bebas}
           >
             Digital <br /> Experiences
@@ -32,11 +28,13 @@ export default function SceneTwo() {
         </div>
       </header>
 
-      {/* The sticky stacking container. Extra bottom padding allows scrolling past the last card. */}
-      <div className="relative z-10 mx-auto max-w-[1400px] px-4 pb-[40vh] pt-12 md:px-8 lg:px-12 flex flex-col gap-[20vh]">
-        {SCENE_TWO_PROJECTS.map((p, i) => (
-          <ProjectCard key={p.id} project={p} index={i} />
-        ))}
+      {/* Bento Grid Container */}
+      <div className="relative z-10 mx-auto max-w-[1400px] px-4 pb-32 pt-8 md:px-8 lg:px-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-8 auto-rows-[350px] md:auto-rows-[400px] lg:auto-rows-[450px]">
+          {SCENE_TWO_PROJECTS.map((p, i) => (
+            <ProjectCard key={p.id} project={p} index={i} />
+          ))}
+        </div>
       </div>
 
       <div className="relative z-10 mx-auto max-w-[1400px] px-5 pb-32 text-center md:px-10 lg:px-14">
