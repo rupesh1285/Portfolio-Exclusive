@@ -30,7 +30,7 @@ export default function SceneTwo() {
 
       {/* Bento Grid Container */}
       <div className="relative z-10 mx-auto max-w-[1400px] px-4 pb-32 pt-8 md:px-8 lg:px-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-8 auto-rows-[350px] md:auto-rows-[400px] lg:auto-rows-[450px]">
+        <div className="group/grid grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-8 auto-rows-[350px] md:auto-rows-[400px] lg:auto-rows-[450px]">
           {SCENE_TWO_PROJECTS.map((p, i) => (
             <ProjectCard key={p.id} project={p} index={i} />
           ))}
