@@ -41,7 +41,7 @@ export default function SceneTwo() {
 
       {/* Bento Grid Container */}
       <div className="relative z-10 mx-auto max-w-[1400px] px-4 pb-32 pt-8 md:px-8 lg:px-12">
-        <div className="group/grid grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-8 auto-rows-[250px] md:auto-rows-[300px] lg:auto-rows-[350px]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-8 auto-rows-[250px] md:auto-rows-[300px] lg:auto-rows-[350px]">
           {SCENE_TWO_PROJECTS.map((p, i) => (
             <ProjectCard 
               key={p.id} 
@@ -76,7 +76,7 @@ export default function SceneTwo() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              exit={{ opacity: 0, transition: { delay: 0.1 } }}
               transition={{ duration: 0.5 }}
               className="absolute inset-0 bg-black/40 backdrop-blur-md"
               onClick={() => setExpandedId(null)}
@@ -88,25 +88,45 @@ export default function SceneTwo() {
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="relative w-[95vw] md:w-[85vw] lg:w-[75vw] max-w-6xl h-[85vh] max-h-[900px] rounded-[40px] bg-white shadow-[0_40px_100px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col lg:flex-row z-10"
             >
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, transition: { delay: 0.2, duration: 0.5 } }}
+                exit={{ opacity: 0, transition: { duration: 0.2 } }}
+                className="absolute inset-0 pointer-events-none z-0 bg-white"
+              />
+
               {/* Close Button */}
-              <button
+              <motion.button
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1, transition: { delay: 0.3 } }}
+                exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.2 } }}
                 onClick={() => setExpandedId(null)}
                 className="absolute top-6 right-6 lg:top-8 lg:right-8 z-50 bg-black/5 hover:bg-black/10 text-black rounded-full w-12 h-12 flex items-center justify-center transition-colors text-[14px]"
               >
                 ✕
-              </button>
+              </motion.button>
 
               {/* Visual Side */}
               <div className={`relative w-full lg:w-[55%] h-[40%] lg:h-full bg-gradient-to-br ${expandedProject.accent}`}>
                 <div className="absolute inset-0 bg-white/10 mix-blend-overlay opacity-50" />
-                <div className="absolute left-8 top-8 lg:left-12 lg:top-12 flex items-center gap-3 rounded-full bg-white/80 backdrop-blur-md px-6 py-3 text-[11px] uppercase tracking-[0.3em] text-black/90 shadow-lg" style={mono}>
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0, transition: { delay: 0.3 } }}
+                  exit={{ opacity: 0, transition: { duration: 0.2 } }}
+                  className="absolute left-8 top-8 lg:left-12 lg:top-12 flex items-center gap-3 rounded-full bg-white/80 backdrop-blur-md px-6 py-3 text-[11px] uppercase tracking-[0.3em] text-black/90 shadow-lg" style={mono}
+                >
                   <span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
                   Interactive Preview
-                </div>
+                </motion.div>
               </div>
 
               {/* Content Side */}
-              <div className="relative w-full lg:w-[45%] h-[60%] lg:h-full p-8 lg:p-16 flex flex-col justify-between bg-white overflow-y-auto">
+              <motion.div 
+                initial={{ opacity: 0, x: 40 }}
+                animate={{ opacity: 1, x: 0, transition: { delay: 0.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] } }}
+                exit={{ opacity: 0, x: 20, transition: { duration: 0.2 } }}
+                className="relative z-10 w-full lg:w-[45%] h-[60%] lg:h-full p-8 lg:p-16 flex flex-col justify-between overflow-y-auto"
+              >
                 <div>
                   <div className="flex items-center gap-4">
                     <span className="text-[clamp(4rem,8vw,8rem)] leading-none text-black/10" style={bebas}>
@@ -156,7 +176,7 @@ export default function SceneTwo() {
                     Read case study
                   </a>
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
           </div>
         )}

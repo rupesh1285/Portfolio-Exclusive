@@ -23,7 +23,6 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
       data-s2-project
       onClick={onClick}
       className={`group/card relative flex flex-col overflow-hidden rounded-[32px] border border-black/5 bg-white shadow-[0_4px_24px_rgba(0,0,0,0.02)] transition-all duration-700 ease-[cubic-bezier(0.2,1,0.2,1)] 
-        group-hover/grid:[&:not(:hover)]:opacity-30 group-hover/grid:[&:not(:hover)]:scale-[0.97] group-hover/grid:[&:not(:hover)]:grayscale-[50%]
         hover:z-40 hover:-translate-y-3 hover:shadow-[0_30px_80px_rgba(0,0,0,0.12)] cursor-pointer
         ${spanClass}`}
     >
@@ -33,10 +32,10 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
       <div className="relative flex-1 overflow-hidden bg-gray-100">
         <div className={`absolute inset-0 bg-gradient-to-br ${p.accent} transition-transform duration-1000 ease-out group-hover/card:scale-105`} />
         
-        {/* Hover "Click to expand" overlay */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 bg-black/10 backdrop-blur-[2px] z-20">
-           <span className="bg-white text-black px-6 py-3 rounded-full text-[10px] uppercase tracking-[0.2em] shadow-xl transform translate-y-4 group-hover/card:translate-y-0 transition-transform duration-500" style={mono}>
-              Click to expand
+        {/* Modern Corner Hover Indicator */}
+        <div className="absolute top-6 right-6 flex items-center opacity-0 group-hover/card:opacity-100 transition-all duration-700 ease-out transform translate-x-4 group-hover/card:translate-x-0 z-20">
+           <span className="text-[9px] uppercase tracking-[0.4em] text-black/80 font-bold bg-white/40 backdrop-blur-md px-3 py-1.5 rounded-sm" style={mono}>
+              [ EXPAND ]
            </span>
         </div>
 
@@ -45,14 +44,17 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
         </div>
       </div>
 
-      <div className="relative z-10 flex flex-col gap-2 bg-white p-6 md:p-8 shrink-0">
+      <motion.div 
+        exit={{ opacity: 0, transition: { duration: 0.1 } }}
+        className="relative z-10 flex flex-col gap-2 bg-white p-6 md:p-8 shrink-0"
+      >
         <h2 className="text-[clamp(1.5rem,3vw,3rem)] leading-[0.95] tracking-[0.02em] text-black/90" style={bebas}>
           {p.title}
         </h2>
         <span className="text-[10px] uppercase tracking-[0.3em] text-black/40" style={mono}>
           {p.role}
         </span>
-      </div>
+      </motion.div>
     </motion.article>
   );
 });
