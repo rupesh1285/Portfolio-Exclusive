@@ -16,6 +16,15 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
   else if (i === 4) spanClass = "md:col-span-1 md:row-span-1 order-4"; // Project 5: Middle Center (Square)
   else if (i === 5) spanClass = "md:col-span-2 md:row-span-1 order-6"; // Project 6: Bottom Left (Wide)
 
+  // Custom Interlocking Aerodynamic Shapes
+  let radiusClass = "rounded-[40px]";
+  if (i === 0) radiusClass = "rounded-tl-[48px] rounded-tr-[12px] rounded-bl-[12px] rounded-br-[48px]"; // Project 1
+  else if (i === 1) radiusClass = "rounded-tl-[12px] rounded-tr-[48px] rounded-bl-[48px] rounded-br-[12px]"; // Project 2
+  else if (i === 2) radiusClass = "rounded-tl-[48px] rounded-tr-[12px] rounded-bl-[48px] rounded-br-[48px]"; // Project 3 (Tall)
+  else if (i === 3) radiusClass = "rounded-tl-[12px] rounded-tr-[48px] rounded-bl-[48px] rounded-br-[12px]"; // Project 4
+  else if (i === 4) radiusClass = "rounded-tl-[48px] rounded-tr-[12px] rounded-bl-[12px] rounded-br-[48px]"; // Project 5
+  else if (i === 5) radiusClass = "rounded-tl-[12px] rounded-tr-[48px] rounded-bl-[48px] rounded-br-[48px]"; // Project 6
+
   return (
     <motion.article
       layoutId={`project-${p.id}`}
@@ -23,7 +32,7 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
       data-s2-project
       onClick={onClick}
       whileHover={{ y: -12, transition: { duration: 0.5, ease: [0.2, 1, 0.2, 1] } }}
-      className={`group/card relative flex flex-col overflow-hidden rounded-[32px] md:rounded-[40px] border border-black/5 bg-white shadow-[0_8px_30px_rgba(0,0,0,0.06)] z-10 hover:z-40 cursor-pointer ${spanClass}`}
+      className={`group/card relative flex flex-col overflow-hidden border border-black/5 bg-white shadow-[0_8px_30px_rgba(0,0,0,0.06)] z-10 hover:z-40 cursor-pointer ${spanClass} ${radiusClass}`}
     >
       {/* -----------------------------
           BASE CARD (Seen in Grid) 
