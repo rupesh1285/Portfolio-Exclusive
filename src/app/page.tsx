@@ -14,6 +14,21 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
   const ghostRef = useRef<HTMLDivElement>(null);
   const st = useRef({ mx: -200, my: -200, rx: -200, ry: -200, gx: -200, gy: -200 });
 
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [hoverState, setHoverState] = useState<"normal" | "xl" | "xd">("normal");
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsDarkTheme(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    const workRegion = document.getElementById("work-region");
+    if (workRegion) observer.observe(workRegion);
+    return () => observer.disconnect();
+  }, []);
+
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
       st.current.mx = e.clientX;
@@ -36,43 +51,15 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
       }
     };
 
-    const xl = () => {
-      if (!ringRef.current) return;
-      Object.assign(ringRef.current.style, {
-        width: "56px",
-        height: "56px",
-        borderColor: "rgba(255,255,255,0.8)",
-        background: "rgba(255,255,255,0.1)",
-      });
-    };
-    const xd = () => {
-      if (!ringRef.current) return;
-      Object.assign(ringRef.current.style, {
-        width: "56px",
-        height: "56px",
-        borderColor: "rgba(255,255,255,0.9)",
-        background: "rgba(255,255,255,0.15)",
-      });
-    };
-    const ct = () => {
-      if (!ringRef.current) return;
-      Object.assign(ringRef.current.style, {
-        width: "28px",
-        height: "28px",
-        borderColor: "rgba(255,255,255,0.6)",
-        background: "transparent",
-      });
-    };
-
     window.addEventListener("mousemove", onMove);
     const attach = () => {
       document.querySelectorAll("[data-cursor-expand]").forEach((el) => {
-        el.addEventListener("mouseenter", xl);
-        el.addEventListener("mouseleave", ct);
+        el.addEventListener("mouseenter", () => setHoverState("xl"));
+        el.addEventListener("mouseleave", () => setHoverState("normal"));
       });
       document.querySelectorAll("[data-cursor-dark]").forEach((el) => {
-        el.addEventListener("mouseenter", xd);
-        el.addEventListener("mouseleave", ct);
+        el.addEventListener("mouseenter", () => setHoverState("xd"));
+        el.addEventListener("mouseleave", () => setHoverState("normal"));
       });
     };
     attach();
@@ -97,6 +84,22 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
     };
   }, [lenisFrameRef]);
 
+  const baseColor = isDarkTheme ? "0,0,0" : "255,255,255";
+  
+  // Compute ring styles based on hover state
+  let ringWidth = 28;
+  let ringBorderOpacity = 0.6;
+  let ringBgOpacity = 0;
+  if (hoverState === "xl") {
+    ringWidth = 56;
+    ringBorderOpacity = 0.8;
+    ringBgOpacity = 0.1;
+  } else if (hoverState === "xd") {
+    ringWidth = 56;
+    ringBorderOpacity = 0.9;
+    ringBgOpacity = 0.15;
+  }
+
   return (
     <>
       <div
@@ -108,8 +111,9 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
           width: 48,
           height: 48,
           borderRadius: "50%",
-          border: "1px solid rgba(255,255,255,0.2)",
-          mixBlendMode: "difference",
+          border: `1px solid rgba(${baseColor}, 0.2)`,
+          transition: "border-color 0.3s",
+          willChange: "transform",
         }}
       />
       <div
@@ -118,13 +122,13 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
         style={{
           top: 0,
           left: 0,
-          width: 28,
-          height: 28,
+          width: ringWidth,
+          height: ringWidth,
           borderRadius: "50%",
-          border: "1px solid rgba(255,255,255,0.6)",
-          mixBlendMode: "difference",
-          transition:
-            "width 0.4s cubic-bezier(0.16,1,0.3,1),height 0.4s cubic-bezier(0.16,1,0.3,1),border-color 0.28s,background 0.28s",
+          border: `1px solid rgba(${baseColor}, ${ringBorderOpacity})`,
+          background: `rgba(${baseColor}, ${ringBgOpacity})`,
+          transition: "width 0.4s cubic-bezier(0.16,1,0.3,1), height 0.4s cubic-bezier(0.16,1,0.3,1), border-color 0.3s, background 0.3s",
+          willChange: "transform",
         }}
       />
       <div
@@ -136,8 +140,9 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
           width: 5,
           height: 5,
           borderRadius: "50%",
-          background: "#FFF",
-          mixBlendMode: "difference",
+          background: `rgba(${baseColor}, 1)`,
+          transition: "background 0.3s",
+          willChange: "transform",
         }}
       />
     </>
