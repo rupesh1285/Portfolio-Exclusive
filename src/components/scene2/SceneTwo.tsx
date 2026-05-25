@@ -18,10 +18,40 @@ export default function SceneTwo() {
   }, [expandedId]);
 
   return (
-    <div id="work-region" className="relative w-full text-[#0c0c0c] bg-[#fcfaf6]">
-      {/* Texture Background */}
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle at center, #000 1.5px, transparent 1.5px)', backgroundSize: '32px 32px' }} />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(0,0,0,0.03)_0%,transparent_50%)]" />
+    <div id="work-region" className="relative w-full text-[#0c0c0c] bg-[#fcfaf6] overflow-hidden">
+      {/* Premium Engineered Background (High Performance) */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        {/* 1. Fast CSS Mesh Gradient for different shades */}
+        <div 
+          className="absolute inset-0 mix-blend-multiply opacity-70"
+          style={{
+            backgroundImage: `
+              radial-gradient(circle at 10% 20%, rgba(220, 235, 255, 0.8) 0%, transparent 35%),
+              radial-gradient(circle at 90% 80%, rgba(255, 225, 220, 0.8) 0%, transparent 40%),
+              radial-gradient(circle at 50% 100%, rgba(220, 255, 235, 0.6) 0%, transparent 50%)
+            `
+          }}
+        />
+
+        {/* 2. Structured Engineering Grid Texture */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px)
+            `,
+            backgroundSize: '48px 48px'
+          }}
+        />
+
+        {/* 3. Geometric & Typographic Accents */}
+        <div className="absolute top-[15%] left-[5%] text-black/20 font-mono text-xs tracking-widest hidden md:block">+ 45.092_N</div>
+        <div className="absolute top-[50%] right-[4%] text-black/20 font-mono text-xs tracking-widest hidden md:block rotate-90 origin-right">SYSTEM_REQ // 02</div>
+        <div className="absolute bottom-[15%] left-[10%] w-24 h-[1px] bg-black/10 hidden md:block" />
+        <div className="absolute top-[25%] right-[12%] w-[1px] h-24 bg-black/10 hidden md:block" />
+        <div className="absolute bottom-[20%] right-[20%] w-2 h-2 border border-black/20 rounded-full hidden md:block" />
+      </div>
 
       <header className="relative z-10 mx-auto max-w-[1400px] px-5 pb-8 pt-20 md:px-10 md:pb-12 md:pt-28 lg:px-14">
         <p className="mb-6 flex items-center gap-3 text-[10px] uppercase tracking-[0.55em] text-black/40" style={mono}>
