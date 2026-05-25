@@ -38,10 +38,22 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
           className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover/card:scale-105"
         />
 
-        {/* Central Expand Hint */}
-        <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-          <div className="flex items-center gap-2 rounded-full bg-black/80 backdrop-blur-md px-6 py-2.5 text-[10px] uppercase tracking-[0.25em] text-white opacity-0 transition-all duration-500 ease-[0.16,1,0.3,1] scale-75 group-hover/card:opacity-100 group-hover/card:scale-100 shadow-2xl" style={mono}>
-            Explore
+        {/* Technical Viewfinder Hover Hint */}
+        <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none mix-blend-difference">
+          <div className="relative flex items-center justify-center opacity-0 transition-all duration-700 ease-[0.16,1,0.3,1] scale-50 group-hover/card:opacity-100 group-hover/card:scale-100">
+             {/* Animated Outer Technical Ring */}
+             <div className="absolute w-16 h-16 rounded-full border-[0.5px] border-white/30 transition-transform duration-1000 ease-[0.16,1,0.3,1] -rotate-45 group-hover/card:rotate-0 scale-75 group-hover/card:scale-100">
+               {/* Tick marks on ring */}
+               <div className="absolute top-0 left-1/2 w-[1px] h-1.5 bg-white -translate-x-1/2" />
+               <div className="absolute bottom-0 left-1/2 w-[1px] h-1.5 bg-white -translate-x-1/2" />
+               <div className="absolute left-0 top-1/2 w-1.5 h-[1px] bg-white -translate-y-1/2" />
+               <div className="absolute right-0 top-1/2 w-1.5 h-[1px] bg-white -translate-y-1/2" />
+             </div>
+             {/* Center expanding crosshairs */}
+             <div className="absolute w-20 h-[1px] bg-gradient-to-r from-transparent via-white/50 to-transparent transition-all duration-700 group-hover/card:scale-x-125" />
+             <div className="absolute w-[1px] h-20 bg-gradient-to-b from-transparent via-white/50 to-transparent transition-all duration-700 group-hover/card:scale-y-125" />
+             {/* Core Dot */}
+             <div className="w-1 h-1 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,1)]" />
           </div>
         </div>
 
