@@ -38,54 +38,61 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
           className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover/card:scale-105"
         />
 
-        {/* Dynamic Test Hover Hints (6 Different Styles) */}
+        {/* Dynamic Test Hover Hints: Text Edition (CLICK TO EXPLORE) */}
         {i === 0 && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none overflow-hidden mix-blend-overlay">
-            <h3 className="text-[clamp(4rem,10vw,8rem)] text-transparent opacity-0 group-hover/card:opacity-100 transition-all duration-700 ease-[0.16,1,0.3,1] translate-y-8 group-hover/card:translate-y-0" style={{ WebkitTextStroke: "2px rgba(255,255,255,0.9)", ...bebas }}>
-              VIEW
-            </h3>
+          <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 bg-black/20">
+            <div className="bg-white text-black py-4 px-2 w-[150%] -rotate-[10deg] transform -translate-x-full group-hover/card:translate-x-0 transition-transform duration-[1s] ease-[0.16,1,0.3,1] whitespace-nowrap flex justify-center gap-8 shadow-2xl">
+              <span className="text-lg font-bold tracking-[0.3em] uppercase" style={mono}>Click To Explore</span>
+              <span className="text-lg font-bold tracking-[0.3em] uppercase" style={mono}>Click To Explore</span>
+              <span className="text-lg font-bold tracking-[0.3em] uppercase" style={mono}>Click To Explore</span>
+            </div>
           </div>
         )}
         {i === 1 && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-            <div className="w-24 h-24 rounded-full bg-white/10 backdrop-blur-md border border-white/30 flex items-center justify-center opacity-0 scale-50 group-hover/card:opacity-100 group-hover/card:scale-100 transition-all duration-700 ease-[0.16,1,0.3,1] shadow-2xl">
-              <span className="text-white text-4xl font-light leading-none mb-1">+</span>
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center pointer-events-none gap-2 bg-black/60 backdrop-blur-sm opacity-0 group-hover/card:opacity-100 transition-opacity duration-700">
+            <div className="overflow-hidden">
+              <span className="block text-white text-2xl font-bold tracking-[0.4em] uppercase translate-y-full group-hover/card:translate-y-0 transition-transform duration-700 ease-[0.16,1,0.3,1] delay-100" style={mono}>Click</span>
+            </div>
+            <div className="overflow-hidden">
+              <span className="block text-white text-2xl font-bold tracking-[0.4em] uppercase translate-y-full group-hover/card:translate-y-0 transition-transform duration-700 ease-[0.16,1,0.3,1] delay-200" style={mono}>To</span>
+            </div>
+            <div className="overflow-hidden">
+              <span className="block text-white text-2xl font-bold tracking-[0.4em] uppercase translate-y-full group-hover/card:translate-y-0 transition-transform duration-700 ease-[0.16,1,0.3,1] delay-300" style={mono}>Explore</span>
             </div>
           </div>
         )}
         {i === 2 && (
-          <div className="absolute inset-8 z-20 pointer-events-none opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 ease-out">
-            <div className="absolute top-0 left-0 w-8 h-8 border-t-[3px] border-l-[3px] border-white transition-all duration-700 -translate-x-8 -translate-y-8 group-hover/card:translate-x-0 group-hover/card:translate-y-0" />
-            <div className="absolute top-0 right-0 w-8 h-8 border-t-[3px] border-r-[3px] border-white transition-all duration-700 translate-x-8 -translate-y-8 group-hover/card:translate-x-0 group-hover/card:translate-y-0" />
-            <div className="absolute bottom-0 left-0 w-8 h-8 border-b-[3px] border-l-[3px] border-white transition-all duration-700 -translate-x-8 translate-y-8 group-hover/card:translate-x-0 group-hover/card:translate-y-0" />
-            <div className="absolute bottom-0 right-0 w-8 h-8 border-b-[3px] border-r-[3px] border-white transition-all duration-700 translate-x-8 translate-y-8 group-hover/card:translate-x-0 group-hover/card:translate-y-0" />
-            <div className="absolute inset-0 flex items-center justify-center">
-               <span className="text-white tracking-[0.5em] text-xs font-bold uppercase" style={mono}>Target</span>
-            </div>
+          <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none bg-black/40 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700">
+             <h3 className="text-5xl text-white tracking-[0.3em] text-center blur-xl group-hover/card:blur-0 transition-all duration-1000 ease-[0.16,1,0.3,1] scale-125 group-hover/card:scale-100" style={bebas}>
+               CLICK TO<br/>EXPLORE
+             </h3>
           </div>
         )}
         {i === 3 && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none opacity-0 group-hover/card:opacity-100 transition-opacity duration-500">
-            <div className="absolute w-3 h-3 bg-white rounded-full shadow-[0_0_15px_rgba(255,255,255,1)]" />
-            <div className="absolute w-16 h-16 border border-white/60 rounded-full group-hover/card:animate-ping" style={{ animationDuration: '2s' }} />
-            <div className="absolute w-32 h-32 border border-white/20 rounded-full group-hover/card:animate-ping" style={{ animationDuration: '2s', animationDelay: '0.4s' }} />
+          <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none bg-black/40 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700">
+             <div className="text-white text-sm font-bold uppercase tracking-widest group-hover/card:tracking-[0.8em] transition-all duration-1000 ease-[0.16,1,0.3,1]" style={mono}>
+               Click To Explore
+             </div>
           </div>
         )}
         {i === 4 && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none overflow-hidden mix-blend-difference">
-            <div className="flex items-center gap-6 opacity-0 group-hover/card:opacity-100 transition-all duration-700 -translate-x-8 group-hover/card:translate-x-0 ease-[0.16,1,0.3,1]">
-              <div className="h-20 w-1.5 bg-white rotate-[25deg]" />
-              <span className="text-white text-xl tracking-[0.4em] font-bold uppercase" style={mono}>Explore</span>
+          <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 bg-black/30 backdrop-blur-md">
+            <div className="relative w-40 h-40 rotate-[-90deg] group-hover/card:rotate-[90deg] transition-transform duration-[3s] ease-linear">
+              <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full text-white fill-current">
+                <path id={`circlePath-${i}`} d="M 50, 50 m -40, 0 a 40,40 0 1,1 80,0 a 40,40 0 1,1 -80,0" fill="none" />
+                <text className="text-[12px] font-bold tracking-[0.25em] uppercase" style={mono}>
+                  <textPath href={`#circlePath-${i}`} startOffset="0%">CLICK TO EXPLORE • CLICK TO EXPLORE • </textPath>
+                </text>
+              </svg>
             </div>
+            <div className="absolute w-2 h-2 bg-white rounded-full" />
           </div>
         )}
         {i === 5 && (
-          <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden flex flex-col justify-between">
-            <div className="w-full h-24 bg-black/90 backdrop-blur-md -translate-y-full group-hover/card:translate-y-0 transition-transform duration-[800ms] ease-[0.16,1,0.3,1]" />
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 delay-200">
-               <span className="text-white border border-white/30 px-8 py-3 tracking-[0.4em] uppercase text-xs" style={mono}>Open Project</span>
+          <div className="absolute inset-0 z-20 flex flex-col justify-center pointer-events-none overflow-hidden">
+            <div className="w-full bg-white/20 backdrop-blur-md border-y border-white/40 py-6 flex items-center justify-center translate-x-full group-hover/card:translate-x-0 transition-transform duration-700 ease-[0.16,1,0.3,1]">
+               <span className="text-white text-sm font-bold tracking-[0.6em] uppercase" style={mono}>Click To Explore</span>
             </div>
-            <div className="w-full h-24 bg-black/90 backdrop-blur-md translate-y-full group-hover/card:translate-y-0 transition-transform duration-[800ms] ease-[0.16,1,0.3,1]" />
           </div>
         )}
 
