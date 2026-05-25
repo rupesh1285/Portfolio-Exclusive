@@ -96,12 +96,18 @@ export default function SceneTwo() {
               />
 
               {/* Visual Side - STRICTLY 16:9, NO GAPS */}
-              <div className="relative w-full lg:w-[60%] xl:w-[65%] aspect-video bg-gray-100 shrink-0 overflow-hidden">
-                <img 
-                  src={expandedProject.image} 
-                  alt={expandedProject.title} 
-                  className="absolute inset-0 w-full h-full object-cover object-top"
-                />
+              <div className="relative w-full lg:w-[60%] xl:w-[65%] aspect-video bg-gray-100 shrink-0 overflow-hidden group/preview">
+                <div className="absolute inset-0 overflow-y-auto scrollbar-hide">
+                  <img 
+                    src={expandedProject.image} 
+                    alt={expandedProject.title} 
+                    className="w-full min-h-full object-cover object-top"
+                  />
+                </div>
+                {/* Scroll Indicator (only visible if user hovers) */}
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-black/60 backdrop-blur-md text-white px-4 py-2 rounded-full text-[9px] uppercase tracking-widest opacity-0 group-hover/preview:opacity-100 transition-opacity pointer-events-none" style={mono}>
+                  <span className="animate-bounce">↓</span> Scroll to explore
+                </div>
 
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }}

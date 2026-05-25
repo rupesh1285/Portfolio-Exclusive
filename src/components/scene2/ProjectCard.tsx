@@ -32,6 +32,20 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
       <div className="relative flex-1 overflow-hidden bg-gray-100">
         <div className={`absolute inset-0 bg-gradient-to-br ${p.accent} transition-transform duration-1000 ease-out group-hover/card:scale-105`} />
         
+        {/* Peeking Project Image */}
+        <div className="absolute top-12 left-6 md:top-16 md:left-10 right-0 bottom-0 rounded-tl-2xl overflow-hidden shadow-[-10px_-10px_30px_rgba(0,0,0,0.1)] transition-transform duration-700 ease-out group-hover/card:-translate-y-2 group-hover/card:-translate-x-2 bg-white">
+           <div className="absolute top-0 left-0 right-0 h-6 bg-zinc-200/80 backdrop-blur-sm border-b border-white/20 flex items-center px-3 gap-1.5 z-10">
+              <span className="w-2 h-2 rounded-full bg-red-400/80"></span>
+              <span className="w-2 h-2 rounded-full bg-amber-400/80"></span>
+              <span className="w-2 h-2 rounded-full bg-green-400/80"></span>
+           </div>
+           <img 
+             src={p.image} 
+             alt="" 
+             className="absolute inset-0 w-full h-full object-cover object-top pt-6"
+           />
+        </div>
+
         {/* Corner Iris Hover Indicator */}
         <div className="absolute top-0 right-0 w-24 h-24 bg-black/90 backdrop-blur-md rounded-bl-[100%] opacity-0 group-hover/card:opacity-100 transition-all duration-700 ease-[cubic-bezier(0.2,1,0.2,1)] transform origin-top-right scale-0 group-hover/card:scale-100 z-20 flex items-center justify-center">
            <svg 
