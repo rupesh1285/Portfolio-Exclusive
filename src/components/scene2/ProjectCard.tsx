@@ -38,16 +38,11 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
           className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover/card:scale-105"
         />
 
-        {/* Corner Iris Hover Indicator */}
-        <div className="absolute top-0 right-0 w-24 h-24 bg-black/90 backdrop-blur-md rounded-bl-[100%] opacity-0 group-hover/card:opacity-100 transition-all duration-700 ease-[cubic-bezier(0.2,1,0.2,1)] transform origin-top-right scale-0 group-hover/card:scale-100 z-20 flex items-center justify-center">
-           <svg 
-             className="w-5 h-5 text-white translate-x-2 -translate-y-2 transform transition-transform duration-500 group-hover/card:translate-x-3 group-hover/card:-translate-y-3" 
-             fill="none" 
-             stroke="currentColor" 
-             viewBox="0 0 24 24"
-           >
-             <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={1.5} d="M7 17L17 7M17 7H7M17 7V17" />
-           </svg>
+        {/* Central Expand Hint */}
+        <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+          <div className="flex items-center gap-2 rounded-full bg-black/80 backdrop-blur-md px-6 py-2.5 text-[10px] uppercase tracking-[0.25em] text-white opacity-0 transition-all duration-500 ease-[0.16,1,0.3,1] scale-75 group-hover/card:opacity-100 group-hover/card:scale-100 shadow-2xl" style={mono}>
+            Explore
+          </div>
         </div>
 
         <div className="absolute left-6 top-6 flex items-center gap-2 rounded-full bg-white/80 backdrop-blur-md px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-black/80 shadow-sm z-10" style={mono}>
