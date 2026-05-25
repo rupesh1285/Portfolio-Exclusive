@@ -14,20 +14,7 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
   const ghostRef = useRef<HTMLDivElement>(null);
   const st = useRef({ mx: -200, my: -200, rx: -200, ry: -200, gx: -200, gy: -200 });
 
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [hoverState, setHoverState] = useState<"normal" | "xl" | "xd">("normal");
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsDarkTheme(entry.isIntersecting);
-      },
-      { threshold: 0.1 }
-    );
-    const workRegion = document.getElementById("work-region");
-    if (workRegion) observer.observe(workRegion);
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
@@ -84,7 +71,7 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
     };
   }, [lenisFrameRef]);
 
-  const baseColor = isDarkTheme ? "0,0,0" : "255,255,255";
+  const baseColor = "255,255,255"; // Always white; mix-blend-difference handles inversion perfectly on all backgrounds
   
   // Compute ring styles based on hover state
   let ringScale = 1;
@@ -104,7 +91,7 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
     <>
       <div
         ref={ghostRef}
-        className="fixed pointer-events-none z-[9990]"
+        className="fixed pointer-events-none z-[9990] mix-blend-difference"
         style={{ top: 0, left: 0, willChange: "transform" }}
       >
         <div style={{
@@ -118,7 +105,7 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
 
       <div
         ref={ringRef}
-        className="fixed pointer-events-none z-[9995]"
+        className="fixed pointer-events-none z-[9995] mix-blend-difference"
         style={{ top: 0, left: 0, willChange: "transform" }}
       >
         <div style={{
@@ -133,7 +120,7 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
 
       <div
         ref={dotRef}
-        className="fixed pointer-events-none z-[9999]"
+        className="fixed pointer-events-none z-[9999] mix-blend-difference"
         style={{ top: 0, left: 0, willChange: "transform" }}
       >
         <div style={{
