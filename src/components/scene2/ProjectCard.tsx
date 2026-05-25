@@ -8,13 +8,13 @@ import { bebas, mono } from "./fonts";
 type Props = { project: Project; index: number; onClick: () => void };
 
 export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onClick }: Props) {
-  // 6-Column Compact Bento Grid
-  let spanClass = "md:col-span-4 md:row-span-1 order-1"; // Project 1: Reduced height
-  if (i === 1) spanClass = "md:col-span-2 md:row-span-1 order-2"; // Project 2: Top right
-  else if (i === 2) spanClass = "md:col-span-2 md:row-span-1 order-5"; // Project 3: Under Project 2
-  else if (i === 3) spanClass = "md:col-span-2 md:row-span-1 order-3"; // Project 4: Under Project 1
-  else if (i === 4) spanClass = "md:col-span-2 md:row-span-1 order-4"; // Project 5: Under Project 1
-  else if (i === 5) spanClass = "md:col-span-6 md:row-span-1 order-6"; // Project 6: Full width footer
+  // 3-Column Exact Mockup Grid
+  let spanClass = "md:col-span-2 md:row-span-1 order-1"; // Project 1: Top Left (Wide)
+  if (i === 1) spanClass = "md:col-span-1 md:row-span-1 order-2"; // Project 2: Top Right (Square)
+  else if (i === 2) spanClass = "md:col-span-1 md:row-span-2 order-5"; // Project 3: Right side tall card (Row 2 & 3)
+  else if (i === 3) spanClass = "md:col-span-1 md:row-span-1 order-3"; // Project 4: Middle Left (Square)
+  else if (i === 4) spanClass = "md:col-span-1 md:row-span-1 order-4"; // Project 5: Middle Center (Square)
+  else if (i === 5) spanClass = "md:col-span-2 md:row-span-1 order-6"; // Project 6: Bottom Left (Wide)
 
   return (
     <motion.article
