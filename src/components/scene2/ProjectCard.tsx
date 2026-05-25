@@ -59,7 +59,7 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, transition: { delay: 0.3, duration: 0.4 } }}
         exit={{ opacity: 0, transition: { duration: 0.1 } }}
-        className="relative z-10 flex flex-col gap-2 bg-white p-6 md:p-8 shrink-0"
+        className="relative z-10 flex flex-col gap-1 md:gap-1.5 bg-white p-3 md:px-5 md:py-4 shrink-0"
       >
         <h2 className="text-[clamp(1.5rem,3vw,3rem)] leading-[0.95] tracking-[0.02em] text-black/90" style={bebas}>
           {p.title}
