@@ -20,10 +20,11 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
   return (
     <motion.article
       layoutId={`project-${p.id}`}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       data-s2-project
       onClick={onClick}
       whileHover={{ y: -12, transition: { duration: 0.5, ease: [0.2, 1, 0.2, 1] } }}
-      className={`group/card relative flex flex-col overflow-hidden rounded-[32px] border border-black/5 bg-white shadow-[0_4px_24px_rgba(0,0,0,0.02)] transition-shadow duration-700 hover:z-40 hover:shadow-[0_30px_80px_rgba(0,0,0,0.12)] cursor-pointer ${spanClass}`}
+      className={`group/card relative flex flex-col overflow-hidden rounded-[32px] md:rounded-[40px] border border-black/5 bg-white shadow-[0_4px_24px_rgba(0,0,0,0.02)] transition-shadow duration-700 hover:z-40 hover:shadow-[0_30px_80px_rgba(0,0,0,0.12)] cursor-pointer ${spanClass}`}
     >
       {/* -----------------------------
           BASE CARD (Seen in Grid) 

@@ -100,10 +100,12 @@ export default function SceneTwo() {
                 <div className="absolute inset-0 bg-white/10 mix-blend-overlay opacity-50" />
                 
                 {/* 16:9 Inner Mockup Area */}
-                <div className="relative w-full aspect-video flex items-center justify-center pointer-events-none">
-                   <p className="text-black/40 text-[10px] uppercase tracking-[0.4em] bg-white/50 backdrop-blur-md px-6 py-3 rounded-full" style={mono}>
-                     16:9 Preview Space
-                   </p>
+                <div className="relative w-full aspect-video overflow-hidden border-y border-black/5 lg:border-none shadow-[0_0_50px_rgba(0,0,0,0.1)]">
+                   <img 
+                     src={expandedProject.image} 
+                     alt={expandedProject.title} 
+                     className="absolute inset-0 w-full h-full object-cover"
+                   />
                 </div>
 
                 <motion.div 

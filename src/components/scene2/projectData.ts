@@ -9,6 +9,7 @@ export type Project = {
   tags: string[];
   metrics: { k: string; v: string }[];
   accent: string;
+  image: string;
 };
 
 export const SCENE_TWO_PROJECTS: Project[] = [
@@ -28,6 +29,7 @@ export const SCENE_TWO_PROJECTS: Project[] = [
       { k: "Uptime", v: "99.98%" },
     ],
     accent: "from-zinc-200 via-neutral-100 to-stone-300",
+    image: "https://images.unsplash.com/photo-1460925890917-4c622a55ba3e?auto=format&fit=crop&w=1600&q=80",
   },
   {
     id: "lattice",
@@ -45,6 +47,7 @@ export const SCENE_TWO_PROJECTS: Project[] = [
       { k: "API errors", v: "-62%" },
     ],
     accent: "from-neutral-100 via-zinc-100 to-stone-200",
+    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1600&q=80",
   },
   {
     id: "signal",
@@ -62,6 +65,7 @@ export const SCENE_TWO_PROJECTS: Project[] = [
       { k: "MTTR delta", v: "-18%" },
     ],
     accent: "from-stone-200 via-neutral-50 to-zinc-200",
+    image: "https://images.unsplash.com/photo-1504868584819-f08a40f0eca9?auto=format&fit=crop&w=1600&q=80",
   },
   {
     id: "meridian",
@@ -79,6 +83,7 @@ export const SCENE_TWO_PROJECTS: Project[] = [
       { k: "Session length", v: "2.4×" },
     ],
     accent: "from-zinc-100 via-stone-100 to-neutral-200",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=80",
   },
   {
     id: "forge",
@@ -96,6 +101,7 @@ export const SCENE_TWO_PROJECTS: Project[] = [
       { k: "MTTD flake", v: "-31%" },
     ],
     accent: "from-neutral-100 via-zinc-50 to-stone-200",
+    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=80",
   },
   {
     id: "vault",
@@ -113,5 +119,6 @@ export const SCENE_TWO_PROJECTS: Project[] = [
       { k: "NPS", v: "54" },
     ],
     accent: "from-stone-100 via-neutral-100 to-zinc-200",
+    image: "https://images.unsplash.com/photo-1507238691740-14c27d7620f1?auto=format&fit=crop&w=1600&q=80",
   },
 ];
