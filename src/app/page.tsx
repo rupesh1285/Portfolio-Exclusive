@@ -87,15 +87,15 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
   const baseColor = isDarkTheme ? "0,0,0" : "255,255,255";
   
   // Compute ring styles based on hover state
-  let ringWidth = 28;
+  let ringScale = 1;
   let ringBorderOpacity = 0.6;
   let ringBgOpacity = 0;
   if (hoverState === "xl") {
-    ringWidth = 56;
+    ringScale = 2; // 28 * 2 = 56
     ringBorderOpacity = 0.8;
     ringBgOpacity = 0.1;
   } else if (hoverState === "xd") {
-    ringWidth = 56;
+    ringScale = 2;
     ringBorderOpacity = 0.9;
     ringBgOpacity = 0.15;
   }
@@ -105,46 +105,45 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
       <div
         ref={ghostRef}
         className="fixed pointer-events-none z-[9990]"
-        style={{
-          top: 0,
-          left: 0,
-          width: 48,
-          height: 48,
+        style={{ top: 0, left: 0, willChange: "transform" }}
+      >
+        <div style={{
+          width: 48, height: 48,
+          transform: "translate(-50%, -50%)",
           borderRadius: "50%",
           border: `1px solid rgba(${baseColor}, 0.2)`,
           transition: "border-color 0.3s",
-          willChange: "transform",
-        }}
-      />
+        }} />
+      </div>
+
       <div
         ref={ringRef}
         className="fixed pointer-events-none z-[9995]"
-        style={{
-          top: 0,
-          left: 0,
-          width: ringWidth,
-          height: ringWidth,
+        style={{ top: 0, left: 0, willChange: "transform" }}
+      >
+        <div style={{
+          width: 28, height: 28,
           borderRadius: "50%",
+          transform: `translate(-50%, -50%) scale(${ringScale})`,
           border: `1px solid rgba(${baseColor}, ${ringBorderOpacity})`,
           background: `rgba(${baseColor}, ${ringBgOpacity})`,
-          transition: "width 0.4s cubic-bezier(0.16,1,0.3,1), height 0.4s cubic-bezier(0.16,1,0.3,1), border-color 0.3s, background 0.3s",
-          willChange: "transform",
-        }}
-      />
+          transition: "transform 0.4s cubic-bezier(0.16,1,0.3,1), border-color 0.3s, background 0.3s",
+        }} />
+      </div>
+
       <div
         ref={dotRef}
         className="fixed pointer-events-none z-[9999]"
-        style={{
-          top: 0,
-          left: 0,
-          width: 5,
-          height: 5,
+        style={{ top: 0, left: 0, willChange: "transform" }}
+      >
+        <div style={{
+          width: 5, height: 5,
+          transform: "translate(-50%, -50%)",
           borderRadius: "50%",
           background: `rgba(${baseColor}, 1)`,
           transition: "background 0.3s",
-          willChange: "transform",
-        }}
-      />
+        }} />
+      </div>
     </>
   );
 }
