@@ -41,8 +41,8 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
       Object.assign(ringRef.current.style, {
         width: "56px",
         height: "56px",
-        borderColor: "rgba(220,220,220,0.65)",
-        background: "rgba(220,220,220,0.06)",
+        borderColor: "rgba(255,255,255,0.8)",
+        background: "rgba(255,255,255,0.1)",
       });
     };
     const xd = () => {
@@ -50,8 +50,8 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
       Object.assign(ringRef.current.style, {
         width: "56px",
         height: "56px",
-        borderColor: "rgba(18,18,18,0.5)",
-        background: "rgba(18,18,18,0.06)",
+        borderColor: "rgba(255,255,255,0.9)",
+        background: "rgba(255,255,255,0.15)",
       });
     };
     const ct = () => {
@@ -59,7 +59,7 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
       Object.assign(ringRef.current.style, {
         width: "28px",
         height: "28px",
-        borderColor: "rgba(180,180,180,0.4)",
+        borderColor: "rgba(255,255,255,0.6)",
         background: "transparent",
       });
     };
@@ -108,7 +108,8 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
           width: 48,
           height: 48,
           borderRadius: "50%",
-          border: "1px solid rgba(160,160,160,0.08)",
+          border: "1px solid rgba(255,255,255,0.2)",
+          mixBlendMode: "difference",
         }}
       />
       <div
@@ -120,7 +121,8 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
           width: 28,
           height: 28,
           borderRadius: "50%",
-          border: "1px solid rgba(180,180,180,0.38)",
+          border: "1px solid rgba(255,255,255,0.6)",
+          mixBlendMode: "difference",
           transition:
             "width 0.4s cubic-bezier(0.16,1,0.3,1),height 0.4s cubic-bezier(0.16,1,0.3,1),border-color 0.28s,background 0.28s",
         }}
@@ -131,10 +133,11 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
         style={{
           top: 0,
           left: 0,
-          width: 4,
-          height: 4,
+          width: 5,
+          height: 5,
           borderRadius: "50%",
           background: "#FFF",
+          mixBlendMode: "difference",
         }}
       />
     </>
