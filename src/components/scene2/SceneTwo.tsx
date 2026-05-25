@@ -19,16 +19,16 @@ export default function SceneTwo() {
 
   return (
     <div id="work-region" className="relative w-full text-[#0c0c0c] bg-[#fcfaf6] overflow-hidden">
-      {/* Premium Engineered Background (High Performance) */}
+      {/* Premium Engineered Background (Monochromatic & Unique Typography) */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        {/* 1. Fast CSS Mesh Gradient for different shades */}
+        {/* 1. Monochromatic CSS Mesh Gradient for subtle depth */}
         <div 
-          className="absolute inset-0 mix-blend-multiply opacity-70"
+          className="absolute inset-0 opacity-80"
           style={{
             backgroundImage: `
-              radial-gradient(circle at 10% 20%, rgba(220, 235, 255, 0.8) 0%, transparent 35%),
-              radial-gradient(circle at 90% 80%, rgba(255, 225, 220, 0.8) 0%, transparent 40%),
-              radial-gradient(circle at 50% 100%, rgba(220, 255, 235, 0.6) 0%, transparent 50%)
+              radial-gradient(circle at 15% 15%, rgba(0, 0, 0, 0.04) 0%, transparent 40%),
+              radial-gradient(circle at 85% 85%, rgba(0, 0, 0, 0.06) 0%, transparent 50%),
+              radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.6) 0%, transparent 60%)
             `
           }}
         />
@@ -45,12 +45,28 @@ export default function SceneTwo() {
           }}
         />
 
-        {/* 3. Geometric & Typographic Accents */}
-        <div className="absolute top-[15%] left-[5%] text-black/20 font-mono text-xs tracking-widest hidden md:block">+ 45.092_N</div>
-        <div className="absolute top-[50%] right-[4%] text-black/20 font-mono text-xs tracking-widest hidden md:block rotate-90 origin-right">SYSTEM_REQ // 02</div>
-        <div className="absolute bottom-[15%] left-[10%] w-24 h-[1px] bg-black/10 hidden md:block" />
-        <div className="absolute top-[25%] right-[12%] w-[1px] h-24 bg-black/10 hidden md:block" />
-        <div className="absolute bottom-[20%] right-[20%] w-2 h-2 border border-black/20 rounded-full hidden md:block" />
+        {/* 3. Unique Typographic & Geometric Accents */}
+        {/* Massive Watermark */}
+        <div 
+          className="absolute top-[8%] left-[-2%] text-[clamp(6rem,15vw,12rem)] leading-none text-black/[0.03] whitespace-nowrap select-none"
+          style={bebas}
+        >
+          ARCHIVE_02
+        </div>
+        
+        {/* Vertical Editorial Text */}
+        <div 
+          className="absolute top-[35%] right-[4%] text-black/20 font-mono text-[9px] tracking-[0.4em] uppercase hidden md:block" 
+          style={{ writingMode: 'vertical-rl' }}
+        >
+          SYS.REQ // GRID_X.VER
+        </div>
+        
+        {/* Technical Coordinate Line */}
+        <div className="absolute bottom-[20%] left-[6%] items-center gap-4 hidden md:flex">
+          <span className="w-16 h-[1px] bg-black/15" />
+          <span className="text-black/20 font-mono text-[10px] tracking-widest">+ COORD.SYS</span>
+        </div>
       </div>
 
       <header className="relative z-10 mx-auto max-w-[1400px] px-5 pb-8 pt-20 md:px-10 md:pb-12 md:pt-28 lg:px-14">
