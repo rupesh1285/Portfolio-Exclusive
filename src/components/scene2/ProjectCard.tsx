@@ -60,12 +60,15 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
           </div>
         )}
         {i === 2 && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none bg-black/50 backdrop-blur-sm opacity-0 group-hover/card:opacity-100 transition-opacity duration-500">
-            <div className="flex items-center gap-4 text-white text-2xl font-bold tracking-[0.5em] uppercase" style={mono}>
-              <span className="translate-x-12 opacity-0 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-700 ease-out">[</span>
-              <span className="opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 delay-300">EXPLORE</span>
-              <span className="-translate-x-12 opacity-0 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-700 ease-out">]</span>
-            </div>
+          <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden">
+             {/* Technical Mask Drop */}
+             <div className="absolute top-0 left-0 right-0 h-[50%] bg-black/80 backdrop-blur-md -translate-y-full group-hover/card:translate-y-0 transition-transform duration-[0.8s] ease-[0.16,1,0.3,1]" />
+             <div className="absolute bottom-0 left-0 right-0 h-[50%] bg-black/80 backdrop-blur-md translate-y-full group-hover/card:translate-y-0 transition-transform duration-[0.8s] ease-[0.16,1,0.3,1]" />
+             <div className="absolute inset-0 flex items-center justify-center z-10">
+               <span className="text-white text-5xl font-bold tracking-[0.4em] uppercase scale-x-0 opacity-0 group-hover/card:opacity-100 group-hover/card:scale-x-100 transition-all duration-[1s] delay-100 ease-[0.16,1,0.3,1]" style={bebas}>
+                 EXPLORE
+               </span>
+             </div>
           </div>
         )}
         {i === 3 && (
@@ -76,10 +79,17 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
           </div>
         )}
         {i === 4 && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none bg-black/40 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700">
-             <div className="relative text-white text-lg font-bold tracking-[0.4em] uppercase" style={mono}>
-               CLICK TO EXPLORE
-               <div className="absolute top-1/2 left-[-10%] w-[120%] h-[3px] bg-white scale-x-0 group-hover/card:scale-x-100 transition-transform duration-700 ease-[0.16,1,0.3,1] origin-left mix-blend-difference" />
+          <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none bg-black/60 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700">
+             <div className="relative flex items-center justify-center">
+               <h3 className="absolute text-[11px] md:text-sm font-bold uppercase tracking-[0.4em] text-transparent stroke-white stroke-1 translate-y-0 group-hover/card:-translate-y-8 transition-transform duration-[0.8s] ease-[0.16,1,0.3,1]" style={{ WebkitTextStroke: "1px rgba(255,255,255,0.4)", ...mono }}>
+                 Click To Explore
+               </h3>
+               <h3 className="relative z-10 text-[11px] md:text-sm font-bold uppercase tracking-[0.4em] text-white" style={mono}>
+                 Click To Explore
+               </h3>
+               <h3 className="absolute text-[11px] md:text-sm font-bold uppercase tracking-[0.4em] text-transparent stroke-white stroke-1 translate-y-0 group-hover/card:translate-y-8 transition-transform duration-[0.8s] ease-[0.16,1,0.3,1]" style={{ WebkitTextStroke: "1px rgba(255,255,255,0.4)", ...mono }}>
+                 Click To Explore
+               </h3>
              </div>
           </div>
         )}
