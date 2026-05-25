@@ -19,6 +19,8 @@ export default function SceneTwo() {
 
   return (
     <div id="work-region" className="relative w-full text-[#0c0c0c] bg-[#fcfaf6]">
+      {/* Texture Background */}
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle at center, #000 1.5px, transparent 1.5px)', backgroundSize: '32px 32px' }} />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(0,0,0,0.03)_0%,transparent_50%)]" />
 
       <header className="relative z-10 mx-auto max-w-[1400px] px-5 pb-8 pt-20 md:px-10 md:pb-12 md:pt-28 lg:px-14">
