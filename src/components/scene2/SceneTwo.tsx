@@ -86,7 +86,7 @@ export default function SceneTwo() {
             <motion.div
               layoutId={`project-${expandedProject.id}`}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-[95vw] max-w-[1500px] min-h-[75vh] md:min-h-[80vh] rounded-[32px] md:rounded-[40px] bg-white shadow-[0_40px_100px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col lg:flex-row z-10"
+              className="relative w-[95vw] max-w-[1500px] rounded-[32px] md:rounded-[40px] bg-white shadow-[0_40px_100px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col lg:flex-row z-10"
             >
               <motion.div 
                 initial={{ opacity: 0 }}
@@ -95,18 +95,13 @@ export default function SceneTwo() {
                 className="absolute inset-0 pointer-events-none z-0 bg-white"
               />
 
-              {/* Visual Side - 16:9 Aspect Ratio Container inside flex */}
-              <div className={`relative w-full lg:w-[65%] flex items-center justify-center bg-gradient-to-br ${expandedProject.accent} shrink-0`}>
-                <div className="absolute inset-0 bg-white/10 mix-blend-overlay opacity-50" />
-                
-                {/* 16:9 Inner Mockup Area */}
-                <div className="relative w-full aspect-video overflow-hidden border-y border-black/5 lg:border-none shadow-[0_0_50px_rgba(0,0,0,0.1)]">
-                   <img 
-                     src={expandedProject.image} 
-                     alt={expandedProject.title} 
-                     className="absolute inset-0 w-full h-full object-cover"
-                   />
-                </div>
+              {/* Visual Side - STRICTLY 16:9, NO GAPS */}
+              <div className="relative w-full lg:w-[60%] xl:w-[65%] aspect-video bg-gray-100 shrink-0 overflow-hidden">
+                <img 
+                  src={expandedProject.image} 
+                  alt={expandedProject.title} 
+                  className="absolute inset-0 w-full h-full object-cover object-top"
+                />
 
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }}
@@ -124,7 +119,7 @@ export default function SceneTwo() {
                 initial={{ opacity: 0, x: 40 }}
                 animate={{ opacity: 1, x: 0, transition: { delay: 0.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] } }}
                 exit={{ opacity: 0, x: 20, transition: { duration: 0.2 } }}
-                className="relative z-10 w-full lg:w-[35%] p-6 lg:p-8 xl:p-10 flex flex-col bg-white"
+                className="relative z-10 w-full lg:w-[40%] xl:w-[35%] p-6 lg:p-8 xl:p-10 flex flex-col bg-white overflow-y-auto"
               >
                 {/* Close Button - Moved to the Info Section top-right */}
                 <button
