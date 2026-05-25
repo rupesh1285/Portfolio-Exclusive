@@ -16,40 +16,14 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
   else if (i === 4) spanClass = "md:col-span-1 md:row-span-1 order-4"; // Project 5: Middle Center (Square)
   else if (i === 5) spanClass = "md:col-span-2 md:row-span-1 order-6"; // Project 6: Bottom Left (Wide)
 
-  // Dynamic A/B Testing Card Shapes
-  let shapeClass = "";
-  let customStyle: React.CSSProperties = {};
-
-  if (i === 0) {
-    // Style 1: Cyberpunk Chamfer (Geometrically cut corners)
-    shapeClass = "rounded-none";
-    customStyle = { clipPath: "polygon(48px 0, 100% 0, 100% calc(100% - 48px), calc(100% - 48px) 100%, 0 100%, 0 48px)" };
-  } else if (i === 1) {
-    // Style 2: The Soft Bubble (Extreme unified rounding)
-    shapeClass = "rounded-[64px]";
-  } else if (i === 2) {
-    // Style 3: The Archway (Massive rounded top, sharp bottom)
-    shapeClass = "rounded-t-[200px] rounded-b-none";
-  } else if (i === 3) {
-    // Style 4: Brutalist Sharp (Zero rounding, thick border)
-    shapeClass = "rounded-none border-[3px] border-black/20";
-  } else if (i === 4) {
-    // Style 5: The Extreme Leaf (Max rounding on opposite corners)
-    shapeClass = "rounded-tl-[120px] rounded-br-[120px] rounded-tr-none rounded-bl-none";
-  } else if (i === 5) {
-    // Style 6: The Inverted Arch (Massive rounded bottom, sharp top)
-    shapeClass = "rounded-b-[200px] rounded-t-none";
-  }
-
   return (
     <motion.article
       layoutId={`project-${p.id}`}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       data-s2-project
       onClick={onClick}
-      style={customStyle}
       whileHover={{ y: -12, transition: { duration: 0.5, ease: [0.2, 1, 0.2, 1] } }}
-      className={`group/card relative flex flex-col overflow-hidden border border-black/5 bg-white shadow-[0_8px_30px_rgba(0,0,0,0.06)] z-10 hover:z-40 cursor-pointer ${spanClass} ${shapeClass}`}
+      className={`group/card relative flex flex-col overflow-hidden rounded-[32px] md:rounded-[40px] border border-black/5 bg-white shadow-[0_8px_30px_rgba(0,0,0,0.06)] z-10 hover:z-40 cursor-pointer ${spanClass}`}
     >
       {/* -----------------------------
           BASE CARD (Seen in Grid) 
