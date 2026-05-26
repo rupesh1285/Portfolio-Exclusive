@@ -126,7 +126,7 @@ export default function SceneOne({ clock }: { clock: string }) {
       />
 
       {/* Floating Dynamic Data Nodes */}
-      <div className="absolute top-[20%] left-[25%] text-[10px] text-emerald-500/40 pointer-events-none font-mono" style={{ animation: "float-data 8s ease-in-out infinite" }}>
+      <div className="absolute top-[20%] left-[25%] text-[10px] text-white/40 pointer-events-none font-mono" style={{ animation: "float-data 8s ease-in-out infinite" }}>
         [SYS.MEM: 0x1A4]
       </div>
       <div className="absolute top-[65%] right-[15%] text-[10px] text-white/20 pointer-events-none font-mono" style={{ animation: "float-data 11s ease-in-out infinite 2s" }}>
@@ -163,8 +163,8 @@ export default function SceneOne({ clock }: { clock: string }) {
           ))}
         </div>
         <div className="hidden items-center gap-2 text-[9px] uppercase tracking-[0.28em] text-white/30 sm:flex relative">
-          <span className="h-1.5 w-1.5 animate-ping absolute left-0 rounded-full bg-emerald-400/70" />
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400/90 relative z-10" />
+          <span className="h-1.5 w-1.5 animate-ping absolute left-0 rounded-full bg-white/70" />
+          <span className="h-1.5 w-1.5 rounded-full bg-white/90 relative z-10" />
           SYSTEM ONLINE
         </div>
       </nav>
@@ -211,7 +211,7 @@ export default function SceneOne({ clock }: { clock: string }) {
         <div className="s1-hero-rail absolute left-8 top-[40%] hidden flex-col gap-10 md:flex pointer-events-none z-10" style={mono}>
           <div className="flex flex-col gap-2">
              <span className="text-[9px] text-white/30 uppercase tracking-[0.4em]">Edge Latency</span>
-             <span className="text-2xl text-emerald-400/80 font-light tracking-wider" style={bebas}>12<span className="text-sm">MS</span></span>
+             <span className="text-2xl text-white/80 font-light tracking-wider" style={bebas}>12<span className="text-sm">MS</span></span>
           </div>
           <div className="flex flex-col gap-2">
              <span className="text-[9px] text-white/30 uppercase tracking-[0.4em]">Sys.Load</span>
