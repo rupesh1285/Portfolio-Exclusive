@@ -101,9 +101,19 @@ export default function SceneOne({ clock }: { clock: string }) {
 
   return (
     <div ref={rootRef} className="relative bg-[#030303] text-[#e6e6e6]">
-      {/* Depth */}
+      {/* Depth - Now with slow dynamic breathing */}
+      <style>{`
+        @keyframes breathe-grid {
+          0%, 100% { opacity: 0.25; transform: scale(1); }
+          50% { opacity: 0.55; transform: scale(1.02); }
+        }
+        @keyframes float-data {
+          0%, 100% { transform: translateY(0px); opacity: 0.2; }
+          50% { transform: translateY(-15px); opacity: 0.6; }
+        }
+      `}</style>
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.45]"
+        className="pointer-events-none absolute inset-0 origin-center"
         style={{
           backgroundImage: `
             linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
@@ -111,8 +121,20 @@ export default function SceneOne({ clock }: { clock: string }) {
           `,
           backgroundSize: "72px 72px",
           maskImage: "radial-gradient(ellipse 70% 60% at 50% 40%, black 20%, transparent 100%)",
+          animation: "breathe-grid 12s ease-in-out infinite"
         }}
       />
+
+      {/* Floating Dynamic Data Nodes */}
+      <div className="absolute top-[20%] left-[25%] text-[10px] text-emerald-500/40 pointer-events-none font-mono" style={{ animation: "float-data 8s ease-in-out infinite" }}>
+        [SYS.MEM: 0x1A4]
+      </div>
+      <div className="absolute top-[65%] right-[15%] text-[10px] text-white/20 pointer-events-none font-mono" style={{ animation: "float-data 11s ease-in-out infinite 2s" }}>
+        [NET.LAT: 12ms]
+      </div>
+      <div className="absolute top-[80%] left-[10%] text-[10px] text-white/20 pointer-events-none font-mono hidden md:block" style={{ animation: "float-data 9s ease-in-out infinite 4s" }}>
+        [WGL.FPS: 60]
+      </div>
 
 
       <nav
@@ -149,27 +171,20 @@ export default function SceneOne({ clock }: { clock: string }) {
 
       {/* ── Hero: baseline mega-type + floating thesis + orbit ring (not 50/50) ── */}
       <section className="relative min-h-[100dvh] overflow-hidden px-4 pb-10 pt-6 md:px-8 lg:px-12 group/hero">
-        <style>{`
-          @keyframes laser-scan {
-            0% { top: -5%; opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { top: 105%; opacity: 0; }
-          }
-        `}</style>
-        {/* Scanning Laser */}
-        <div className="absolute left-0 right-0 h-[1px] bg-emerald-500/40 shadow-[0_0_15px_3px_rgba(16,185,129,0.2)] pointer-events-none z-20" style={{ animation: 'laser-scan 6s linear infinite' }} />
         <div className="s1-hero-rail pointer-events-none absolute left-3 top-28 hidden flex-col gap-6 text-[9px] uppercase tracking-[0.5em] text-white/25 lg:flex">
           <span className="max-w-[10em] leading-relaxed">Systems & UI Engineering</span>
           <div className="h-24 w-px bg-gradient-to-b from-white/25 to-transparent" />
           <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>Scroll</span>
         </div>
 
-        {/* Orbit decoration — behind float card */}
+        {/* Orbit decoration — behind float card — NOW ROTATING DYNAMICALLY */}
         <div className="s1-hero-orbit pointer-events-none absolute right-[-18%] top-[8%] h-[min(72vw,520px)] w-[min(72vw,520px)] md:right-[-8%]">
+          {/* Static base ring */}
           <div className="absolute inset-0 rounded-full border border-white/[0.07]" />
-          <div className="absolute inset-[10%] rounded-full border border-white/[0.05] border-t-white/20" />
-          <div className="absolute inset-[22%] rounded-full border border-dashed border-white/[0.08]" />
+          {/* Inner ring rotating forward */}
+          <div className="absolute inset-[10%] rounded-full border border-white/[0.05] border-t-white/20 animate-[spin_20s_linear_infinite]" />
+          {/* Outer dashed ring rotating reverse */}
+          <div className="absolute inset-[22%] rounded-full border border-dashed border-white/[0.08] animate-[spin_30s_linear_infinite_reverse]" />
           <div
             className="absolute left-1/2 top-1/2 h-[1px] w-[120%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-transparent via-white/15 to-transparent"
             style={{ transform: "translate(-50%, -50%) rotate(-18deg)" }}
