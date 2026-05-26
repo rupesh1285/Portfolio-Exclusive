@@ -140,14 +140,25 @@ export default function SceneOne({ clock }: { clock: string }) {
             </button>
           ))}
         </div>
-        <div className="hidden items-center gap-2 text-[9px] uppercase tracking-[0.28em] text-white/30 sm:flex">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400/90" />
-          Available Q2
+        <div className="hidden items-center gap-2 text-[9px] uppercase tracking-[0.28em] text-white/30 sm:flex relative">
+          <span className="h-1.5 w-1.5 animate-ping absolute left-0 rounded-full bg-emerald-400/70" />
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400/90 relative z-10" />
+          SYSTEM ONLINE
         </div>
       </nav>
 
       {/* ── Hero: baseline mega-type + floating thesis + orbit ring (not 50/50) ── */}
-      <section className="relative min-h-[100dvh] overflow-hidden px-4 pb-10 pt-6 md:px-8 lg:px-12">
+      <section className="relative min-h-[100dvh] overflow-hidden px-4 pb-10 pt-6 md:px-8 lg:px-12 group/hero">
+        <style>{`
+          @keyframes laser-scan {
+            0% { top: -5%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 105%; opacity: 0; }
+          }
+        `}</style>
+        {/* Scanning Laser */}
+        <div className="absolute left-0 right-0 h-[1px] bg-emerald-500/40 shadow-[0_0_15px_3px_rgba(16,185,129,0.2)] pointer-events-none z-20" style={{ animation: 'laser-scan 6s linear infinite' }} />
         <div className="s1-hero-rail pointer-events-none absolute left-3 top-28 hidden flex-col gap-6 text-[9px] uppercase tracking-[0.5em] text-white/25 lg:flex">
           <span className="max-w-[10em] leading-relaxed">Systems & UI Engineering</span>
           <div className="h-24 w-px bg-gradient-to-b from-white/25 to-transparent" />
@@ -248,11 +259,23 @@ export default function SceneOne({ clock }: { clock: string }) {
       </section>
 
       {/* Marquee */}
-      <div className="s1-block-marquee overflow-hidden border-y border-white/[0.06] bg-[#050505] py-3.5">
+      <div className="s1-block-marquee overflow-hidden border-y border-white/[0.06] bg-[#050505] py-4 flex flex-col gap-3">
         <div className="ticker-inner flex items-center gap-10">
           {[...tape, ...tape].map((t, i) => (
             <span
               key={`${t}-${i}`}
+              className="shrink-0 text-[9px] uppercase tracking-[0.55em] text-white/30"
+              style={mono}
+            >
+              {t}
+              <span className="ml-10 text-white/12">✦</span>
+            </span>
+          ))}
+        </div>
+        <div className="ticker-inner flex items-center gap-10 opacity-40" style={{ animationDirection: "reverse" }}>
+          {[...tape, ...tape].reverse().map((t, i) => (
+            <span
+              key={`${t}-rev-${i}`}
               className="shrink-0 text-[9px] uppercase tracking-[0.55em] text-white/30"
               style={mono}
             >
@@ -344,14 +367,17 @@ export class EdgeNode implements INode {
           ].map((x) => (
             <div
               key={x.t}
-              className="s1-pillar group border border-white/[0.07] bg-white/[0.02] p-8 transition-colors hover:border-white/[0.14] hover:bg-white/[0.035]"
+              className="s1-pillar group relative overflow-hidden border border-white/[0.07] bg-white/[0.02] p-8 transition-colors hover:border-white/[0.2] hover:bg-white/[0.04]"
             >
-              <h3 className="mb-4 text-xl tracking-[0.08em] text-white/90" style={bebas}>
-                {x.t}
-              </h3>
-              <p className="text-[12px] leading-[1.75] text-white/40" style={mono}>
-                {x.d}
-              </p>
+              <div className="absolute -inset-full z-0 block translate-x-[-100%] bg-gradient-to-r from-transparent via-white/5 to-transparent transition-transform duration-1000 group-hover:translate-x-[100%]" />
+              <div className="relative z-10">
+                <h3 className="mb-4 text-xl tracking-[0.08em] text-white/90" style={bebas}>
+                  {x.t}
+                </h3>
+                <p className="text-[12px] leading-[1.75] text-white/40" style={mono}>
+                  {x.d}
+                </p>
+              </div>
             </div>
           ))}
         </div>
