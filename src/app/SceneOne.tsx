@@ -149,7 +149,7 @@ export default function SceneOne({ clock }: { clock: string }) {
       {/* ── Hero: baseline mega-type + floating thesis + orbit ring (not 50/50) ── */}
       <section className="relative min-h-[100dvh] overflow-hidden px-4 pb-10 pt-6 md:px-8 lg:px-12">
         <div className="s1-hero-rail pointer-events-none absolute left-3 top-28 hidden flex-col gap-6 text-[9px] uppercase tracking-[0.5em] text-white/25 lg:flex">
-          <span className="max-w-[10em] leading-relaxed">Portfolio · sample copy</span>
+          <span className="max-w-[10em] leading-relaxed">Systems & UI Engineering</span>
           <div className="h-24 w-px bg-gradient-to-b from-white/25 to-transparent" />
           <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>Scroll</span>
         </div>
@@ -170,10 +170,9 @@ export default function SceneOne({ clock }: { clock: string }) {
           className="s1-hero-float relative z-10 mx-auto mt-8 w-full max-w-md border border-white/[0.09] bg-[#080808]/[0.95] p-6 shadow-[0_40px_120px_rgba(0,0,0,0.55)] md:ml-auto md:mr-6 md:mt-14 lg:mr-16 lg:mt-20"
           style={mono}
         >
-          <p className="mb-3 text-[9px] uppercase tracking-[0.55em] text-white/40">Full-stack engineer</p>
+          <p className="mb-3 text-[9px] uppercase tracking-[0.55em] text-white/40">Full-Stack Architect</p>
           <p className="text-[13px] leading-[1.75] text-white/55">
-            Sample positioning statement — replace with your north star: how you think about product,
-            latency, and craft when you ship software at the edge of the browser.
+            Engineering highly performant web applications with a focus on systems design, fluid cinematic interfaces, and deep backend resilience. I optimize for latency, maintainability, and absolute craft.
           </p>
           <div className="mt-5 flex flex-wrap gap-3 border-t border-white/[0.06] pt-5 text-[9px] uppercase tracking-[0.28em] text-white/35">
             <span>Remote / India</span>
@@ -217,8 +216,7 @@ export default function SceneOne({ clock }: { clock: string }) {
             className="s1-hero-mask-inner mt-6 max-w-xl text-[clamp(15px,1.35vw,19px)] font-light italic leading-relaxed text-white/40 md:pl-1"
             style={cormorant}
           >
-            Sample hero line — replace later: I build resilient backends and cinematic frontends where
-            every transition earns its milliseconds.
+            I architect scalable backend systems and craft cinematic front-end experiences where every millisecond is explicitly earned.
           </p>
         </div>
 
@@ -259,7 +257,7 @@ export default function SceneOne({ clock }: { clock: string }) {
         </div>
         <div className="grid gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-24">
           <h2 className="s1-ab text-[clamp(2.5rem,5vw,4rem)] leading-[0.95] tracking-[0.02em]" style={bebas}>
-            CLARITY AT
+            ENGINEERING AT
             <br />
             <span className="text-transparent" style={{ WebkitTextStroke: "1px rgba(255,255,255,0.28)" }}>
               SCALE.
@@ -267,18 +265,16 @@ export default function SceneOne({ clock }: { clock: string }) {
           </h2>
           <div className="space-y-6">
             <p className="s1-ab text-[13px] leading-[1.85] text-white/45" style={mono}>
-              Sample bio paragraph one — mention your stack, what you optimize for, and the kinds of teams
-              you like to join. This block is intentionally long so you can see rhythm and line length.
+              I specialize in bridging the gap between highly complex backend architectures and flawless, motion-driven frontend interfaces. My stack is deeply rooted in modern TypeScript, React ecosystem, and robust systems languages.
             </p>
             <p className="s1-ab text-[13px] leading-[1.85] text-white/45" style={mono}>
-              Second paragraph: shipped systems, teaching yourself new runtimes, obsession with DX, or how
-              you prototype in days and harden in weeks. Replace all of this with your voice.
+              Whether it's designing highly concurrent microservices, orchestrating cloud-native deployments, or hand-crafting custom WebGL shaders, my core philosophy remains constant: ship software that is mathematically precise, incredibly fast, and unapologetically beautiful.
             </p>
             <blockquote
               className="s1-ab border-l border-white/20 py-1 pl-6 text-[17px] leading-relaxed text-white/55 italic"
               style={cormorant}
             >
-              “Sample pull quote — the line people remember when they close the tab.”
+              “Performance is not a feature; it is the fundamental baseline of user experience.”
             </blockquote>
           </div>
         </div>
@@ -296,15 +292,15 @@ export default function SceneOne({ clock }: { clock: string }) {
           {[
             {
               t: "Architecture",
-              d: "Sample: service boundaries, caching, queues, and schema design for products that outgrow the MVP.",
+              d: "Designing service boundaries, implementing edge caching, message queues, and bulletproof schema design for products built to outgrow their MVP.",
             },
             {
               t: "Interfaces",
-              d: "Sample: motion-first UI, accessible components, and layouts that stay sharp from mobile to ultrawide.",
+              d: "Crafting motion-first UI, highly accessible tokenized component systems, and fluid layouts that maintain fidelity from mobile to ultrawide.",
             },
             {
               t: "Delivery",
-              d: "Sample: CI pipelines, observability, and pragmatic tradeoffs so teams ship without fearing Friday deploys.",
+              d: "Constructing zero-downtime CI/CD pipelines, deep telemetry observability, and pragmatic system tradeoffs for fearless deployments.",
             },
           ].map((x) => (
             <div
@@ -332,10 +328,10 @@ export default function SceneOne({ clock }: { clock: string }) {
         </div>
         <div className="grid gap-8 md:grid-cols-4">
           {[
-            { y: "2026", l: "Sample — led platform migration" },
-            { y: "2025", l: "Sample — real-time dashboard launch" },
-            { y: "2024", l: "Sample — design system v2" },
-            { y: "2023", l: "Sample — first production GraphQL API" },
+            { y: "2026", l: "Architected distributed event-streaming platform" },
+            { y: "2025", l: "Led global headless commerce migration" },
+            { y: "2024", l: "Shipped proprietary WebGL design engine" },
+            { y: "2023", l: "Engineered ultra-low-latency data pipeline" },
           ].map((row) => (
             <div key={row.y} className="s1-tl">
               <p className="mb-2 text-3xl text-white/90" style={bebas}>
@@ -355,13 +351,7 @@ export default function SceneOne({ clock }: { clock: string }) {
           className="s1-man-line mx-auto max-w-4xl text-center text-[clamp(1.75rem,3.8vw,3rem)] leading-[1.15] tracking-[0.03em] text-white/88"
           style={bebas}
         >
-          SAMPLE MANIFESTO LINE — REPLACE WITH YOURS. PRECISION IS THE DEFAULT. MOTION IS THE REWARD.
-        </p>
-        <p
-          className="mx-auto mt-8 max-w-xl text-center text-[14px] leading-relaxed text-white/35"
-          style={cormorant}
-        >
-          End of Scene 1 — scroll enters the work section. White field below is intentional contrast.
+          PRECISION IS THE DEFAULT. MOTION IS THE REWARD.
         </p>
       </section>
     </div>
