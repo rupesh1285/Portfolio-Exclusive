@@ -167,7 +167,7 @@ export default function SceneOne({ clock }: { clock: string }) {
 
         {/* Floating thesis cluster — offset, overlaps void */}
         <div
-          className="s1-hero-float relative z-10 mx-auto mt-8 w-full max-w-md border border-white/[0.09] bg-[#080808]/[0.95] p-6 shadow-[0_40px_120px_rgba(0,0,0,0.55)] md:ml-auto md:mr-6 md:mt-14 lg:mr-16 lg:mt-20"
+          className="s1-hero-float relative z-10 mx-auto mt-8 w-full max-w-md border border-white/[0.09] bg-[#080808]/[0.95] p-6 shadow-[0_40px_120px_rgba(0,0,0,0.55)] md:ml-auto md:mr-6 md:mt-14 lg:mr-16 lg:mt-20 backdrop-blur-md"
           style={mono}
         >
           <p className="mb-3 text-[9px] uppercase tracking-[0.55em] text-white/40">Full-Stack Architect</p>
@@ -178,6 +178,22 @@ export default function SceneOne({ clock }: { clock: string }) {
             <span>Remote / India</span>
             <span className="text-white/15">·</span>
             <span>{clock || "—:—:—"} IST</span>
+          </div>
+        </div>
+
+        {/* NEW: Left Side Telemetry Widget (Fills empty mid-left space) */}
+        <div className="s1-hero-rail absolute left-8 top-[40%] hidden flex-col gap-10 md:flex pointer-events-none z-10" style={mono}>
+          <div className="flex flex-col gap-2">
+             <span className="text-[9px] text-white/30 uppercase tracking-[0.4em]">Edge Latency</span>
+             <span className="text-2xl text-emerald-400/80 font-light tracking-wider" style={bebas}>12<span className="text-sm">MS</span></span>
+          </div>
+          <div className="flex flex-col gap-2">
+             <span className="text-[9px] text-white/30 uppercase tracking-[0.4em]">Sys.Load</span>
+             <div className="flex items-end gap-1.5 h-8 mt-1">
+                {[4, 8, 5, 9, 3, 6, 10, 4].map((h, i) => (
+                  <div key={i} className="w-1 bg-white/20" style={{ height: `${h * 10}%`, animation: `pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite ${i * 0.15}s` }} />
+                ))}
+             </div>
           </div>
         </div>
 
@@ -248,8 +264,31 @@ export default function SceneOne({ clock }: { clock: string }) {
       </div>
 
       {/* About */}
-      <section className="s1-io s1-block-about border-b border-white/[0.05] px-5 py-24 md:px-10 lg:px-16">
-        <div className="mb-14 flex items-center gap-4">
+      <section className="s1-io s1-block-about relative border-b border-white/[0.05] px-5 py-24 md:px-10 lg:px-16 overflow-hidden">
+        {/* NEW: Background Code Watermark in About Section */}
+        <div className="absolute top-1/2 right-[-10%] -translate-y-1/2 pointer-events-none opacity-[0.03] z-0 select-none rotate-12" style={mono}>
+           <pre className="text-[12px] leading-[2] text-white">
+{`interface SystemMetrics {
+  latency: number;
+  throughput: number;
+  errorRate: number;
+}
+export class EdgeNode implements INode {
+  private async reconcile() {
+    await this.cluster.sync();
+  }
+}
+// ARCHITECTURE //
+// Highly available, multi-region routing`}
+           </pre>
+        </div>
+        {/* Corner Crosshairs */}
+        <div className="absolute top-4 left-4 w-4 h-4 border-t border-l border-white/20" />
+        <div className="absolute top-4 right-4 w-4 h-4 border-t border-r border-white/20" />
+        <div className="absolute bottom-4 left-4 w-4 h-4 border-b border-l border-white/20" />
+        <div className="absolute bottom-4 right-4 w-4 h-4 border-b border-r border-white/20" />
+
+        <div className="relative z-10 mb-14 flex items-center gap-4">
           <div className="h-px w-10 bg-white/20" />
           <p className="text-[9px] uppercase tracking-[0.55em] text-white/35" style={mono}>
             01 — Profile
@@ -319,7 +358,10 @@ export default function SceneOne({ clock }: { clock: string }) {
       </section>
 
       {/* Timeline strip */}
-      <section className="s1-io s1-block-timeline border-y border-white/[0.06] bg-[#050505] px-5 py-16 md:px-10 lg:px-16">
+      <section className="s1-io s1-block-timeline relative border-y border-white/[0.06] bg-[#050505] px-5 py-16 md:px-10 lg:px-16 overflow-hidden">
+        {/* NEW: Connecting Horizontal Data Line */}
+        <div className="absolute top-1/2 left-0 w-full h-[1px] bg-white/[0.03] -translate-y-1/2 pointer-events-none" />
+        <div className="absolute top-1/2 left-0 w-1/3 h-[1px] bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent -translate-y-1/2 pointer-events-none animate-pulse" />
         <div className="mb-10 flex items-center gap-4">
           <div className="h-px w-10 bg-white/20" />
           <p className="text-[9px] uppercase tracking-[0.55em] text-white/35" style={mono}>
