@@ -75,7 +75,7 @@ export default function SceneFour() {
             </h1>
           </div>
           <p className="mt-8 max-w-xl text-[15px] leading-[1.8] text-black/60 italic" style={cormorant}>
-            We've reached the end of the scroll. If you're looking for an architect who treats backend resilience as a feature and front-end motion as a prerequisite, let's start a conversation.
+            We've reached the end of the scroll. If you're looking for an architect who treats backend resilience as a feature and frontend motion as a prerequisite, let's start a conversation.
           </p>
         </header>
 
