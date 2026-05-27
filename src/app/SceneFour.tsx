@@ -118,7 +118,7 @@ export default function SceneFour() {
                 className="shrink-0 text-[9px] uppercase tracking-[0.55em] text-black/50 font-bold"
                 style={mono}
               >
-                AVAILABLE FOR HIRE
+                OPEN FOR COLLABORATION
                 <span className="ml-10 text-black/20">✦</span>
               </span>
             ))}
