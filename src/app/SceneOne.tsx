@@ -197,21 +197,25 @@ export default function SceneOne({ clock }: { clock: string }) {
             Full-Stack Architect
           </p>
           
-          <h1
-            className="text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.2)] leading-[0.9] tracking-[0.02em] flex flex-wrap justify-center gap-x-4 md:gap-x-8"
-            style={{ ...bebas, fontSize: "clamp(4.5rem, 15vw, 12rem)" }}
-          >
-            <div className="flex">
-              {"RUPESH".split("").map((char, i) => (
-                <span key={`f-${i}`} className="hero-char inline-block">{char}</span>
-              ))}
-            </div>
-            <div className="flex">
-              {"AGARWAL".split("").map((char, i) => (
-                <span key={`l-${i}`} className="hero-char inline-block text-transparent" style={{ WebkitTextStroke: "1.5px rgba(255,255,255,0.85)" }}>{char}</span>
-              ))}
-            </div>
-          </h1>
+          <div className="relative">
+            {/* Targeted intense glow behind the text */}
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[140%] bg-white/10 blur-[100px] rounded-[100%] pointer-events-none z-0" />
+            <h1
+              className="relative z-10 text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.2)] leading-[0.9] tracking-[0.02em] flex flex-wrap justify-center gap-x-4 md:gap-x-8"
+              style={{ ...bebas, fontSize: "clamp(4.5rem, 15vw, 12rem)" }}
+            >
+              <div className="flex">
+                {"RUPESH".split("").map((char, i) => (
+                  <span key={`f-${i}`} className="hero-char inline-block">{char}</span>
+                ))}
+              </div>
+              <div className="flex">
+                {"AGARWAL".split("").map((char, i) => (
+                  <span key={`l-${i}`} className="hero-char inline-block text-transparent" style={{ WebkitTextStroke: "1.5px rgba(255,255,255,0.85)" }}>{char}</span>
+                ))}
+              </div>
+            </h1>
+          </div>
 
           <p
             className="hero-sub mt-8 max-w-2xl text-[clamp(15px,1.5vw,22px)] font-light italic leading-relaxed text-white/60 drop-shadow-md"
