@@ -246,7 +246,7 @@ export default function SceneOne({ clock }: { clock: string }) {
         </div>
 
         {/* Far Right: Massive 3D Full-Stack Visualizer */}
-        <div className="hidden lg:flex absolute right-[2%] xl:right-[5%] top-1/2 -translate-y-1/2 w-[500px] h-[600px] items-center justify-center z-10 pointer-events-none perspective-[1200px]">
+        <div className="hidden lg:flex absolute -right-[2%] xl:right-0 top-1/2 -translate-y-1/2 w-[500px] h-[600px] items-center justify-center z-10 pointer-events-none perspective-[1200px]">
           <style>{`
             .iso-stack { transform-style: preserve-3d; transform: rotateX(55deg) rotateZ(-45deg); }
             @keyframes float-top { 0%, 100% { transform: translateZ(140px); } 50% { transform: translateZ(160px); } }
