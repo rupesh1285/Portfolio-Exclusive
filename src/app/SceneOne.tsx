@@ -228,6 +228,16 @@ export default function SceneOne({ clock }: { clock: string }) {
           >
             I architect scalable backend systems and craft cinematic front-end experiences where every millisecond is explicitly earned.
           </p>
+          
+          <div
+            className="s1-hero-foot pointer-events-none mt-10 md:mt-14 flex flex-col items-start gap-4 z-10"
+            style={mono}
+          >
+            <span className="text-[10px] md:text-[11px] uppercase tracking-[0.4em] text-white/70 drop-shadow-md font-medium">Scroll to Explore</span>
+            <div className="flex h-16 md:h-20 w-[1px] ml-6 overflow-hidden bg-white/[0.2]">
+              <div className="animate-scroll-drop h-1/2 w-full bg-gradient-to-b from-white to-transparent" />
+            </div>
+          </div>
         </div>
 
         {/* Right Side: Hero Image */}
@@ -240,16 +250,6 @@ export default function SceneOne({ clock }: { clock: string }) {
           <span>Remote / India</span>
           <span className="text-white/20">|</span>
           <span>{clock || "—:—:—"} IST</span>
-        </div>
-
-        <div
-          className="s1-hero-foot pointer-events-none absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 md:bottom-10 z-10"
-          style={mono}
-        >
-          <span className="text-[8px] uppercase tracking-[0.5em] text-white/30">Scroll to Explore</span>
-          <div className="flex h-12 w-[1px] overflow-hidden bg-white/[0.15]">
-            <div className="animate-scroll-drop h-1/2 w-full bg-gradient-to-b from-white/70 to-transparent" />
-          </div>
         </div>
       </section>
 
