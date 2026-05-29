@@ -223,7 +223,7 @@ export default function SceneOne({ clock }: { clock: string }) {
           </p>
 
           <p
-            className="hero-sub max-w-xl text-[clamp(14px,1.2vw,18px)] font-light italic leading-relaxed text-white/60 drop-shadow-md"
+            className="hero-sub w-[90vw] md:w-[45vw] max-w-[600px] text-[clamp(14px,1.2vw,18px)] font-light italic leading-relaxed text-white/60 drop-shadow-md"
             style={cormorant}
           >
             I architect scalable backend systems and craft cinematic front-end experiences where every millisecond is explicitly earned.
@@ -231,8 +231,8 @@ export default function SceneOne({ clock }: { clock: string }) {
         </div>
 
         {/* Right Side: Hero Image */}
-        <div className="hero-sub absolute right-[5%] md:right-[25%] top-1/2 -translate-y-1/2 z-20 w-[70vw] md:w-[45vw] max-w-[600px] opacity-90 drop-shadow-[0_0_40px_rgba(255,255,255,0.05)] pointer-events-none">
-          <img src="/Hero.png" alt="Rupesh Agarwal" className="w-full h-auto object-contain" />
+        <div className="hero-sub absolute right-[5%] md:right-[20%] bottom-0 z-20 w-[75vw] md:w-[45vw] max-w-[650px] opacity-90 drop-shadow-[0_0_40px_rgba(255,255,255,0.05)] pointer-events-none origin-bottom scale-110 md:scale-100">
+          <img src="/Hero.png" alt="Rupesh Agarwal" className="w-full h-auto object-bottom object-contain" />
         </div>
 
         <div className="hero-sub pointer-events-none absolute bottom-20 right-6 md:bottom-24 md:right-10 flex items-center gap-4 border border-white/10 bg-white/[0.02] px-6 py-3 rounded-full backdrop-blur-md text-[9px] uppercase tracking-[0.3em] text-white/40 shadow-xl z-20">
