@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
 const mono = { fontFamily: "'DM Mono', ui-monospace, monospace" } as const;
-const bebas = { fontFamily: "'Bebas Neue', sans-serif" } as const;
+const luxury = { fontFamily: "'Cinzel', serif", fontWeight: 500 } as const;
 const cormorant = { fontFamily: "'Cormorant Garamond', Georgia, serif" } as const;
 
 export default function SceneOne({ clock }: { clock: string }) {
@@ -158,7 +158,7 @@ export default function SceneOne({ clock }: { clock: string }) {
         className="sticky top-0 z-40 flex items-center justify-between border-b border-white/[0.06] bg-[#030303]/[0.92] px-5 py-5 md:px-10"
         style={mono}
       >
-        <span data-cursor-expand className="text-[11px] tracking-[0.35em] text-white/90" style={bebas}>
+        <span data-cursor-expand className="text-[11px] tracking-[0.35em] text-white/90" style={luxury}>
           RA.
         </span>
         <div className="flex gap-8 text-[9px] uppercase tracking-[0.42em] text-white/35">
@@ -201,13 +201,13 @@ export default function SceneOne({ clock }: { clock: string }) {
             {/* Targeted intense glow behind the text */}
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[100%] h-[120%] bg-white/5 blur-[100px] rounded-[100%] pointer-events-none z-0" />
             <h1
-              className="relative z-10 text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.2)] leading-[0.9] tracking-[0.08em] flex flex-wrap justify-center gap-x-6 md:gap-x-10"
+              className="relative z-10 text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.2)] leading-[0.95] tracking-[0.1em] flex flex-wrap justify-center gap-x-6 md:gap-x-10"
               style={{ 
-                ...bebas, 
+                ...luxury, 
                 fontSize: "clamp(4rem, 14vw, 11rem)",
                 maskImage: "linear-gradient(to bottom, black 65%, transparent 100%)",
                 WebkitMaskImage: "linear-gradient(to bottom, black 65%, transparent 100%)",
-                transform: "scaleX(1.1)"
+                transform: "scaleX(1.15)"
               }}
             >
               <div className="flex">
