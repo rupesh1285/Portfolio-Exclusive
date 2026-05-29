@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
 const mono = { fontFamily: "'DM Mono', ui-monospace, monospace" } as const;
@@ -145,62 +145,37 @@ export default function SceneOne({ clock }: { clock: string }) {
 
 
 
-      {/* Modern High-Tech Navbar */}
-      <nav className="absolute top-6 left-0 w-full px-6 md:px-12 flex justify-between items-start md:items-center z-50 pointer-events-auto">
-        <style>{`
-          @keyframes shimmer { 100% { transform: translateX(100%); } }
-        `}</style>
-        
-        {/* Animated Architectural Logo */}
-        <div className="flex items-center gap-4 cursor-pointer group">
-          <div className="relative w-8 h-8 flex items-center justify-center">
-            <div className="absolute inset-0 border border-white/20 rotate-45 group-hover:rotate-90 group-hover:border-white/60 transition-all duration-700 ease-in-out" />
-            <div className="absolute inset-[3px] border border-white/40 bg-white/5 backdrop-blur-sm -rotate-45 group-hover:rotate-0 transition-all duration-700 ease-in-out" />
-            <span className="text-[12px] font-bold text-white z-10" style={mono}>R</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-[12px] font-bold tracking-[0.4em] text-white uppercase drop-shadow-md">Rupesh</span>
-            <span className="text-[8px] uppercase tracking-[0.6em] text-white/50" style={mono}>Agarwal</span>
-          </div>
-        </div>
-        
-        {/* Floating Glassmorphic Nav Pill */}
-        <div className="hidden md:flex items-center gap-10 px-10 py-4 bg-white/[0.02] border border-white/[0.08] rounded-full backdrop-blur-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] relative overflow-hidden group/nav">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.05] to-transparent -translate-x-full group-hover/nav:animate-[shimmer_1.5s_infinite]" />
-          
-          {["Work", "Profile", "Contact"].map((n, i) => (
-            <React.Fragment key={n}>
-              <button
-                type="button"
-                className="text-[10px] uppercase tracking-[0.4em] text-white/50 hover:text-white transition-all duration-300 relative group/link"
-                style={mono}
-                onClick={() => {
-                  const idx = n === "Work" ? 1 : n === "Contact" ? 3 : 0;
+      <nav
+        className="sticky top-0 z-40 flex items-center justify-between border-b border-white/[0.06] bg-[#030303]/[0.92] px-5 py-5 md:px-10"
+        style={mono}
+      >
+        <span data-cursor-expand className="text-[11px] tracking-[0.35em] text-white/90" style={luxury}>
+          RA.
+        </span>
+        <div className="flex gap-8 text-[9px] uppercase tracking-[0.42em] text-white/35">
+          {["Work", "Profile", "Contact"].map((n) => (
+            <button
+              key={n}
+              type="button"
+              data-cursor-expand
+              className="transition-colors hover:text-white/80"
+              onClick={() => {
+                const idx = n === "Work" ? 1 : n === "Contact" ? 3 : 0;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                if ((window as any).__goToScene) {
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  if ((window as any).__goToScene) {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    (window as any).__goToScene(idx);
-                  }
-                }}
-              >
-                {n}
-                <span className="absolute -bottom-2 left-1/2 w-0 h-[1px] bg-white transition-all duration-300 -translate-x-1/2 group-hover/link:w-full" />
-              </button>
-              {i < 2 && <span className="w-1 h-1 rounded-full bg-white/20" />}
-            </React.Fragment>
+                  (window as any).__goToScene(idx);
+                }
+              }}
+            >
+              {n}
+            </button>
           ))}
         </div>
-        
-        {/* Tactical Status Badge */}
-        <div className="flex items-center gap-3 px-4 py-2 border border-white/10 rounded-sm bg-black/40 backdrop-blur-md group cursor-default shadow-lg">
-          <div className="relative flex items-center justify-center w-2 h-2">
-            <span className="absolute inset-0 bg-white rounded-full animate-ping opacity-70" />
-            <div className="w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_10px_white]" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-[9px] uppercase tracking-[0.4em] text-white/90" style={mono}>System</span>
-            <span className="text-[7px] uppercase tracking-[0.5em] text-white/40" style={mono}>Online</span>
-          </div>
+        <div className="hidden items-center gap-2 text-[9px] uppercase tracking-[0.28em] text-white/30 sm:flex relative">
+          <span className="h-1.5 w-1.5 animate-ping absolute left-0 rounded-full bg-white/70" />
+          <span className="h-1.5 w-1.5 rounded-full bg-white/90 relative z-10" />
+          SYSTEM ONLINE
         </div>
       </nav>
 
