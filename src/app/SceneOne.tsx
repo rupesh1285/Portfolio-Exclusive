@@ -241,7 +241,7 @@ export default function SceneOne({ clock }: { clock: string }) {
         </div>
 
         {/* Right Side: Hero Image */}
-        <div className="hero-sub absolute right-[5%] md:right-[20%] lg:right-[22%] bottom-0 z-20 h-[70vh] md:h-[85vh] w-[75vw] md:w-auto max-w-[650px] opacity-90 drop-shadow-[0_0_40px_rgba(255,255,255,0.05)] pointer-events-none origin-bottom">
+        <div className="hero-sub absolute right-[5%] md:right-[20%] lg:right-[22%] bottom-0 md:bottom-16 lg:bottom-24 xl:bottom-32 z-20 h-[70vh] md:h-[85vh] w-[75vw] md:w-auto max-w-[650px] opacity-90 drop-shadow-[0_0_40px_rgba(255,255,255,0.05)] pointer-events-none origin-bottom">
           <img src="/Hero.png" alt="Rupesh Agarwal" className="w-auto h-full max-w-full object-bottom object-contain" />
         </div>
 
