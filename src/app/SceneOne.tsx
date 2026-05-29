@@ -109,13 +109,9 @@ export default function SceneOne({ clock }: { clock: string }) {
           0%, 100% { opacity: 0.5; transform: scale(1); }
           50% { opacity: 0.8; transform: scale(1.08); }
         }
-        @keyframes rotate-slow {
-          0% { transform: translate(-50%, -50%) rotate(0deg); }
-          100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-        @keyframes float-geom {
-          0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.15; }
-          50% { transform: translateY(-40px) rotate(20deg); opacity: 0.4; }
+        @keyframes breathe-grid {
+          0%, 100% { opacity: 0.25; transform: scale(1); }
+          50% { opacity: 0.55; transform: scale(1.02); }
         }
         @keyframes float-data {
           0%, 100% { transform: translateY(0px); opacity: 0.2; }
@@ -132,26 +128,19 @@ export default function SceneOne({ clock }: { clock: string }) {
         }}
       />
 
-      {/* Abstract geometric designs in background */}
-      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-        {/* Large rotating architectural rings */}
-        <div 
-          className="absolute left-1/2 top-1/2 w-[min(120vw,1200px)] h-[min(120vw,1200px)] rounded-full border border-[rgba(245,242,228,0.02)]"
-          style={{ animation: "rotate-slow 60s linear infinite" }}
-        >
-          <div className="absolute inset-[15%] rounded-full border border-[rgba(245,242,228,0.03)] border-dashed animate-[spin_40s_linear_infinite_reverse]" />
-          <div className="absolute inset-[30%] rounded-full border border-[rgba(245,242,228,0.015)]" />
-        </div>
-        
-        {/* Floating cross hairs */}
-        <div className="absolute right-[15%] top-[30%] w-12 h-12 flex items-center justify-center" style={{ animation: "float-geom 12s ease-in-out infinite" }}>
-          <div className="absolute w-full h-[1px] bg-[rgba(245,242,228,0.3)]" />
-          <div className="absolute w-[1px] h-full bg-[rgba(245,242,228,0.3)]" />
-        </div>
-
-        {/* Floating square */}
-        <div className="absolute left-[15%] bottom-[25%] w-24 h-24 border border-[rgba(245,242,228,0.04)] rotate-45" style={{ animation: "float-geom 16s ease-in-out infinite 2s" }} />
-      </div>
+      {/* Grid Design overlay */}
+      <div
+        className="pointer-events-none absolute inset-0 origin-center mix-blend-screen"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(245,242,228,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(245,242,228,0.03) 1px, transparent 1px)
+          `,
+          backgroundSize: "72px 72px",
+          maskImage: "radial-gradient(ellipse 70% 60% at 50% 40%, black 20%, transparent 100%)",
+          animation: "breathe-grid 12s ease-in-out infinite"
+        }}
+      />
 
       {/* Floating Dynamic Data Nodes */}
       <div className="absolute top-[20%] left-[25%] text-[10px] text-white/40 pointer-events-none font-mono" style={{ animation: "float-data 8s ease-in-out infinite" }}>
