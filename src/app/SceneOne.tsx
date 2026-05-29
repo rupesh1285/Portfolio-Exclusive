@@ -206,7 +206,7 @@ export default function SceneOne({ clock }: { clock: string }) {
           </p>
         </div>
 
-        <div className="hero-sub pointer-events-none absolute bottom-12 right-6 md:bottom-16 md:right-10 flex items-center gap-4 border border-white/10 bg-white/[0.02] px-6 py-3 rounded-full backdrop-blur-md text-[9px] uppercase tracking-[0.3em] text-white/40 shadow-xl z-20">
+        <div className="hero-sub pointer-events-none absolute bottom-20 right-6 md:bottom-24 md:right-10 flex items-center gap-4 border border-white/10 bg-white/[0.02] px-6 py-3 rounded-full backdrop-blur-md text-[9px] uppercase tracking-[0.3em] text-white/40 shadow-xl z-20">
           <span className="w-1.5 h-1.5 bg-white/70 rounded-full animate-pulse" />
           <span>Remote / India</span>
           <span className="text-white/20">|</span>
