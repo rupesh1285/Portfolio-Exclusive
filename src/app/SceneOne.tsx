@@ -130,14 +130,14 @@ export default function SceneOne({ clock }: { clock: string }) {
 
       {/* Grid Design overlay */}
       <div
-        className="pointer-events-none absolute inset-0 origin-center mix-blend-screen"
+        className="pointer-events-none absolute inset-0 origin-center"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(245,242,228,0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(245,242,228,0.03) 1px, transparent 1px)
+            linear-gradient(rgba(245,242,228,0.15) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(245,242,228,0.15) 1px, transparent 1px)
           `,
           backgroundSize: "72px 72px",
-          maskImage: "radial-gradient(ellipse 70% 60% at 50% 40%, black 20%, transparent 100%)",
+          maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%)",
           animation: "breathe-grid 12s ease-in-out infinite"
         }}
       />
