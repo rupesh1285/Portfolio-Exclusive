@@ -206,7 +206,7 @@ export default function SceneOne({ clock }: { clock: string }) {
               className="relative z-10 text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.2)] leading-[0.95] tracking-[0.04em] flex flex-col gap-2"
               style={{ 
                 ...luxury, 
-                fontSize: "clamp(3.5rem, 11vw, 9rem)",
+                fontSize: "clamp(3rem, 8vw, 7rem)",
                 maskImage: "linear-gradient(to bottom, black 65%, transparent 100%)",
                 WebkitMaskImage: "linear-gradient(to bottom, black 65%, transparent 100%)"
               }}
@@ -240,7 +240,7 @@ export default function SceneOne({ clock }: { clock: string }) {
         </div>
 
         {/* Right Side: Hero Image */}
-        <div className="hero-sub absolute right-[-5%] md:right-[5%] top-1/2 -translate-y-1/2 z-10 w-[70vw] md:w-[45vw] max-w-[600px] opacity-90 drop-shadow-[0_0_40px_rgba(255,255,255,0.05)] pointer-events-none mix-blend-lighten">
+        <div className="hero-sub absolute right-0 md:right-[15%] top-1/2 -translate-y-1/2 z-10 w-[70vw] md:w-[45vw] max-w-[600px] opacity-90 drop-shadow-[0_0_40px_rgba(255,255,255,0.05)] pointer-events-none mix-blend-lighten">
           <img src="/Hero.png" alt="Rupesh Agarwal" className="w-full h-auto object-contain" />
         </div>
 
