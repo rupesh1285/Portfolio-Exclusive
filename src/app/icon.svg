@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@300;700&amp;display=swap');
+      .r { font-family: 'Cinzel', serif; font-weight: 700; font-size: 54px; fill: #ffffff; }
+      .a { font-family: 'Cinzel', serif; font-weight: 300; font-size: 54px; fill: rgba(255, 255, 255, 0.7); }
+    </style>
+  </defs>
+  <rect width="100" height="100" fill="#030303" rx="24"/>
+  <rect width="96" height="96" x="2" y="2" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2" rx="22"/>
+  <g transform="translate(16, 68)">
+    <text x="0" y="0" class="r">R</text>
+    <text x="38" y="0" class="a">A</text>
+    <circle cx="75" cy="-2" r="4.5" fill="#ffffff" />
+  </g>
+</svg>
