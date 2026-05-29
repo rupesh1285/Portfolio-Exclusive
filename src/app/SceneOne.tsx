@@ -182,7 +182,7 @@ export default function SceneOne({ clock }: { clock: string }) {
       <section className="relative min-h-[100dvh] overflow-hidden px-6 md:px-12 lg:px-24 flex items-center justify-between group/hero">
         
         {/* Left Side: Text Content */}
-        <div className="flex flex-col items-start text-left z-10 w-full max-w-3xl -mt-24 md:-mt-16 lg:-mt-24 xl:-mt-32">
+        <div className="flex flex-col items-start text-left z-10 w-full max-w-3xl -mt-20 md:-mt-12 lg:-mt-16 xl:-mt-20">
           <p
             className="hero-sub mb-2 text-[clamp(16px,2vw,24px)] italic text-white/70"
             style={cormorant}
@@ -241,12 +241,12 @@ export default function SceneOne({ clock }: { clock: string }) {
         </div>
 
         {/* Right Side: Hero Image */}
-        <div className="hero-sub absolute right-[5%] md:right-[20%] lg:right-[22%] bottom-0 md:bottom-16 lg:bottom-24 xl:bottom-32 z-20 h-[70vh] md:h-[85vh] w-[75vw] md:w-auto max-w-[650px] opacity-90 drop-shadow-[0_0_40px_rgba(255,255,255,0.05)] pointer-events-none origin-bottom">
+        <div className="hero-sub absolute right-[5%] md:right-[20%] lg:right-[22%] bottom-0 md:bottom-12 lg:bottom-16 xl:bottom-20 z-20 h-[70vh] md:h-[85vh] w-[75vw] md:w-auto max-w-[650px] opacity-90 drop-shadow-[0_0_40px_rgba(255,255,255,0.05)] pointer-events-none origin-bottom">
           <img src="/Hero.png" alt="Rupesh Agarwal" className="w-auto h-full max-w-full object-bottom object-contain" />
         </div>
 
         {/* Far Right: Massive 3D Full-Stack Visualizer */}
-        <div className="hidden lg:flex absolute -right-[2%] xl:right-0 top-[40%] xl:top-[45%] -translate-y-1/2 w-[500px] h-[600px] items-center justify-center z-10 pointer-events-none perspective-[1200px]">
+        <div className="hidden lg:flex absolute -right-[2%] xl:right-0 top-[45%] xl:top-[48%] -translate-y-1/2 w-[500px] h-[600px] items-center justify-center z-10 pointer-events-none perspective-[1200px]">
           <style>{`
             .iso-stack { transform-style: preserve-3d; transform: rotateX(55deg) rotateZ(-45deg); }
             @keyframes float-top { 0%, 100% { transform: translateZ(140px); } 50% { transform: translateZ(160px); } }
