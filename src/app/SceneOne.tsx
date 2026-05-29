@@ -293,7 +293,10 @@ export default function SceneOne({ clock }: { clock: string }) {
         </div>
 
         {/* Right Side: Hero Image */}
-        <div className="hero-sub absolute right-[5%] md:right-[20%] lg:right-[22%] bottom-0 md:bottom-8 lg:bottom-12 xl:bottom-16 z-20 h-[70vh] md:h-[85vh] w-[75vw] md:w-auto max-w-[650px] opacity-90 drop-shadow-[0_0_40px_rgba(255,255,255,0.05)] pointer-events-none origin-bottom">
+        <div className="hero-sub absolute right-[5%] md:right-[20%] lg:right-[22%] bottom-0 md:bottom-8 lg:bottom-12 xl:bottom-16 z-20 h-[70vh] md:h-[85vh] w-[75vw] md:w-auto max-w-[650px] opacity-90 drop-shadow-[0_0_40px_rgba(255,255,255,0.05)] pointer-events-none origin-bottom flex justify-center">
+          {/* High Radius Radial Glow */}
+          <div className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[90%] aspect-square bg-white/[0.04] blur-[100px] rounded-full -z-10" />
+          
           <img src="/Hero.png" alt="Rupesh Agarwal" className="w-auto h-full max-w-full object-bottom object-contain" />
         </div>
 
