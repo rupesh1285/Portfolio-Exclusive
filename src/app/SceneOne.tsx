@@ -142,16 +142,7 @@ export default function SceneOne({ clock }: { clock: string }) {
         }}
       />
 
-      {/* Floating Dynamic Data Nodes */}
-      <div className="absolute top-[20%] left-[25%] text-[10px] text-white/40 pointer-events-none font-mono" style={{ animation: "float-data 8s ease-in-out infinite" }}>
-        [SYS.MEM: 0x1A4]
-      </div>
-      <div className="absolute top-[65%] right-[15%] text-[10px] text-white/20 pointer-events-none font-mono" style={{ animation: "float-data 11s ease-in-out infinite 2s" }}>
-        [NET.LAT: 12ms]
-      </div>
-      <div className="absolute top-[80%] left-[10%] text-[10px] text-white/20 pointer-events-none font-mono hidden md:block" style={{ animation: "float-data 9s ease-in-out infinite 4s" }}>
-        [WGL.FPS: 60]
-      </div>
+
 
 
       <nav
