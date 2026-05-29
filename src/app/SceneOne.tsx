@@ -182,7 +182,7 @@ export default function SceneOne({ clock }: { clock: string }) {
       <section className="relative min-h-[100dvh] overflow-hidden px-6 md:px-12 lg:px-24 flex items-center justify-between group/hero">
         
         {/* Left Side: Text Content */}
-        <div className="flex flex-col items-start text-left z-10 w-full max-w-3xl -mt-24 md:-mt-0">
+        <div className="flex flex-col items-start text-left z-10 w-full max-w-3xl -mt-24 md:-mt-16 lg:-mt-24 xl:-mt-32">
           <p
             className="hero-sub mb-2 text-[clamp(16px,2vw,24px)] italic text-white/70"
             style={cormorant}
@@ -246,7 +246,7 @@ export default function SceneOne({ clock }: { clock: string }) {
         </div>
 
         {/* Far Right: Massive 3D Full-Stack Visualizer */}
-        <div className="hidden lg:flex absolute -right-[2%] xl:right-0 top-1/2 -translate-y-1/2 w-[500px] h-[600px] items-center justify-center z-10 pointer-events-none perspective-[1200px]">
+        <div className="hidden lg:flex absolute -right-[2%] xl:right-0 top-[40%] xl:top-[45%] -translate-y-1/2 w-[500px] h-[600px] items-center justify-center z-10 pointer-events-none perspective-[1200px]">
           <style>{`
             .iso-stack { transform-style: preserve-3d; transform: rotateX(55deg) rotateZ(-45deg); }
             @keyframes float-top { 0%, 100% { transform: translateZ(140px); } 50% { transform: translateZ(160px); } }
