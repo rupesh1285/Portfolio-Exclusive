@@ -201,8 +201,14 @@ export default function SceneOne({ clock }: { clock: string }) {
             {/* Targeted intense glow behind the text */}
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[100%] h-[120%] bg-white/5 blur-[100px] rounded-[100%] pointer-events-none z-0" />
             <h1
-              className="relative z-10 text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.2)] leading-[0.9] tracking-[0.02em] flex flex-wrap justify-center gap-x-4 md:gap-x-8"
-              style={{ ...bebas, fontSize: "clamp(4.5rem, 15vw, 12rem)" }}
+              className="relative z-10 text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.2)] leading-[0.9] tracking-[0.08em] flex flex-wrap justify-center gap-x-6 md:gap-x-10"
+              style={{ 
+                ...bebas, 
+                fontSize: "clamp(4rem, 14vw, 11rem)",
+                maskImage: "linear-gradient(to bottom, black 65%, transparent 100%)",
+                WebkitMaskImage: "linear-gradient(to bottom, black 65%, transparent 100%)",
+                transform: "scaleX(1.1)"
+              }}
             >
               <div className="flex">
                 {"RUPESH".split("").map((char, i) => (
