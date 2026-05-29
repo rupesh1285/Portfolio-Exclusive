@@ -309,7 +309,7 @@ export class EdgeNode implements INode {
           </p>
         </div>
         <div className="grid gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-24">
-          <h2 className="s1-ab text-[clamp(2.5rem,5vw,4rem)] leading-[0.95] tracking-[0.02em]" style={bebas}>
+          <h2 className="s1-ab text-[clamp(2.5rem,5vw,4rem)] leading-[0.95] tracking-[0.02em]" style={luxury}>
             ENGINEERING AT
             <br />
             <span className="text-transparent" style={{ WebkitTextStroke: "1px rgba(255,255,255,0.28)" }}>
@@ -362,7 +362,7 @@ export class EdgeNode implements INode {
             >
               <div className="absolute -inset-full z-0 block translate-x-[-100%] bg-gradient-to-r from-transparent via-white/5 to-transparent transition-transform duration-1000 group-hover:translate-x-[100%]" />
               <div className="relative z-10">
-                <h3 className="mb-4 text-xl tracking-[0.08em] text-white/90" style={bebas}>
+                <h3 className="mb-4 text-xl tracking-[0.08em] text-white/90" style={luxury}>
                   {x.t}
                 </h3>
                 <p className="text-[12px] leading-[1.75] text-white/40" style={mono}>
@@ -393,7 +393,7 @@ export class EdgeNode implements INode {
             { y: "2023", l: "Engineered ultra-low-latency data pipeline" },
           ].map((row) => (
             <div key={row.y} className="s1-tl">
-              <p className="mb-2 text-3xl text-white/90" style={bebas}>
+              <p className="mb-2 text-3xl text-white/90" style={luxury}>
                 {row.y}
               </p>
               <p className="text-[11px] leading-relaxed text-white/38" style={mono}>
@@ -408,7 +408,7 @@ export class EdgeNode implements INode {
       <section className="s1-io s1-block-manifesto px-5 py-28 md:px-10 lg:px-16">
         <p
           className="s1-man-line mx-auto max-w-4xl text-center text-[clamp(1.75rem,3.8vw,3rem)] leading-[1.15] tracking-[0.03em] text-white/88"
-          style={bebas}
+          style={luxury}
         >
           PRECISION IS THE DEFAULT. MOTION IS THE REWARD.
         </p>
