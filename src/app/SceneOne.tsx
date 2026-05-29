@@ -245,66 +245,64 @@ export default function SceneOne({ clock }: { clock: string }) {
           <img src="/Hero.png" alt="Rupesh Agarwal" className="w-auto h-full max-w-full object-bottom object-contain" />
         </div>
 
-        {/* Far Right: Dynamic Telemetry Column */}
-        <div className="hidden lg:flex absolute right-6 xl:right-12 top-1/2 -translate-y-1/2 flex-col items-end gap-16 z-30 pointer-events-auto">
+        {/* Far Right: Massive 3D Full-Stack Visualizer */}
+        <div className="hidden lg:flex absolute right-[2%] xl:right-[5%] top-1/2 -translate-y-1/2 w-[500px] h-[600px] items-center justify-center z-10 pointer-events-none perspective-[1200px]">
           <style>{`
-            @keyframes bar-bounce {
-              0%, 100% { transform: scaleY(0.3); }
-              50% { transform: scaleY(1); }
-            }
-            @keyframes spin-slow {
-              from { transform: rotate(0deg); }
-              to { transform: rotate(360deg); }
-            }
+            .iso-stack { transform-style: preserve-3d; transform: rotateX(55deg) rotateZ(-45deg); }
+            @keyframes float-top { 0%, 100% { transform: translateZ(140px); } 50% { transform: translateZ(160px); } }
+            @keyframes float-mid { 0%, 100% { transform: translateZ(50px); } 50% { transform: translateZ(60px); } }
+            @keyframes float-bot { 0%, 100% { transform: translateZ(-40px); } 50% { transform: translateZ(-30px); } }
+            @keyframes scanline { 0% { transform: translateY(-100%); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(200%); opacity: 0; } }
           `}</style>
 
-          {/* Metric 1: System Load */}
-          <div className="flex flex-col items-end gap-3 opacity-60 hover:opacity-100 transition-opacity duration-500 cursor-default">
-            <div className="flex items-center gap-3">
-              <span className="text-[9px] uppercase tracking-[0.4em] text-white" style={mono}>Sys.Load</span>
-              <div className="h-1 w-1 rounded-full bg-white animate-pulse shadow-[0_0_10px_white]" />
+          <div className="iso-stack relative w-72 h-72">
+            {/* Connecting Vertical Core Line */}
+            <div className="absolute left-1/2 top-1/2 w-[2px] h-[300px] bg-white/20 -translate-x-1/2 -translate-y-1/2 transform rotateX(90deg)">
+              <div className="w-full h-[50px] bg-white shadow-[0_0_20px_white] animate-[scanline_3s_ease-in-out_infinite]" />
             </div>
-            <div className="flex gap-[3px] h-6 items-end justify-end w-full">
-              {[0.1, 0.5, 0.2, 0.8, 0.4, 0.7].map((delay, i) => (
-                <div 
-                  key={i} 
-                  className="w-[2px] bg-white/70 origin-bottom rounded-t-sm" 
-                  style={{ 
-                    height: '100%', 
-                    animation: `bar-bounce 1.5s ease-in-out infinite`,
-                    animationDelay: `${delay}s` 
-                  }} 
-                />
-              ))}
-            </div>
-          </div>
 
-          {/* Metric 2: Edge Latency */}
-          <div className="flex flex-col items-end gap-1 opacity-60 hover:opacity-100 transition-opacity duration-500 cursor-default">
-            <span className="text-[9px] uppercase tracking-[0.4em] text-white/70" style={mono}>Edge Ping</span>
-            <div className="flex items-baseline gap-1 text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
-              <span className="text-4xl font-light" style={luxury}>12</span>
-              <span className="text-[9px] uppercase tracking-[0.2em] text-white/50" style={mono}>ms</span>
+            {/* Top Layer: Frontend Client */}
+            <div className="absolute inset-0 border border-white/40 bg-black/40 backdrop-blur-md shadow-[0_0_50px_rgba(255,255,255,0.1)] animate-[float-top_6s_ease-in-out_infinite] flex flex-col p-4 overflow-hidden">
+              <div className="absolute top-2 right-2 text-[8px] uppercase tracking-[0.4em] text-white/80" style={mono}>Client / UI</div>
+              {/* Fake UI Wireframe */}
+              <div className="w-full flex justify-between items-center opacity-60 mt-4 border-b border-white/20 pb-2">
+                 <div className="w-3 h-3 rounded-full border border-white/50" />
+                 <div className="flex gap-2"><div className="w-12 h-1 bg-white/30 rounded-full"/><div className="w-6 h-1 bg-white/30 rounded-full"/></div>
+              </div>
+              <div className="w-full h-24 border border-white/20 mt-4 rounded-sm bg-gradient-to-br from-white/10 to-transparent relative overflow-hidden">
+                <div className="absolute inset-0 w-[200%] bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent)] animate-[scanline_2s_linear_infinite]" />
+              </div>
+              <div className="w-full flex gap-3 h-12 mt-4">
+                 <div className="w-1/2 h-full border border-white/20 rounded-sm" />
+                 <div className="w-1/2 h-full border border-white/20 rounded-sm" />
+              </div>
             </div>
-          </div>
 
-          {/* Metric 3: Active Nodes Cluster */}
-          <div className="flex flex-col items-end gap-4 opacity-60 hover:opacity-100 transition-opacity duration-500 cursor-default">
-            <span className="text-[9px] uppercase tracking-[0.4em] text-white/70" style={mono}>Cluster</span>
-            <div className="relative w-12 h-12 flex items-center justify-center">
-              {/* Outer dashed ring */}
-              <svg className="absolute inset-0 w-full h-full text-white/40 animate-[spin-slow_10s_linear_infinite]" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="4 8" />
-              </svg>
-              {/* Inner solid ring */}
-              <svg className="absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] text-white/20 animate-[spin-slow_15s_linear_infinite_reverse]" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="30 10" />
-              </svg>
-              {/* Center core */}
-              <div className="w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,1)] animate-pulse" />
+            {/* Middle Layer: Backend Services */}
+            <div className="absolute inset-0 border border-white/20 bg-black/60 shadow-[0_0_40px_rgba(255,255,255,0.05)] animate-[float-mid_6s_ease-in-out_infinite_0.5s] flex items-center justify-center">
+              <div className="absolute top-2 right-2 text-[8px] uppercase tracking-[0.4em] text-white/50" style={mono}>Backend / API</div>
+              <div className="w-3/4 h-3/4 border border-white/10 grid grid-cols-3 grid-rows-3 gap-2 p-2 relative">
+                 {[...Array(9)].map((_, i) => (
+                   <div key={i} className={`border border-white/10 ${i % 2 === 0 ? 'bg-white/5' : ''} flex items-center justify-center`}>
+                     {i === 4 && <div className="w-4 h-4 bg-white/80 rotate-45 animate-pulse shadow-[0_0_15px_white]" />}
+                   </div>
+                 ))}
+              </div>
             </div>
+
+            {/* Bottom Layer: Database */}
+            <div className="absolute inset-0 border border-white/10 bg-black/80 animate-[float-bot_6s_ease-in-out_infinite_1s] flex items-center justify-center">
+              <div className="absolute top-2 right-2 text-[8px] uppercase tracking-[0.4em] text-white/30" style={mono}>Database Layer</div>
+              <div className="w-24 h-24 flex flex-col gap-2 relative">
+                {[1,2,3].map(i => (
+                  <div key={i} className="w-full h-8 border border-white/20 rounded-[50%] flex items-center justify-center relative bg-white/[0.02]">
+                    <div className="absolute inset-x-0 top-1/2 bottom-0 border-b border-white/20 rounded-[50%]" />
+                  </div>
+                ))}
+              </div>
+            </div>
+            
           </div>
-          
         </div>
 
         <div className="hero-sub pointer-events-none absolute bottom-20 right-6 md:bottom-24 md:right-10 flex items-center gap-4 border border-white/10 bg-white/[0.02] px-6 py-3 rounded-full backdrop-blur-md text-[9px] uppercase tracking-[0.3em] text-white/40 shadow-xl z-20">
