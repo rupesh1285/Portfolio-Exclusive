@@ -8,11 +8,12 @@ import { useSceneScroll } from "@/hooks/useSceneScroll";
 gsap.registerPlugin(Observer);
 
 type SceneManagerProps = {
-  scenes: ReactNode[]; // Array of scene components
+  scenes: { id: string; render: () => ReactNode }[];
 };
 
 export default function SceneManager({ scenes }: SceneManagerProps) {
   const [activeScene, setActiveScene] = useState(0);
+  const [mountedScenes, setMountedScenes] = useState<Set<number>>(new Set([0]));
   const isAnimating = useRef(false);
   
   // Refs for each scene's scrolling container
@@ -26,6 +27,16 @@ export default function SceneManager({ scenes }: SceneManagerProps) {
   const animateTo = useCallback((nextIndex: number) => {
     if (isAnimating.current || nextIndex === activeScene) return;
     
+    // Ensure the incoming scene is mounted before animating
+    setMountedScenes((prev) => {
+      if (!prev.has(nextIndex)) {
+        const next = new Set(prev);
+        next.add(nextIndex);
+        return next;
+      }
+      return prev;
+    });
+
     isAnimating.current = true;
     const currentIndex = activeScene;
     
@@ -162,11 +173,12 @@ export default function SceneManager({ scenes }: SceneManagerProps) {
 
   return (
     <>
-      {scenes.map((scene, index) => {
+      {scenes.map((sceneDef, index) => {
         const isActive = index === activeScene;
+        const isMounted = mountedScenes.has(index);
         return (
           <div
-            key={index}
+            key={sceneDef.id}
             ref={(el) => { layerRefs.current[index] = el; }}
             className={`scene-layer ${isActive ? "active" : ""}`}
             style={{ visibility: isActive ? "visible" : "hidden", zIndex: isActive ? 10 : 1 }}
@@ -175,7 +187,7 @@ export default function SceneManager({ scenes }: SceneManagerProps) {
               ref={(el) => { sceneRefs.current[index] = el; }}
               className="scene-scroll-container"
             >
-              {scene}
+              {isMounted ? sceneDef.render() : null}
             </div>
           </div>
         );

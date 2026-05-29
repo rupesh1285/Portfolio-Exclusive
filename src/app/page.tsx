@@ -3,10 +3,13 @@
 import type { MutableRefObject } from "react";
 import { useEffect, useRef, useState } from "react";
 import SceneManager from "@/components/SceneManager";
+import dynamic from "next/dynamic";
 import SceneOne from "./SceneOne";
-import SceneTwo from "@/components/scene2/SceneTwo";
-import SceneThree from "./SceneThree";
-import SceneFour from "./SceneFour";
+
+// Dynamically import scenes so they are code-split and lazy loaded
+const SceneTwo = dynamic(() => import("@/components/scene2/SceneTwo"), { ssr: false });
+const SceneThree = dynamic(() => import("./SceneThree"), { ssr: false });
+const SceneFour = dynamic(() => import("./SceneFour"), { ssr: false });
 
 function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(() => void) | null> }) {
   const dotRef = useRef<HTMLDivElement>(null);
@@ -159,10 +162,10 @@ export default function Home() {
       <PrecisionCursor />
       <SceneManager
         scenes={[
-          <SceneOne key="scene1" clock={clock} />,
-          <SceneTwo key="scene2" />,
-          <SceneThree key="scene3" />,
-          <SceneFour key="scene4" />,
+          { id: "scene1", render: () => <SceneOne clock={clock} /> },
+          { id: "scene2", render: () => <SceneTwo /> },
+          { id: "scene3", render: () => <SceneThree /> },
+          { id: "scene4", render: () => <SceneFour /> },
         ]}
       />
     </div>
