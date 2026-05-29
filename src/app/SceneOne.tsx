@@ -314,7 +314,7 @@ export default function SceneOne({ clock }: { clock: string }) {
       </section>
 
       {/* Marquee */}
-      <div className="s1-block-marquee overflow-hidden border-y border-white/[0.06] bg-[#050505] py-4 flex flex-col gap-3">
+      <div className="s1-block-marquee overflow-hidden border-y border-white/[0.06] bg-[#050505] py-4 flex flex-col gap-3 relative z-30 -mt-0 md:-mt-8 lg:-mt-12 xl:-mt-16">
         <div className="ticker-inner flex items-center gap-10">
           {[...tape, ...tape].map((t, i) => (
             <span
