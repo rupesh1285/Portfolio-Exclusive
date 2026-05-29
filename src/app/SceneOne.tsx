@@ -220,9 +220,26 @@ export default function SceneOne({ clock }: { clock: string }) {
         
         {/* Left Side: Text Content */}
         <div className="flex flex-col items-start text-left z-10 w-full max-w-3xl -mt-16 md:-mt-8 lg:-mt-12 xl:-mt-16">
-          <div className="hero-sub mb-4 flex items-center gap-4 text-[10px] md:text-[11px] uppercase tracking-[0.5em] text-white/50" style={mono}>
-            <span className="w-8 h-[1px] bg-white/30" />
-            <span>Architected By</span>
+          {/* Animated Geometric Element instead of text */}
+          <div className="hero-sub mb-8 flex items-center gap-4 h-4">
+            {/* Spinning geometric core */}
+            <div className="relative flex items-center justify-center w-4 h-4">
+              <div className="absolute inset-0 border border-white/20 rounded-none animate-[spin_4s_linear_infinite]" />
+              <div className="absolute inset-1 border border-white/40 rounded-none animate-[spin_3s_linear_infinite_reverse]" />
+              <div className="w-1 h-1 bg-white rounded-full shadow-[0_0_8px_white]" />
+            </div>
+            
+            {/* Pulsing data bars */}
+            <div className="flex items-center gap-1 h-3">
+              <div className="w-[1.5px] h-[40%] bg-white/40 animate-[pulse_1.5s_ease-in-out_infinite]" style={{ animationDelay: '0.0s' }} />
+              <div className="w-[1.5px] h-[80%] bg-white/60 animate-[pulse_1.5s_ease-in-out_infinite]" style={{ animationDelay: '0.1s' }} />
+              <div className="w-[1.5px] h-[100%] bg-white/90 animate-[pulse_1.5s_ease-in-out_infinite]" style={{ animationDelay: '0.2s' }} />
+              <div className="w-[1.5px] h-[60%] bg-white/60 animate-[pulse_1.5s_ease-in-out_infinite]" style={{ animationDelay: '0.3s' }} />
+              <div className="w-[1.5px] h-[30%] bg-white/40 animate-[pulse_1.5s_ease-in-out_infinite]" style={{ animationDelay: '0.4s' }} />
+            </div>
+            
+            {/* Trailing line */}
+            <div className="w-16 h-[1px] bg-gradient-to-r from-white/30 to-transparent" />
           </div>
           
           <div className="relative">
