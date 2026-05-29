@@ -69,13 +69,13 @@ export default function SceneFour() {
           </p>
           <div className="overflow-hidden">
             <h1 className="text-[clamp(4rem,12vw,10rem)] leading-[0.85] tracking-[0.02em] uppercase origin-bottom" style={bebas}>
-              LET'S <span className="text-transparent" style={{ WebkitTextStroke: "1.5px rgba(0,0,0,0.3)" }}>BUILD</span>
+              LET&apos;S <span className="text-transparent" style={{ WebkitTextStroke: "1.5px rgba(0,0,0,0.3)" }}>BUILD</span>
               <br />
               SOMETHING.
             </h1>
           </div>
           <p className="mt-8 max-w-xl text-[15px] leading-[1.8] text-black/60 italic" style={cormorant}>
-            We've reached the end of the scroll. If you're looking for an architect who treats backend resilience as a feature and frontend motion as a prerequisite, let's start a conversation.
+            We&apos;ve reached the end of the scroll. If you&apos;re looking for an architect who treats backend resilience as a feature and frontend motion as a prerequisite, let&apos;s start a conversation.
           </p>
         </header>
 

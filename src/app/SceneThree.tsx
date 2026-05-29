@@ -19,6 +19,7 @@ export default function SceneThree() {
     return()=>obs.disconnect();
   },[]);
 
+  // eslint-disable-next-line react-hooks/refs
   const ref=(i:number)=>(el:HTMLElement|null)=>{refs.current[i]=el;};
 
   const skills=[

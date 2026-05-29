@@ -153,7 +153,9 @@ export default function SceneOne({ clock }: { clock: string }) {
               className="transition-colors hover:text-white/80"
               onClick={() => {
                 const idx = n === "Work" ? 1 : n === "Contact" ? 3 : 0;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 if ((window as any).__goToScene) {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   (window as any).__goToScene(idx);
                 }
               }}
@@ -345,7 +347,7 @@ export class EdgeNode implements INode {
               I specialize in bridging the gap between highly complex backend architectures and flawless, motion-driven frontend interfaces. My stack is deeply rooted in modern TypeScript, React ecosystem, and robust systems languages.
             </p>
             <p className="s1-ab text-[13px] leading-[1.85] text-white/45" style={mono}>
-              Whether it's designing highly concurrent microservices, orchestrating cloud-native deployments, or hand-crafting custom WebGL shaders, my core philosophy remains constant: ship software that is mathematically precise, incredibly fast, and unapologetically beautiful.
+              Whether it&apos;s designing highly concurrent microservices, orchestrating cloud-native deployments, or hand-crafting custom WebGL shaders, my core philosophy remains constant: ship software that is mathematically precise, incredibly fast, and unapologetically beautiful.
             </p>
             <blockquote
               className="s1-ab border-l border-white/20 py-1 pl-6 text-[17px] leading-relaxed text-white/55 italic"

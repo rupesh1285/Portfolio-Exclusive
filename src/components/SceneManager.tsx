@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, ReactNode } from "react";
+import { useEffect, useRef, useState, ReactNode, useCallback } from "react";
 import gsap from "gsap";
 import { Observer } from "gsap/Observer";
 import { useSceneScroll } from "@/hooks/useSceneScroll";
@@ -20,54 +20,10 @@ export default function SceneManager({ scenes }: SceneManagerProps) {
   // Refs for each scene's outer fixed layer (for animation)
   const layerRefs = useRef<(HTMLDivElement | null)[]>([]);
 
+  // eslint-disable-next-line react-hooks/refs
   const { checkScroll } = useSceneScroll({ current: sceneRefs.current[activeScene] });
 
-  useEffect(() => {
-    // Only one scene active at a time. The rest are hidden.
-    // However, during animation, both outgoing and incoming need to be visible.
-    // This is handled by the GSAP timeline and CSS classes.
-    const intentAccumulator = { up: 0, down: 0 };
-    const INTENT_THRESHOLD = 3; // Number of consecutive scroll events to trigger transition (handles trackpad inertia)
-
-    const handleScrollIntent = (direction: "up" | "down") => {
-      if (isAnimating.current) return;
-      
-      const { isAtTop, isAtBottom } = checkScroll();
-
-      if (direction === "down" && isAtBottom) {
-        intentAccumulator.down++;
-        intentAccumulator.up = 0;
-        if (intentAccumulator.down >= INTENT_THRESHOLD && activeScene < scenes.length - 1) {
-          intentAccumulator.down = 0;
-          animateTo(activeScene + 1);
-        }
-      } else if (direction === "up" && isAtTop) {
-        intentAccumulator.up++;
-        intentAccumulator.down = 0;
-        if (intentAccumulator.up >= INTENT_THRESHOLD && activeScene > 0) {
-          intentAccumulator.up = 0;
-          animateTo(activeScene - 1);
-        }
-      } else {
-        // Reset if scrolling within bounds
-        intentAccumulator.up = 0;
-        intentAccumulator.down = 0;
-      }
-    };
-
-    const observer = Observer.create({
-      type: "wheel,touch,pointer",
-      wheelSpeed: -1,
-      onDown: () => handleScrollIntent("up"),
-      onUp: () => handleScrollIntent("down"),
-      tolerance: 10,
-      preventDefault: false, // Let native scroll happen when within bounds
-    });
-
-    return () => observer.kill();
-  }, [activeScene, checkScroll, scenes.length]);
-
-  const animateTo = (nextIndex: number) => {
+  const animateTo = useCallback((nextIndex: number) => {
     if (isAnimating.current || nextIndex === activeScene) return;
     
     isAnimating.current = true;
@@ -145,17 +101,64 @@ export default function SceneManager({ scenes }: SceneManagerProps) {
       tl.to(currentLayer, { opacity: 0, duration: 0.5 }, 0)
         .to(nextLayer, { opacity: 1, duration: 0.5 }, 0);
     }
-  };
+  }, [activeScene]);
+
+  useEffect(() => {
+    // Only one scene active at a time. The rest are hidden.
+    // However, during animation, both outgoing and incoming need to be visible.
+    // This is handled by the GSAP timeline and CSS classes.
+    const intentAccumulator = { up: 0, down: 0 };
+    const INTENT_THRESHOLD = 3; // Number of consecutive scroll events to trigger transition (handles trackpad inertia)
+
+    const handleScrollIntent = (direction: "up" | "down") => {
+      if (isAnimating.current) return;
+      
+      const { isAtTop, isAtBottom } = checkScroll();
+
+      if (direction === "down" && isAtBottom) {
+        intentAccumulator.down++;
+        intentAccumulator.up = 0;
+        if (intentAccumulator.down >= INTENT_THRESHOLD && activeScene < scenes.length - 1) {
+          intentAccumulator.down = 0;
+          animateTo(activeScene + 1);
+        }
+      } else if (direction === "up" && isAtTop) {
+        intentAccumulator.up++;
+        intentAccumulator.down = 0;
+        if (intentAccumulator.up >= INTENT_THRESHOLD && activeScene > 0) {
+          intentAccumulator.up = 0;
+          animateTo(activeScene - 1);
+        }
+      } else {
+        // Reset if scrolling within bounds
+        intentAccumulator.up = 0;
+        intentAccumulator.down = 0;
+      }
+    };
+
+    const observer = Observer.create({
+      type: "wheel,touch,pointer",
+      wheelSpeed: -1,
+      onDown: () => handleScrollIntent("up"),
+      onUp: () => handleScrollIntent("down"),
+      tolerance: 10,
+      preventDefault: false, // Let native scroll happen when within bounds
+    });
+
+    return () => observer.kill();
+  }, [activeScene, checkScroll, scenes.length, animateTo]);
 
   // Expose goToScene globally for nav links
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (window as any).__goToScene = (idx: number) => {
       if (idx >= 0 && idx < scenes.length) animateTo(idx);
     };
     return () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       delete (window as any).__goToScene;
     };
-  }, [activeScene, scenes.length]);
+  }, [activeScene, scenes.length, animateTo]);
 
   return (
     <>
