@@ -153,16 +153,13 @@ export default function SceneOne({ clock }: { clock: string }) {
           @keyframes shimmer { 100% { transform: translateX(100%); } }
         `}</style>
         
-        {/* Left: Brand Mark */}
-        <div className="flex items-center gap-3 group cursor-pointer" data-cursor-expand>
-          <div className="relative w-4 h-4 flex items-center justify-center">
-            <span className="absolute inset-0 border border-white/20 group-hover:rotate-90 transition-transform duration-700 ease-in-out" />
-            <span className="absolute inset-[2px] border border-white/40 group-hover:-rotate-90 transition-transform duration-700 ease-in-out" />
-            <span className="text-[8px] text-white font-bold" style={luxury}>R</span>
+        {/* Left: Typographic Brand Mark */}
+        <div className="flex items-center group cursor-pointer select-none" data-cursor-expand>
+          <div className="relative flex items-baseline leading-none">
+            <span className="text-[18px] font-bold text-white tracking-tighter drop-shadow-md transition-transform duration-500 group-hover:-translate-y-0.5" style={luxury}>R</span>
+            <span className="text-[18px] font-light text-white/70 tracking-tighter -ml-[1px] group-hover:text-white transition-all duration-500 group-hover:translate-y-0.5" style={luxury}>A</span>
+            <span className="w-1.5 h-1.5 bg-white/90 rounded-full ml-1.5 mb-[2px] group-hover:bg-white group-hover:shadow-[0_0_12px_rgba(255,255,255,1)] transition-all duration-500" />
           </div>
-          <span className="text-[11px] tracking-[0.35em] text-white/90 uppercase font-medium group-hover:text-white transition-colors duration-300">
-            RA.
-          </span>
         </div>
 
         {/* Center: Architectural Tabs */}
