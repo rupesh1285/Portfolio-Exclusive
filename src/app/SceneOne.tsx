@@ -15,29 +15,31 @@ export default function SceneOne({ clock }: { clock: string }) {
     if (!rootRef.current) return;
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
-      tl.from(".s1-hero-mask-inner", {
-        yPercent: 110,
-        rotate: 2,
-        opacity: 0,
-        duration: 1.25,
-        stagger: 0.11,
-      })
-        .from(
-          ".s1-hero-float",
-          { y: 28, opacity: 0, duration: 1, ease: "power3.out" },
-          "-=0.85",
-        )
-        .from(
-          ".s1-hero-rail",
-          { opacity: 0, x: -12, duration: 0.8, ease: "power2.out" },
-          "-=0.9",
-        )
-        .from(
-          ".s1-hero-orbit",
-          { scale: 0.92, opacity: 0, duration: 1.1, ease: "power3.out" },
-          "-=1",
-        )
-        .from(".s1-hero-foot", { y: 16, opacity: 0, duration: 0.7 }, "-=0.55");
+      tl.fromTo(
+        ".hero-char",
+        { opacity: 0, filter: "blur(12px)", scale: 0.85, y: 30 },
+        {
+          opacity: 1,
+          filter: "blur(0px)",
+          scale: 1,
+          y: 0,
+          duration: 1.6,
+          stagger: 0.04,
+          ease: "expo.out",
+        }
+      )
+      .fromTo(
+        ".hero-sub",
+        { opacity: 0, y: 20, filter: "blur(6px)" },
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 1.2, stagger: 0.15, ease: "power3.out" },
+        "-=1.1"
+      )
+      .fromTo(
+        ".s1-hero-foot", 
+        { opacity: 0, y: 15 }, 
+        { opacity: 1, y: 0, duration: 1 }, 
+        "-=0.6"
+      );
     }, rootRef);
     return () => ctx.revert();
   }, []);
@@ -101,27 +103,17 @@ export default function SceneOne({ clock }: { clock: string }) {
 
   return (
     <div ref={rootRef} className="relative bg-[#030303] text-[#e6e6e6]">
-      {/* Depth - Now with slow dynamic breathing */}
-      <style>{`
-        @keyframes breathe-grid {
-          0%, 100% { opacity: 0.25; transform: scale(1); }
-          50% { opacity: 0.55; transform: scale(1.02); }
-        }
-        @keyframes float-data {
-          0%, 100% { transform: translateY(0px); opacity: 0.2; }
-          50% { transform: translateY(-15px); opacity: 0.6; }
-        }
-      `}</style>
+      {/* Textured Noise Background */}
       <div
-        className="pointer-events-none absolute inset-0 origin-center"
+        className="pointer-events-none absolute inset-0 z-0 opacity-[0.25] mix-blend-screen"
         style={{
-          backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
-          `,
-          backgroundSize: "72px 72px",
-          maskImage: "radial-gradient(ellipse 70% 60% at 50% 40%, black 20%, transparent 100%)",
-          animation: "breathe-grid 12s ease-in-out infinite"
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+        }}
+      />
+      <div 
+        className="pointer-events-none absolute inset-0 z-0 opacity-50"
+        style={{
+          background: "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.06) 0%, transparent 65%)"
         }}
       />
 
@@ -171,106 +163,53 @@ export default function SceneOne({ clock }: { clock: string }) {
         </div>
       </nav>
 
-      {/* ── Hero: baseline mega-type + floating thesis + orbit ring (not 50/50) ── */}
-      <section className="relative min-h-[100dvh] overflow-hidden px-4 pb-10 pt-6 md:px-8 lg:px-12 group/hero">
-        <div className="s1-hero-rail pointer-events-none absolute left-3 top-28 hidden flex-col gap-6 text-[9px] uppercase tracking-[0.5em] text-white/25 lg:flex">
-          <span className="max-w-[10em] leading-relaxed">Systems & UI Engineering</span>
-          <div className="h-24 w-px bg-gradient-to-b from-white/25 to-transparent" />
-          <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>Scroll</span>
-        </div>
-
-        {/* Orbit decoration — behind float card — NOW ROTATING DYNAMICALLY */}
-        <div className="s1-hero-orbit pointer-events-none absolute right-[-18%] top-[8%] h-[min(72vw,520px)] w-[min(72vw,520px)] md:right-[-8%]">
-          {/* Static base ring */}
-          <div className="absolute inset-0 rounded-full border border-white/[0.07]" />
-          {/* Inner ring rotating forward */}
-          <div className="absolute inset-[10%] rounded-full border border-white/[0.05] border-t-white/20 animate-[spin_20s_linear_infinite]" />
-          {/* Outer dashed ring rotating reverse */}
-          <div className="absolute inset-[22%] rounded-full border border-dashed border-white/[0.08] animate-[spin_30s_linear_infinite_reverse]" />
-          <div
-            className="absolute left-1/2 top-1/2 h-[1px] w-[120%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-transparent via-white/15 to-transparent"
-            style={{ transform: "translate(-50%, -50%) rotate(-18deg)" }}
-          />
-        </div>
-
-        {/* Floating thesis cluster — offset, overlaps void */}
-        <div
-          className="s1-hero-float relative z-10 mx-auto mt-8 w-full max-w-md border border-white/[0.09] bg-[#080808]/[0.95] p-6 shadow-[0_40px_120px_rgba(0,0,0,0.55)] md:ml-auto md:mr-6 md:mt-14 lg:mr-16 lg:mt-20 backdrop-blur-md"
-          style={mono}
-        >
-          <p className="mb-3 text-[9px] uppercase tracking-[0.55em] text-white/40">Full-Stack Architect</p>
-          <p className="text-[13px] leading-[1.75] text-white/55">
-            Engineering highly performant web applications with a focus on systems design, fluid cinematic interfaces, and deep backend resilience. I optimize for latency, maintainability, and absolute craft.
-          </p>
-          <div className="mt-5 flex flex-wrap gap-3 border-t border-white/[0.06] pt-5 text-[9px] uppercase tracking-[0.28em] text-white/35">
-            <span>Remote / India</span>
-            <span className="text-white/15">·</span>
-            <span>{clock || "—:—:—"} IST</span>
-          </div>
-        </div>
-
-        {/* NEW: Left Side Telemetry Widget (Fills empty mid-left space) */}
-        <div className="s1-hero-rail absolute left-8 top-[40%] hidden flex-col gap-10 md:flex pointer-events-none z-10" style={mono}>
-          <div className="flex flex-col gap-2">
-             <span className="text-[9px] text-white/30 uppercase tracking-[0.4em]">Edge Latency</span>
-             <span className="text-2xl text-white/80 font-light tracking-wider" style={bebas}>12<span className="text-sm">MS</span></span>
-          </div>
-          <div className="flex flex-col gap-2">
-             <span className="text-[9px] text-white/30 uppercase tracking-[0.4em]">Sys.Load</span>
-             <div className="flex items-end gap-1.5 h-8 mt-1">
-                {[4, 8, 5, 9, 3, 6, 10, 4].map((h, i) => (
-                  <div key={i} className="w-1 bg-white/20" style={{ height: `${h * 10}%`, animation: `pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite ${i * 0.15}s` }} />
-                ))}
-             </div>
-          </div>
-        </div>
-
-        {/* Baseline-anchored typography */}
-        <div className="relative z-[5] mt-[min(22vh,180px)] flex flex-col justify-end md:mt-[min(18vh,200px)]">
+      <section className="relative min-h-[100dvh] overflow-hidden px-4 flex flex-col items-center justify-center group/hero">
+        <div className="flex flex-col items-center text-center z-10 w-full max-w-5xl mt-12 md:mt-0">
           <p
-            className="s1-hero-mask-inner mb-2 text-[10px] uppercase tracking-[0.65em] text-white/30 md:pl-1"
+            className="hero-sub mb-4 text-[11px] uppercase tracking-[0.8em] text-white/50"
             style={mono}
           >
-            Rupesh Agarwal
+            Full-Stack Architect
           </p>
-          <div className="overflow-hidden">
-            <h1
-              className="s1-hero-mask-inner leading-[0.82] tracking-[0.02em] text-white"
-              style={{
-                ...bebas,
-                fontSize: "clamp(4.2rem, 14vw, 11rem)",
-              }}
-            >
-              RUPESH
-            </h1>
-          </div>
-          <div className="-mt-1 overflow-hidden md:-mt-2">
-            <h1
-              className="s1-hero-mask-inner leading-[0.82] tracking-[0.28em] text-transparent"
-              style={{
-                ...bebas,
-                fontSize: "clamp(2.4rem, 7.5vw, 5.5rem)",
-                WebkitTextStroke: "1.2px rgba(255,255,255,0.35)",
-              }}
-            >
-              AGARWAL
-            </h1>
-          </div>
+          
+          <h1
+            className="text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.2)] leading-[0.9] tracking-[0.02em] flex flex-wrap justify-center gap-x-4 md:gap-x-8"
+            style={{ ...bebas, fontSize: "clamp(4.5rem, 15vw, 12rem)" }}
+          >
+            <div className="flex">
+              {"RUPESH".split("").map((char, i) => (
+                <span key={`f-${i}`} className="hero-char inline-block">{char}</span>
+              ))}
+            </div>
+            <div className="flex">
+              {"AGARWAL".split("").map((char, i) => (
+                <span key={`l-${i}`} className="hero-char inline-block text-transparent" style={{ WebkitTextStroke: "1.5px rgba(255,255,255,0.85)" }}>{char}</span>
+              ))}
+            </div>
+          </h1>
+
           <p
-            className="s1-hero-mask-inner mt-6 max-w-xl text-[clamp(15px,1.35vw,19px)] font-light italic leading-relaxed text-white/40 md:pl-1"
+            className="hero-sub mt-8 max-w-2xl text-[clamp(15px,1.5vw,22px)] font-light italic leading-relaxed text-white/60 drop-shadow-md"
             style={cormorant}
           >
             I architect scalable backend systems and craft cinematic front-end experiences where every millisecond is explicitly earned.
           </p>
+
+          <div className="hero-sub mt-12 flex items-center justify-center gap-4 border border-white/10 bg-white/[0.02] px-6 py-3 rounded-full backdrop-blur-md text-[10px] uppercase tracking-[0.3em] text-white/40 shadow-xl">
+            <span className="w-1.5 h-1.5 bg-white/70 rounded-full animate-pulse" />
+            <span>Remote / India</span>
+            <span className="text-white/20">|</span>
+            <span>{clock || "—:—:—"} IST</span>
+          </div>
         </div>
 
         <div
-          className="s1-hero-foot pointer-events-none absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 md:bottom-10"
+          className="s1-hero-foot pointer-events-none absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 md:bottom-10 z-10"
           style={mono}
         >
-          <span className="text-[8px] uppercase tracking-[0.5em] text-white/25">Continue</span>
-          <div className="flex h-10 w-px overflow-hidden bg-white/[0.12]">
-            <div className="animate-scroll-drop h-1/2 w-full bg-gradient-to-b from-white/50 to-transparent" />
+          <span className="text-[8px] uppercase tracking-[0.5em] text-white/30">Scroll to Explore</span>
+          <div className="flex h-12 w-[1px] overflow-hidden bg-white/[0.15]">
+            <div className="animate-scroll-drop h-1/2 w-full bg-gradient-to-b from-white/70 to-transparent" />
           </div>
         </div>
       </section>
