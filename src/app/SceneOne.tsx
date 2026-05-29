@@ -220,12 +220,10 @@ export default function SceneOne({ clock }: { clock: string }) {
         
         {/* Left Side: Text Content */}
         <div className="flex flex-col items-start text-left z-10 w-full max-w-3xl -mt-16 md:-mt-8 lg:-mt-12 xl:-mt-16">
-          <p
-            className="hero-sub mb-2 text-[clamp(16px,2vw,24px)] italic text-white/70"
-            style={cormorant}
-          >
-            Hi, I'm
-          </p>
+          <div className="hero-sub mb-4 flex items-center gap-4 text-[10px] md:text-[11px] uppercase tracking-[0.5em] text-white/50" style={mono}>
+            <span className="w-8 h-[1px] bg-white/30" />
+            <span>Architected By</span>
+          </div>
           
           <div className="relative">
             {/* Targeted intense glow behind the text */}
