@@ -174,7 +174,7 @@ export default function SceneOne({ clock }: { clock: string }) {
       </nav>
 
       <section className="relative min-h-[100dvh] overflow-hidden px-4 flex flex-col items-center justify-center group/hero">
-        <div className="flex flex-col items-center text-center z-10 w-full max-w-5xl mt-12 md:mt-0">
+        <div className="flex flex-col items-center text-center z-10 w-full max-w-5xl -mt-24 md:-mt-32">
           <p
             className="hero-sub mb-4 text-[11px] uppercase tracking-[0.8em] text-white/50"
             style={mono}
