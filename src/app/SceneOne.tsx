@@ -188,26 +188,27 @@ export default function SceneOne({ clock }: { clock: string }) {
         </div>
       </nav>
 
-      <section className="relative min-h-[100dvh] overflow-hidden px-4 flex flex-col items-center justify-center group/hero">
-        <div className="flex flex-col items-center text-center z-10 w-full max-w-5xl -mt-24 md:-mt-32">
+      <section className="relative min-h-[100dvh] overflow-hidden px-6 md:px-12 lg:px-24 flex items-center justify-between group/hero">
+        
+        {/* Left Side: Text Content */}
+        <div className="flex flex-col items-start text-left z-10 w-full max-w-3xl -mt-24 md:-mt-0">
           <p
-            className="hero-sub mb-4 text-[11px] uppercase tracking-[0.8em] text-white/50"
-            style={mono}
+            className="hero-sub mb-2 text-[clamp(16px,2vw,24px)] italic text-white/70"
+            style={cormorant}
           >
-            Full-Stack Architect
+            Hi, I'm
           </p>
           
           <div className="relative">
             {/* Targeted intense glow behind the text */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[100%] h-[120%] bg-white/5 blur-[100px] rounded-[100%] pointer-events-none z-0" />
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-white/5 blur-[100px] rounded-[100%] pointer-events-none z-0" />
             <h1
-              className="relative z-10 text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.2)] leading-[0.95] tracking-[0.1em] flex flex-wrap justify-center gap-x-6 md:gap-x-10"
+              className="relative z-10 text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.2)] leading-[0.95] tracking-[0.04em] flex flex-col gap-2"
               style={{ 
                 ...luxury, 
-                fontSize: "clamp(4rem, 14vw, 11rem)",
+                fontSize: "clamp(3.5rem, 11vw, 9rem)",
                 maskImage: "linear-gradient(to bottom, black 65%, transparent 100%)",
-                WebkitMaskImage: "linear-gradient(to bottom, black 65%, transparent 100%)",
-                transform: "scaleX(1.15)"
+                WebkitMaskImage: "linear-gradient(to bottom, black 65%, transparent 100%)"
               }}
             >
               <div className="flex">
@@ -224,11 +225,23 @@ export default function SceneOne({ clock }: { clock: string }) {
           </div>
 
           <p
-            className="hero-sub mt-8 max-w-2xl text-[clamp(15px,1.5vw,22px)] font-light italic leading-relaxed text-white/60 drop-shadow-md"
+            className="hero-sub mt-6 mb-6 text-[11px] uppercase tracking-[0.8em] text-white/50"
+            style={mono}
+          >
+            Full-Stack Architect
+          </p>
+
+          <p
+            className="hero-sub max-w-xl text-[clamp(14px,1.2vw,18px)] font-light italic leading-relaxed text-white/60 drop-shadow-md"
             style={cormorant}
           >
             I architect scalable backend systems and craft cinematic front-end experiences where every millisecond is explicitly earned.
           </p>
+        </div>
+
+        {/* Right Side: Hero Image */}
+        <div className="hero-sub absolute right-[-5%] md:right-[5%] top-1/2 -translate-y-1/2 z-10 w-[70vw] md:w-[45vw] max-w-[600px] opacity-90 drop-shadow-[0_0_40px_rgba(255,255,255,0.05)] pointer-events-none mix-blend-lighten">
+          <img src="/Hero.png" alt="Rupesh Agarwal" className="w-full h-auto object-contain" />
         </div>
 
         <div className="hero-sub pointer-events-none absolute bottom-20 right-6 md:bottom-24 md:right-10 flex items-center gap-4 border border-white/10 bg-white/[0.02] px-6 py-3 rounded-full backdrop-blur-md text-[9px] uppercase tracking-[0.3em] text-white/40 shadow-xl z-20">
