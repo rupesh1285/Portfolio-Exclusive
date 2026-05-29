@@ -152,13 +152,13 @@ export default function SceneOne({ clock }: { clock: string }) {
         <span data-cursor-expand className="text-[11px] tracking-[0.35em] text-white/90" style={luxury}>
           RA.
         </span>
-        <div className="flex gap-8 text-[9px] uppercase tracking-[0.42em] text-white/35">
+        <div className="flex gap-8 text-[11px] font-medium uppercase tracking-[0.42em] text-white/80">
           {["Work", "Profile", "Contact"].map((n) => (
             <button
               key={n}
               type="button"
               data-cursor-expand
-              className="transition-colors hover:text-white/80"
+              className="transition-all hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
               onClick={() => {
                 const idx = n === "Work" ? 1 : n === "Contact" ? 3 : 0;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
