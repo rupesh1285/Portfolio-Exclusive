@@ -24,7 +24,7 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
       data-s2-project
       onClick={onClick}
       whileHover={{ y: -12, transition: { duration: 0.5, ease: [0.2, 1, 0.2, 1] } }}
-      className={`group/card relative flex flex-col overflow-hidden rounded-xl md:rounded-2xl border border-black/5 bg-white shadow-[0_8px_30px_rgba(0,0,0,0.06)] z-10 hover:z-40 cursor-pointer ${spanClass}`}
+      className={`group/card relative flex flex-col overflow-hidden rounded-xl md:rounded-2xl border border-black/15 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.08)] z-10 hover:z-40 hover:shadow-[0_40px_80px_rgba(0,0,0,0.15)] hover:border-black/30 cursor-pointer transition-colors duration-500 ${spanClass}`}
     >
       {/* -----------------------------
           BASE CARD (Seen in Grid) 
@@ -104,6 +104,11 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
           </div>
         )}
 
+        {/* Floating Number Badge (Top Right) */}
+        <div className="absolute right-6 top-6 flex items-center justify-center w-10 h-10 rounded-full bg-white/90 backdrop-blur-md text-[14px] font-bold text-black shadow-lg z-10 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 delay-100" style={mono}>
+          {String(i + 1).padStart(2, '0')}
+        </div>
+
         <div className="absolute left-6 top-6 flex items-center gap-2 rounded-full bg-white/80 backdrop-blur-md px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-black/80 shadow-sm z-10" style={mono}>
           {p.year}
         </div>
@@ -113,14 +118,19 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, transition: { delay: 0.3, duration: 0.4 } }}
         exit={{ opacity: 0, transition: { duration: 0.1 } }}
-        className="relative z-10 flex flex-col gap-1 md:gap-1.5 bg-white p-3 md:px-5 md:py-4 shrink-0"
+        className="relative z-10 flex flex-row justify-between items-end bg-white p-4 md:px-6 md:py-5 shrink-0"
       >
-        <h2 className="text-[clamp(1.5rem,3vw,3rem)] leading-[0.95] tracking-[0.02em] text-black/90" style={bebas}>
-          {p.title}
-        </h2>
-        <span className="text-[10px] uppercase tracking-[0.3em] text-black/40" style={mono}>
-          {p.role}
-        </span>
+        <div className="flex flex-col gap-1 md:gap-1.5">
+          <h2 className="text-[clamp(1.5rem,3vw,3rem)] leading-[0.95] tracking-[0.02em] text-black/90" style={bebas}>
+            {p.title}
+          </h2>
+          <span className="text-[10px] uppercase tracking-[0.3em] text-black/40" style={mono}>
+            {p.role}
+          </span>
+        </div>
+        <div className="text-[clamp(2.5rem,4vw,3.5rem)] leading-none text-black/10 select-none hidden md:block" style={bebas}>
+          {String(i + 1).padStart(2, '0')}
+        </div>
       </motion.div>
     </motion.article>
   );
