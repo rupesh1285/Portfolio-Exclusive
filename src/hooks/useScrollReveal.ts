@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import type { RefObject } from "react";
 
-const SCROLLER = ".main-scroll";
+
 
 /**
  * Adds `.s2-inview` to `.s2-reveal` descendants when they enter the main scroller.

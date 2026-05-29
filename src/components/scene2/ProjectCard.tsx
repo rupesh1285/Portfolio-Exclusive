@@ -1,5 +1,6 @@
 "use client";
 
+/* eslint-disable @next/next/no-img-element */
 import { memo } from "react";
 import { motion } from "framer-motion";
 import type { Project } from "./projectData";
