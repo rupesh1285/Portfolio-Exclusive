@@ -166,13 +166,16 @@ export default function SceneOne({ clock }: { clock: string }) {
         </div>
 
         {/* Center: Architectural Tabs */}
-        <div className="flex items-center gap-1 md:gap-3">
-          {["Work", "Profile", "Contact"].map((n) => (
+        <div className="flex items-center gap-8 md:gap-16 relative">
+          {/* Subtle static connecting timeline behind the nodes */}
+          <div className="absolute top-[40%] left-0 w-full h-[1px] bg-white/[0.05] pointer-events-none" />
+          
+          {["Work", "Profile", "Contact"].map((n, i) => (
             <button
               key={n}
               type="button"
               data-cursor-expand
-              className="relative px-3 md:px-6 py-2.5 flex items-center justify-center text-[9px] md:text-[10px] font-medium uppercase tracking-[0.3em] text-white/50 hover:text-white transition-all duration-300 group/link border border-white/[0.02] bg-white/[0.01] hover:bg-white/[0.05] hover:border-white/[0.1] rounded-sm overflow-hidden"
+              className="relative flex flex-col items-center gap-2 group/link bg-[#030303] px-3 z-10"
               onClick={() => {
                 const idx = n === "Work" ? 1 : n === "Contact" ? 3 : 0;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -182,11 +185,22 @@ export default function SceneOne({ clock }: { clock: string }) {
                 }
               }}
             >
-              <span className="relative z-10">{n}</span>
-              {/* Animated structural top accent */}
-              <span className="absolute top-0 left-0 w-full h-[1px] bg-white scale-x-0 group-hover/link:scale-x-100 transition-transform duration-300 origin-center" />
-              {/* Glow */}
-              <span className="absolute inset-0 bg-white/5 opacity-0 group-hover/link:opacity-100 transition-opacity duration-300 blur-md" />
+              <div className="flex items-center gap-2">
+                {/* Static editorial numbering */}
+                <span className="text-[8px] text-white/30 tracking-widest group-hover/link:text-white/70 transition-colors" style={mono}>
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span className="text-[10px] font-medium uppercase tracking-[0.4em] text-white/70 group-hover/link:text-white group-hover/link:drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] transition-all duration-300">
+                  {n}
+                </span>
+              </div>
+              
+              {/* Static structural node that ignites on hover */}
+              <div className="relative flex items-center justify-center w-4 h-4">
+                <span className="absolute w-[1px] h-full bg-white/[0.05] group-hover/link:bg-white/20 transition-colors duration-300" />
+                <span className="absolute h-[1px] w-full bg-white/[0.05] group-hover/link:bg-white/20 transition-colors duration-300" />
+                <span className="relative w-1.5 h-1.5 rounded-full bg-white/10 group-hover/link:bg-white group-hover/link:shadow-[0_0_10px_white] transition-all duration-300" />
+              </div>
             </button>
           ))}
         </div>
