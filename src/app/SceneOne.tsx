@@ -197,7 +197,7 @@ export default function SceneOne({ clock }: { clock: string }) {
               className="relative z-10 text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.2)] leading-[0.95] tracking-[0.04em] flex flex-col gap-2"
               style={{ 
                 ...luxury, 
-                fontSize: "clamp(3rem, 8vw, 7rem)",
+                fontSize: "clamp(2.5rem, min(8vw, 15vh), 9rem)",
                 maskImage: "linear-gradient(to bottom, black 65%, transparent 100%)",
                 WebkitMaskImage: "linear-gradient(to bottom, black 65%, transparent 100%)"
               }}
@@ -223,7 +223,7 @@ export default function SceneOne({ clock }: { clock: string }) {
           </p>
 
           <p
-            className="hero-sub w-[90vw] md:w-[45vw] max-w-[600px] text-[clamp(14px,1.2vw,18px)] font-light italic leading-relaxed text-white/60 drop-shadow-md"
+            className="hero-sub w-[90vw] md:w-[45vw] max-w-[600px] text-[clamp(12px,min(1.2vw,2.5vh),18px)] font-light italic leading-relaxed text-white/60 drop-shadow-md"
             style={cormorant}
           >
             I architect scalable backend systems and craft cinematic front-end experiences where every millisecond is explicitly earned.
@@ -231,8 +231,8 @@ export default function SceneOne({ clock }: { clock: string }) {
         </div>
 
         {/* Right Side: Hero Image */}
-        <div className="hero-sub absolute right-[5%] md:right-[20%] bottom-0 z-20 w-[75vw] md:w-[45vw] max-w-[650px] opacity-90 drop-shadow-[0_0_40px_rgba(255,255,255,0.05)] pointer-events-none origin-bottom scale-110 md:scale-100">
-          <img src="/Hero.png" alt="Rupesh Agarwal" className="w-full h-auto object-bottom object-contain" />
+        <div className="hero-sub absolute right-0 md:right-[10%] lg:right-[15%] bottom-0 z-20 h-[70vh] md:h-[85vh] w-[75vw] md:w-auto max-w-[650px] opacity-90 drop-shadow-[0_0_40px_rgba(255,255,255,0.05)] pointer-events-none origin-bottom flex justify-end">
+          <img src="/Hero.png" alt="Rupesh Agarwal" className="w-auto h-full max-w-full object-bottom object-contain" />
         </div>
 
         <div className="hero-sub pointer-events-none absolute bottom-20 right-6 md:bottom-24 md:right-10 flex items-center gap-4 border border-white/10 bg-white/[0.02] px-6 py-3 rounded-full backdrop-blur-md text-[9px] uppercase tracking-[0.3em] text-white/40 shadow-xl z-20">
