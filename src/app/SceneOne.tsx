@@ -103,17 +103,27 @@ export default function SceneOne({ clock }: { clock: string }) {
 
   return (
     <div ref={rootRef} className="relative bg-[#030303] text-[#e6e6e6]">
-      {/* Textured Noise Background */}
+      {/* Depth - Now with slow dynamic breathing */}
+      <style>{`
+        @keyframes breathe-grid {
+          0%, 100% { opacity: 0.25; transform: scale(1); }
+          50% { opacity: 0.55; transform: scale(1.02); }
+        }
+        @keyframes float-data {
+          0%, 100% { transform: translateY(0px); opacity: 0.2; }
+          50% { transform: translateY(-15px); opacity: 0.6; }
+        }
+      `}</style>
       <div
-        className="pointer-events-none absolute inset-0 z-0 opacity-[0.25] mix-blend-screen"
+        className="pointer-events-none absolute inset-0 origin-center"
         style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-        }}
-      />
-      <div 
-        className="pointer-events-none absolute inset-0 z-0 opacity-50"
-        style={{
-          background: "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.06) 0%, transparent 65%)"
+          backgroundImage: `
+            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
+          `,
+          backgroundSize: "72px 72px",
+          maskImage: "radial-gradient(ellipse 70% 60% at 50% 40%, black 20%, transparent 100%)",
+          animation: "breathe-grid 12s ease-in-out infinite"
         }}
       />
 
