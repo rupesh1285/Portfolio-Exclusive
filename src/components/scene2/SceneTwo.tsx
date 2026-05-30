@@ -89,8 +89,8 @@ export default function SceneTwo() {
       </header>
 
       {/* Bento Grid Container */}
-      <div className="mx-auto max-w-7xl px-4 md:px-8 pb-32">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 lg:gap-5 auto-rows-[320px] lg:auto-rows-[380px]">
+      <div className="mx-auto max-w-[1400px] px-4 md:px-8 pb-32">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 lg:gap-6 auto-rows-[350px] lg:auto-rows-[420px]">
           {SCENE_TWO_PROJECTS.map((p, i) => (
             <ProjectCard 
               key={p.id} 

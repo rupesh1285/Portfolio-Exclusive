@@ -124,19 +124,35 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, transition: { delay: 0.3, duration: 0.4 } }}
         exit={{ opacity: 0, transition: { duration: 0.1 } }}
-        className="relative z-10 flex flex-row justify-start items-center gap-5 bg-white p-4 md:px-6 md:py-5 shrink-0 border-t border-black/5"
+        className="relative z-10 flex flex-row justify-between items-center bg-white p-4 md:px-6 md:py-5 shrink-0 border-t border-black/5"
       >
-        <div className="text-[clamp(2.5rem,4vw,3.5rem)] leading-none text-black/90 font-bold select-none pt-1" style={bebas}>
-          {String(displayNumber).padStart(2, '0')}
+        <div className="flex flex-row items-center gap-4 md:gap-5">
+          {/* Circular Number Badge */}
+          <div className="relative flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full border border-black/10 overflow-hidden group-hover/card:border-black/30 transition-colors duration-500 shrink-0">
+            <div className="absolute inset-0 bg-black/5 scale-y-0 group-hover/card:scale-y-100 transition-transform duration-500 origin-bottom" />
+            <span className="relative z-10 text-[22px] md:text-[26px] leading-none text-black/90 font-bold tracking-tighter" style={bebas}>
+              {String(displayNumber).padStart(2, '0')}
+            </span>
+          </div>
+          
+          <div className="flex flex-col justify-center gap-1">
+            <h2 className="text-[clamp(1.4rem,2.2vw,2.5rem)] leading-none tracking-[0.02em] text-black/90 group-hover/card:translate-x-1 transition-transform duration-300" style={bebas}>
+              {p.title}
+            </h2>
+            <div className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-black/20 group-hover/card:bg-black/60 transition-colors duration-300" />
+              <span className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-black/40" style={mono}>
+                {p.role}
+              </span>
+            </div>
+          </div>
         </div>
-        <div className="w-[1px] h-10 bg-black/10" />
-        <div className="flex flex-col gap-1 md:gap-1.5">
-          <h2 className="text-[clamp(1.5rem,3vw,3rem)] leading-[0.95] tracking-[0.02em] text-black/90" style={bebas}>
-            {p.title}
-          </h2>
-          <span className="text-[10px] uppercase tracking-[0.3em] text-black/40" style={mono}>
-            {p.role}
-          </span>
+
+        {/* Animated Arrow */}
+        <div className="hidden sm:flex items-center justify-center w-10 h-10 shrink-0 rounded-full bg-black text-white -translate-x-4 opacity-0 group-hover/card:translate-x-0 group-hover/card:opacity-100 transition-all duration-500 ease-out">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
         </div>
       </motion.div>
     </motion.article>
