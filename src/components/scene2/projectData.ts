@@ -14,9 +14,9 @@ export type Project = {
 
 export const SCENE_TWO_PROJECTS: Project[] = [
   {
-    id: "aurora",
+    id: "finalist",
     index: "01",
-    title: "Aurora Console",
+    title: "Finalist",
     role: "Lead frontend · sample",
     year: "2025",
     blurb:
@@ -29,7 +29,7 @@ export const SCENE_TWO_PROJECTS: Project[] = [
       { k: "Uptime", v: "99.98%" },
     ],
     accent: "from-zinc-200 via-neutral-100 to-stone-300",
-    image: "/project1.png",
+    image: "/pr1-mockup.png",
   },
   {
     id: "lattice",
