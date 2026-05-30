@@ -76,16 +76,16 @@ export default function SceneManager({ scenes }: SceneManagerProps) {
         tl.to(currentLayer, { yPercent: 100, duration: 1, ease: "power2.inOut", force3D: true });
       }
     } 
-    // Scene 2 <-> 3: Scale + fade
+    // Scene 2 <-> 3: Cinematic Z-Axis Lens Dive
     else if ((currentIndex === 1 && nextIndex === 2) || (currentIndex === 2 && nextIndex === 1)) {
       if (nextIndex > currentIndex) {
-        gsap.set(nextLayer, { opacity: 0 });
-        tl.to(currentLayer, { scale: 0.92, opacity: 0, duration: 0.9, ease: "power2.inOut", force3D: true }, 0)
-          .to(nextLayer, { opacity: 1, duration: 0.9, ease: "power2.out", force3D: true }, 0.1);
+        gsap.set(nextLayer, { scale: 0.6, opacity: 0, filter: "blur(20px)" });
+        tl.to(currentLayer, { scale: 1.6, opacity: 0, filter: "blur(20px)", duration: 1.2, ease: "power3.inOut", force3D: true }, 0)
+          .to(nextLayer, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 1.2, ease: "power3.inOut", force3D: true }, 0);
       } else {
-        gsap.set(nextLayer, { scale: 0.92, opacity: 0 });
-        tl.to(currentLayer, { opacity: 0, duration: 0.9, ease: "power2.inOut", force3D: true }, 0)
-          .to(nextLayer, { scale: 1, opacity: 1, duration: 0.9, ease: "power2.out", force3D: true }, 0.1);
+        gsap.set(nextLayer, { scale: 1.6, opacity: 0, filter: "blur(20px)" });
+        tl.to(currentLayer, { scale: 0.6, opacity: 0, filter: "blur(20px)", duration: 1.2, ease: "power3.inOut", force3D: true }, 0)
+          .to(nextLayer, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 1.2, ease: "power3.inOut", force3D: true }, 0);
       }
     }
     // Scene 3 <-> 4: Right wipe
