@@ -311,14 +311,34 @@ export default function SceneOne({ clock }: { clock: string }) {
           </div>
 
           <div
-            className="hero-sub mt-6 mb-6 flex items-center h-4 text-[11px] uppercase tracking-[0.8em] text-white/50"
-            style={mono}
+            className="hero-sub mt-6 mb-6 flex items-center gap-3"
           >
-            <span>{roleText}</span>
+            {/* Leading accent dash */}
             <span 
-              className="inline-block w-[2px] h-[12px] bg-white ml-2 shadow-[0_0_8px_rgba(255,255,255,0.6)]"
-              style={{ animation: `cursor-blink ${phase === 'waiting' ? '0.8s' : '1s'} step-end infinite` }}
+              className="w-5 h-[1px] bg-gradient-to-r from-white/60 to-white/10 shrink-0"
             />
+            
+            {/* Role text in premium italic serif */}
+            <span 
+              className="text-[13px] md:text-[15px] tracking-[0.35em] uppercase text-white/60"
+              style={{ ...cormorant, fontStyle: 'italic', fontWeight: 300, letterSpacing: '0.35em' }}
+            >
+              {roleText}
+            </span>
+            
+            {/* Premium layered cursor */}
+            <span className="relative inline-flex items-center w-[2px] h-[16px] ml-0.5 shrink-0">
+              {/* Outer glow */}
+              <span 
+                className="absolute inset-0 bg-white/40 blur-[3px] rounded-full"
+                style={{ animation: `cursor-blink ${phase === 'waiting' ? '0.8s' : '1s'} step-end infinite` }}
+              />
+              {/* Core line */}
+              <span 
+                className="absolute inset-0 bg-white rounded-full shadow-[0_0_6px_rgba(255,255,255,0.8),0_0_14px_rgba(255,255,255,0.3)]"
+                style={{ animation: `cursor-blink ${phase === 'waiting' ? '0.8s' : '1s'} step-end infinite` }}
+              />
+            </span>
           </div>
 
           <p
