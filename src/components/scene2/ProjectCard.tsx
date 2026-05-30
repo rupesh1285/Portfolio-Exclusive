@@ -30,7 +30,7 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
       data-s2-project
       onClick={onClick}
       whileHover={{ y: -12, transition: { duration: 0.5, ease: [0.2, 1, 0.2, 1] } }}
-      className={`group/card relative flex flex-col overflow-hidden rounded-xl md:rounded-2xl border border-black/15 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.08)] z-10 hover:z-40 hover:shadow-[0_40px_80px_rgba(0,0,0,0.15)] hover:border-black/30 cursor-pointer transition-colors duration-500 ${spanClass}`}
+      className={`group/card relative flex flex-col overflow-hidden rounded-xl md:rounded-2xl border-[1.5px] border-black/20 bg-[#0d0d0d] shadow-[0_20px_50px_rgba(0,0,0,0.08)] z-10 hover:z-40 hover:shadow-[0_40px_80px_rgba(0,0,0,0.2)] hover:border-black/60 cursor-pointer transition-colors duration-500 ${spanClass}`}
     >
       {/* -----------------------------
           BASE CARD (Seen in Grid) 
@@ -124,32 +124,32 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, transition: { delay: 0.3, duration: 0.4 } }}
         exit={{ opacity: 0, transition: { duration: 0.1 } }}
-        className="relative z-10 flex flex-row justify-between items-center bg-[#fcfcfc] p-4 md:px-6 md:py-5 shrink-0 border-t border-black/5 overflow-hidden"
+        className="relative z-10 flex flex-row justify-between items-center bg-[#0d0d0d] p-4 md:px-6 md:py-5 shrink-0 border-t border-white/10 overflow-hidden"
       >
-        {/* Premium Matte Film Grain Texture */}
+        {/* Technical Diagonal Pinstripes on Dark */}
         <div 
-          className="absolute inset-0 pointer-events-none opacity-[0.06] mix-blend-multiply"
+          className="absolute inset-0 pointer-events-none opacity-[0.06]"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`
+            backgroundImage: `repeating-linear-gradient(45deg, #fff, #fff 1px, transparent 1px, transparent 10px)`
           }}
         />
 
         <div className="relative z-10 flex flex-row items-center gap-4 md:gap-5">
           {/* Circular Number Badge */}
-          <div className="relative flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full border border-black/10 overflow-hidden group-hover/card:border-black/30 bg-white transition-colors duration-500 shrink-0 shadow-sm">
-            <div className="absolute inset-0 bg-black/5 scale-y-0 group-hover/card:scale-y-100 transition-transform duration-500 origin-bottom" />
-            <span className="relative z-10 text-[22px] md:text-[26px] leading-none text-black/90 font-bold tracking-tighter" style={bebas}>
+          <div className="relative flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/20 overflow-hidden group-hover/card:border-white/50 transition-colors duration-500 shrink-0 shadow-sm">
+            <div className="absolute inset-0 bg-white/10 scale-y-0 group-hover/card:scale-y-100 transition-transform duration-500 origin-bottom" />
+            <span className="relative z-10 text-[22px] md:text-[26px] leading-none text-white font-bold tracking-tighter" style={bebas}>
               {String(displayNumber).padStart(2, '0')}
             </span>
           </div>
           
           <div className="flex flex-col justify-center gap-1">
-            <h2 className="text-[clamp(1.4rem,2.2vw,2.5rem)] leading-none tracking-[0.02em] text-black/90 group-hover/card:translate-x-1 transition-transform duration-300" style={bebas}>
+            <h2 className="text-[clamp(1.4rem,2.2vw,2.5rem)] leading-none tracking-[0.02em] text-white group-hover/card:translate-x-1 transition-transform duration-300" style={bebas}>
               {p.title}
             </h2>
             <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-black/20 group-hover/card:bg-black/60 transition-colors duration-300" />
-              <span className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-black/40" style={mono}>
+              <span className="w-1.5 h-1.5 rounded-full bg-white/30 group-hover/card:bg-white transition-colors duration-300" />
+              <span className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-white/50" style={mono}>
                 {p.role}
               </span>
             </div>
@@ -157,7 +157,7 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
         </div>
 
         {/* Animated Arrow */}
-        <div className="relative z-10 hidden sm:flex items-center justify-center w-10 h-10 shrink-0 rounded-full bg-black text-white -translate-x-4 opacity-0 group-hover/card:translate-x-0 group-hover/card:opacity-100 transition-all duration-500 ease-out shadow-md">
+        <div className="relative z-10 hidden sm:flex items-center justify-center w-10 h-10 shrink-0 rounded-full bg-white text-black -translate-x-4 opacity-0 group-hover/card:translate-x-0 group-hover/card:opacity-100 transition-all duration-500 ease-out shadow-md">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
           </svg>
