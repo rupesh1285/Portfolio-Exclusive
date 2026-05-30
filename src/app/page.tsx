@@ -30,13 +30,16 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
       }
     };
     const tick = () => {
-      if (!hasMoved) return; // Skip frame if mouse hasn't moved
-      hasMoved = false;
       const s = st.current;
-      s.rx += (s.mx - s.rx) * 0.12;
-      s.ry += (s.my - s.ry) * 0.12;
-      s.gx += (s.mx - s.gx) * 0.055;
-      s.gy += (s.my - s.gy) * 0.055;
+      const dx = s.mx - s.rx;
+      const dy = s.my - s.ry;
+      // Skip heavy updates if all cursors have converged (within 0.1px)
+      if (!hasMoved && Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1) return;
+      hasMoved = false;
+      s.rx += dx * 0.15;
+      s.ry += dy * 0.15;
+      s.gx += (s.mx - s.gx) * 0.07;
+      s.gy += (s.my - s.gy) * 0.07;
       if (ringRef.current) {
         ringRef.current.style.transform = `translate3d(${s.rx}px, ${s.ry}px, 0) translate(-50%, -50%)`;
       }
@@ -46,23 +49,24 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
     };
 
     window.addEventListener("mousemove", onMove, { passive: true });
-    const attach = () => {
-      document.querySelectorAll("[data-cursor-expand]").forEach((el) => {
-        el.addEventListener("mouseenter", () => setHoverState("xl"));
-        el.addEventListener("mouseleave", () => setHoverState("normal"));
-      });
-      document.querySelectorAll("[data-cursor-dark]").forEach((el) => {
-        el.addEventListener("mouseenter", () => setHoverState("xd"));
-        el.addEventListener("mouseleave", () => setHoverState("normal"));
-      });
+    const onMouseOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest("[data-cursor-expand]")) {
+        setHoverState("xl");
+      } else if (target.closest("[data-cursor-dark]")) {
+        setHoverState("xd");
+      } else {
+        setHoverState("normal");
+      }
     };
-    attach();
+    document.addEventListener("mouseover", onMouseOver, { passive: true });
 
     if (lenisFrameRef) {
       lenisFrameRef.current = tick;
       return () => {
         lenisFrameRef.current = null;
         window.removeEventListener("mousemove", onMove);
+        document.removeEventListener("mouseover", onMouseOver);
       };
     }
 
@@ -74,6 +78,7 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
     raf = requestAnimationFrame(loop);
     return () => {
       window.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseover", onMouseOver);
       cancelAnimationFrame(raf);
     };
   }, [lenisFrameRef]);

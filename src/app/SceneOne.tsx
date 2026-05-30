@@ -56,7 +56,7 @@ export default function SceneOne({ clock }: { clock: string }) {
   useEffect(() => {
     if (!rootRef.current) return;
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+      const tl = gsap.timeline({ defaults: { ease: "power4.out", force3D: true } });
       tl.fromTo(
         ".hero-char",
         { opacity: 0, filter: "blur(12px)", scale: 0.85, y: 30 },
@@ -101,28 +101,28 @@ export default function SceneOne({ clock }: { clock: string }) {
             gsap.fromTo(
               el.querySelectorAll(".s1-ab"),
               { y: 40, opacity: 0 },
-              { y: 0, opacity: 1, duration: 1, stagger: 0.08, ease: "power3.out" },
+              { y: 0, opacity: 1, duration: 1, stagger: 0.08, ease: "power3.out", force3D: true },
             );
           }
           if (el.classList.contains("s1-block-pillars")) {
             gsap.fromTo(
               el.querySelectorAll(".s1-pillar"),
               { y: 56, opacity: 0 },
-              { y: 0, opacity: 1, duration: 0.95, stagger: 0.12, ease: "power3.out" },
+              { y: 0, opacity: 1, duration: 0.95, stagger: 0.12, ease: "power3.out", force3D: true },
             );
           }
           if (el.classList.contains("s1-block-timeline")) {
             gsap.fromTo(
               el.querySelectorAll(".s1-tl"),
               { x: -24, opacity: 0 },
-              { x: 0, opacity: 1, duration: 0.75, stagger: 0.06, ease: "power2.out" },
+              { x: 0, opacity: 1, duration: 0.75, stagger: 0.06, ease: "power2.out", force3D: true },
             );
           }
           if (el.classList.contains("s1-block-manifesto")) {
             gsap.fromTo(
               el.querySelector(".s1-man-line"),
               { y: 32, opacity: 0 },
-              { y: 0, opacity: 1, duration: 1.1, ease: "power3.out" },
+              { y: 0, opacity: 1, duration: 1.1, ease: "power3.out", force3D: true },
             );
           }
           obs.unobserve(el);

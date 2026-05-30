@@ -59,49 +59,50 @@ export default function SceneManager({ scenes }: SceneManagerProps) {
         gsap.set(currentLayer, { clearProps: "transform,opacity,zIndex" });
         gsap.set(nextLayer, { clearProps: "transform,opacity" });
         setActiveScene(nextIndex);
-        isAnimating.current = false;
+        // Small cooldown to prevent accidental double-transitions
+        setTimeout(() => { isAnimating.current = false; }, 200);
       }
     });
 
-    // Define unique transitions based on index pairing
-    // Scene 1 <-> 2 (index 0 <-> 1): Curtain rise/fall
+    // Define unique transitions — all with force3D for GPU compositing
+    // Scene 1 <-> 2: Smooth curtain rise/fall
     if ((currentIndex === 0 && nextIndex === 1) || (currentIndex === 1 && nextIndex === 0)) {
       if (nextIndex > currentIndex) {
         gsap.set(nextLayer, { yPercent: 100 });
-        tl.to(nextLayer, { yPercent: 0, duration: 0.8, ease: "power3.inOut" });
+        tl.to(nextLayer, { yPercent: 0, duration: 1, ease: "power2.inOut", force3D: true });
       } else {
         gsap.set(currentLayer, { zIndex: 10 });
         gsap.set(nextLayer, { zIndex: 5 });
-        tl.to(currentLayer, { yPercent: 100, duration: 0.8, ease: "power3.inOut" });
+        tl.to(currentLayer, { yPercent: 100, duration: 1, ease: "power2.inOut", force3D: true });
       }
     } 
-    // Scene 2 <-> 3 (index 1 <-> 2): Scale + fade
+    // Scene 2 <-> 3: Scale + fade
     else if ((currentIndex === 1 && nextIndex === 2) || (currentIndex === 2 && nextIndex === 1)) {
       if (nextIndex > currentIndex) {
         gsap.set(nextLayer, { opacity: 0 });
-        tl.to(currentLayer, { scale: 0.92, opacity: 0.3, duration: 0.7, ease: "power2.inOut" }, 0)
-          .to(nextLayer, { opacity: 1, duration: 0.7, ease: "power2.out" }, 0);
+        tl.to(currentLayer, { scale: 0.92, opacity: 0, duration: 0.9, ease: "power2.inOut", force3D: true }, 0)
+          .to(nextLayer, { opacity: 1, duration: 0.9, ease: "power2.out", force3D: true }, 0.1);
       } else {
-        gsap.set(nextLayer, { scale: 0.92, opacity: 0.3 });
-        tl.to(currentLayer, { opacity: 0, duration: 0.7, ease: "power2.inOut" }, 0)
-          .to(nextLayer, { scale: 1, opacity: 1, duration: 0.7, ease: "power2.out" }, 0);
+        gsap.set(nextLayer, { scale: 0.92, opacity: 0 });
+        tl.to(currentLayer, { opacity: 0, duration: 0.9, ease: "power2.inOut", force3D: true }, 0)
+          .to(nextLayer, { scale: 1, opacity: 1, duration: 0.9, ease: "power2.out", force3D: true }, 0.1);
       }
     }
-    // Scene 3 <-> 4 (index 2 <-> 3): Right wipe
+    // Scene 3 <-> 4: Right wipe
     else if ((currentIndex === 2 && nextIndex === 3) || (currentIndex === 3 && nextIndex === 2)) {
       if (nextIndex > currentIndex) {
         gsap.set(nextLayer, { xPercent: 100 });
-        tl.to(nextLayer, { xPercent: 0, duration: 0.8, ease: "power3.inOut" });
+        tl.to(nextLayer, { xPercent: 0, duration: 1, ease: "power2.inOut", force3D: true });
       } else {
         gsap.set(currentLayer, { zIndex: 10 });
         gsap.set(nextLayer, { zIndex: 5 });
-        tl.to(currentLayer, { xPercent: 100, duration: 0.8, ease: "power3.inOut" });
+        tl.to(currentLayer, { xPercent: 100, duration: 1, ease: "power2.inOut", force3D: true });
       }
     } else {
-      // Fallback simple crossfade for arbitrary jumps
+      // Fallback crossfade
       gsap.set(nextLayer, { opacity: 0 });
-      tl.to(currentLayer, { opacity: 0, duration: 0.5 }, 0)
-        .to(nextLayer, { opacity: 1, duration: 0.5 }, 0);
+      tl.to(currentLayer, { opacity: 0, duration: 0.6, force3D: true }, 0)
+        .to(nextLayer, { opacity: 1, duration: 0.6, force3D: true }, 0.1);
     }
   }, []);
 
@@ -137,7 +138,7 @@ export default function SceneManager({ scenes }: SceneManagerProps) {
 
   useEffect(() => {
     const intentAccumulator = { up: 0, down: 0 };
-    const INTENT_THRESHOLD = 3;
+    const INTENT_THRESHOLD = 2; // Reduced for snappier response
 
     const handleScrollIntent = (direction: "up" | "down") => {
       if (isAnimating.current) return;
