@@ -24,15 +24,15 @@ export default function SceneOne({ clock }: { clock: string }) {
 
   useEffect(() => {
     const currentRole = ROLES[roleIndex];
-    let typingSpeed = isDeleting ? 30 : 80;
+    let typingSpeed = isDeleting ? 40 : 120; // Slower elegant typing, smooth deletion
 
     if (!isDeleting && roleText === currentRole) {
-      typingSpeed = 2500; // Pause at the end of the word
+      typingSpeed = 3000; // Wait exactly 3 seconds at the end
       setIsDeleting(true);
     } else if (isDeleting && roleText === "") {
       setIsDeleting(false);
       setRoleIndex((prev) => (prev + 1) % ROLES.length);
-      typingSpeed = 600; // Pause before typing next word
+      typingSpeed = 800; // Small pause before starting next role
     }
 
     const timer = setTimeout(() => {
@@ -137,6 +137,7 @@ export default function SceneOne({ clock }: { clock: string }) {
     <div ref={rootRef} className="relative bg-[#030303] text-[#e6e6e6]">
       {/* Background Styling */}
       <style>{`
+        @keyframes cursor-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
         @keyframes breathe-glow {
           0%, 100% { opacity: 0.5; transform: scale(1); }
           50% { opacity: 0.8; transform: scale(1.08); }
@@ -304,7 +305,10 @@ export default function SceneOne({ clock }: { clock: string }) {
             style={mono}
           >
             <span>{roleText}</span>
-            <span className="w-1.5 h-3 ml-2 bg-white/50 animate-[pulse_1s_ease-in-out_infinite]" />
+            <span 
+              className="inline-block w-[2px] h-[12px] bg-white ml-2 shadow-[0_0_8px_rgba(255,255,255,0.6)]"
+              style={{ animation: 'cursor-blink 1s step-end infinite' }}
+            />
           </div>
 
           <p
