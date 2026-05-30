@@ -20,14 +20,18 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
   const [hoverState, setHoverState] = useState<"normal" | "xl" | "xd">("normal");
 
   useEffect(() => {
+    let hasMoved = false;
     const onMove = (e: MouseEvent) => {
       st.current.mx = e.clientX;
       st.current.my = e.clientY;
+      hasMoved = true;
       if (dotRef.current) {
         dotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
       }
     };
     const tick = () => {
+      if (!hasMoved) return; // Skip frame if mouse hasn't moved
+      hasMoved = false;
       const s = st.current;
       s.rx += (s.mx - s.rx) * 0.12;
       s.ry += (s.my - s.ry) * 0.12;
@@ -41,7 +45,7 @@ function PrecisionCursor({ lenisFrameRef }: { lenisFrameRef?: MutableRefObject<(
       }
     };
 
-    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mousemove", onMove, { passive: true });
     const attach = () => {
       document.querySelectorAll("[data-cursor-expand]").forEach((el) => {
         el.addEventListener("mouseenter", () => setHoverState("xl"));

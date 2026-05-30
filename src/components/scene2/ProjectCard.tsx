@@ -42,7 +42,10 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
         <img 
           src={p.image} 
           alt="" 
+          loading="lazy"
+          decoding="async"
           className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover/card:scale-105"
+          style={{ transform: 'translateZ(0)' }}
         />
 
         {/* Dynamic Test Hover Hints: Text Edition Round 2 */}
@@ -54,7 +57,7 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
           </div>
         )}
         {i === 1 && (
-          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center pointer-events-none gap-2 bg-black/60 backdrop-blur-sm opacity-0 group-hover/card:opacity-100 transition-opacity duration-700">
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center pointer-events-none gap-2 bg-black/70 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700">
             <div className="overflow-hidden">
               <span className="block text-white text-2xl font-bold tracking-[0.4em] uppercase translate-y-full group-hover/card:translate-y-0 transition-transform duration-700 ease-[0.16,1,0.3,1] delay-100" style={mono}>Click</span>
             </div>
@@ -69,8 +72,8 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
         {i === 2 && (
           <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden">
              {/* Technical Mask Drop */}
-             <div className="absolute top-0 left-0 right-0 h-[50%] bg-black/80 backdrop-blur-md -translate-y-full group-hover/card:translate-y-0 transition-transform duration-[0.8s] ease-[0.16,1,0.3,1]" />
-             <div className="absolute bottom-0 left-0 right-0 h-[50%] bg-black/80 backdrop-blur-md translate-y-full group-hover/card:translate-y-0 transition-transform duration-[0.8s] ease-[0.16,1,0.3,1]" />
+             <div className="absolute top-0 left-0 right-0 h-[50%] bg-black/85 -translate-y-full group-hover/card:translate-y-0 transition-transform duration-[0.8s] ease-[0.16,1,0.3,1]" />
+             <div className="absolute bottom-0 left-0 right-0 h-[50%] bg-black/85 translate-y-full group-hover/card:translate-y-0 transition-transform duration-[0.8s] ease-[0.16,1,0.3,1]" />
              <div className="absolute inset-0 flex items-center justify-center z-10">
                <span className="text-white text-5xl font-bold tracking-[0.4em] uppercase scale-x-0 opacity-0 group-hover/card:opacity-100 group-hover/card:scale-x-100 transition-all duration-[1s] delay-100 ease-[0.16,1,0.3,1]" style={bebas}>
                  EXPLORE
@@ -102,7 +105,7 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
         )}
         {i === 5 && (
           <div className="absolute inset-0 z-20 pointer-events-none bg-black/60 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700">
-             <div className="absolute left-0 top-0 bottom-0 flex items-center justify-center w-24 bg-white/10 backdrop-blur-md border-r border-white/20 -translate-x-full group-hover/card:translate-x-0 transition-transform duration-700 ease-[0.16,1,0.3,1]">
+             <div className="absolute left-0 top-0 bottom-0 flex items-center justify-center w-24 bg-black/50 border-r border-white/20 -translate-x-full group-hover/card:translate-x-0 transition-transform duration-700 ease-[0.16,1,0.3,1]">
                <span className="text-white text-sm font-bold tracking-[0.5em] uppercase -rotate-90 whitespace-nowrap" style={mono}>
                  — Click To Explore
                </span>
@@ -111,11 +114,11 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
         )}
 
         {/* Floating Number Badge (Top Right) */}
-        <div className="absolute right-6 top-6 flex items-center justify-center w-10 h-10 rounded-full bg-white/90 backdrop-blur-md text-[14px] font-bold text-black shadow-lg z-10 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 delay-100" style={mono}>
+        <div className="absolute right-6 top-6 flex items-center justify-center w-10 h-10 rounded-full bg-white/90 text-[14px] font-bold text-black shadow-lg z-10 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 delay-100" style={mono}>
           {String(displayNumber).padStart(2, '0')}
         </div>
 
-        <div className="absolute left-6 top-6 flex items-center gap-2 rounded-full bg-white/80 backdrop-blur-md px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-black/80 shadow-sm z-10" style={mono}>
+        <div className="absolute left-6 top-6 flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-black/80 shadow-sm z-10" style={mono}>
           {p.year}
         </div>
       </div>

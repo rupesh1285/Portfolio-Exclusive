@@ -149,31 +149,28 @@ export default function SceneOne({ clock }: { clock: string }) {
       <style>{`
         @keyframes cursor-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
         @keyframes breathe-glow {
-          0%, 100% { opacity: 0.5; transform: scale(1); }
-          50% { opacity: 0.8; transform: scale(1.08); }
+          0%, 100% { opacity: 0.5; }
+          50% { opacity: 0.8; }
         }
         @keyframes breathe-grid {
-          0%, 100% { opacity: 0.25; transform: scale(1); }
-          50% { opacity: 0.55; transform: scale(1.02); }
-        }
-        @keyframes float-data {
-          0%, 100% { transform: translateY(0px); opacity: 0.2; }
-          50% { transform: translateY(-15px); opacity: 0.6; }
+          0%, 100% { opacity: 0.25; }
+          50% { opacity: 0.55; }
         }
       `}</style>
       
       {/* Creamish radial glow */}
       <div
-        className="pointer-events-none absolute inset-0 z-0 mix-blend-screen origin-center"
+        className="pointer-events-none absolute inset-0 z-0 mix-blend-screen"
         style={{
           background: "radial-gradient(circle at 50% 50%, rgba(245, 242, 228, 0.09) 0%, transparent 65%)",
-          animation: "breathe-glow 10s ease-in-out infinite"
+          animation: "breathe-glow 10s ease-in-out infinite",
+          willChange: "opacity"
         }}
       />
 
       {/* Grid Design overlay */}
       <div
-        className="pointer-events-none absolute inset-0 origin-center"
+        className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage: `
             linear-gradient(rgba(245,242,228,0.15) 1px, transparent 1px),
@@ -181,7 +178,8 @@ export default function SceneOne({ clock }: { clock: string }) {
           `,
           backgroundSize: "72px 72px",
           maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%)",
-          animation: "breathe-grid 12s ease-in-out infinite"
+          animation: "breathe-grid 12s ease-in-out infinite",
+          willChange: "opacity"
         }}
       />
 
@@ -360,11 +358,11 @@ export default function SceneOne({ clock }: { clock: string }) {
         </div>
 
         {/* Right Side: Hero Image */}
-        <div className="hero-sub absolute right-[5%] md:right-[20%] lg:right-[22%] bottom-0 md:bottom-8 lg:bottom-12 xl:bottom-16 z-20 h-[70vh] md:h-[85vh] w-[75vw] md:w-auto max-w-[650px] opacity-90 drop-shadow-[0_0_40px_rgba(255,255,255,0.05)] pointer-events-none origin-bottom flex justify-center">
+        <div className="hero-sub absolute right-[5%] md:right-[20%] lg:right-[22%] bottom-0 md:bottom-8 lg:bottom-12 xl:bottom-16 z-20 h-[70vh] md:h-[85vh] w-[75vw] md:w-auto max-w-[650px] opacity-90 pointer-events-none origin-bottom flex justify-center">
           {/* High Radius Radial Glow */}
-          <div className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[90%] aspect-square bg-white/[0.04] blur-[100px] rounded-full -z-10" />
+          <div className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[90%] aspect-square bg-white/[0.04] blur-[80px] rounded-full -z-10" />
           
-          <img src="/Hero.png" alt="Rupesh Agarwal" className="w-auto h-full max-w-full object-bottom object-contain" />
+          <img src="/Hero.png" alt="Rupesh Agarwal" className="w-auto h-full max-w-full object-bottom object-contain" loading="eager" decoding="async" />
         </div>
 
         {/* Far Right: Massive 3D Full-Stack Visualizer */}
