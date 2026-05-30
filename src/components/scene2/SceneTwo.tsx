@@ -19,7 +19,7 @@ export default function SceneTwo() {
   }, [expandedId]);
 
   return (
-    <div id="work-region" className="relative w-full text-[#0c0c0c] bg-[#fcfaf6] overflow-hidden">
+    <div id="work-region" className="relative w-full text-[#0c0c0c] bg-[#e8e8e8] overflow-hidden">
       {/* Premium Engineered Background (Monochromatic & Unique Typography) */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         {/* 1. Monochromatic CSS Mesh Gradient for subtle depth */}
