@@ -124,17 +124,13 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, transition: { delay: 0.3, duration: 0.4 } }}
         exit={{ opacity: 0, transition: { duration: 0.1 } }}
-        className="relative z-10 flex flex-row justify-between items-center bg-white p-4 md:px-6 md:py-5 shrink-0 border-t border-black/5 overflow-hidden"
+        className="relative z-10 flex flex-row justify-between items-center bg-[#fcfcfc] p-4 md:px-6 md:py-5 shrink-0 border-t border-black/5 overflow-hidden"
       >
-        {/* Subtle Engineered Strip Texture */}
+        {/* Premium Matte Film Grain Texture */}
         <div 
-          className="absolute inset-0 pointer-events-none opacity-[0.03]"
+          className="absolute inset-0 pointer-events-none opacity-[0.06] mix-blend-multiply"
           style={{
-            backgroundImage: `
-              linear-gradient(to right, #000 1px, transparent 1px),
-              linear-gradient(to bottom, #000 1px, transparent 1px)
-            `,
-            backgroundSize: '6px 6px'
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`
           }}
         />
 
@@ -148,12 +144,12 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
           </div>
           
           <div className="flex flex-col justify-center gap-1">
-            <h2 className="text-[clamp(1.4rem,2.2vw,2.5rem)] leading-none tracking-[0.02em] text-black/90 group-hover/card:translate-x-1 transition-transform duration-300 bg-white/50 px-1 -ml-1 rounded-sm backdrop-blur-sm" style={bebas}>
+            <h2 className="text-[clamp(1.4rem,2.2vw,2.5rem)] leading-none tracking-[0.02em] text-black/90 group-hover/card:translate-x-1 transition-transform duration-300" style={bebas}>
               {p.title}
             </h2>
-            <div className="flex items-center gap-2 px-1 -ml-1">
+            <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-black/20 group-hover/card:bg-black/60 transition-colors duration-300" />
-              <span className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-black/60 bg-white/50 backdrop-blur-sm px-1 py-0.5 rounded-sm" style={mono}>
+              <span className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-black/40" style={mono}>
                 {p.role}
               </span>
             </div>
