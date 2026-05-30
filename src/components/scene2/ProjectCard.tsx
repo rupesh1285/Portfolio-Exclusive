@@ -17,6 +17,12 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
   else if (i === 4) spanClass = "md:col-span-1 md:row-span-1 order-4"; // Project 5: Middle Center (Square)
   else if (i === 5) spanClass = "md:col-span-2 md:row-span-1 order-6"; // Project 6: Bottom Left (Wide)
 
+  // Number assignment based on visual layout
+  let displayNumber = i + 1;
+  if (i === 2) displayNumber = 5; // Long vertical card
+  else if (i === 3) displayNumber = 3; // Small adjacent
+  else if (i === 4) displayNumber = 4; // Small adjacent
+
   return (
     <motion.article
       layoutId={`project-${p.id}`}
@@ -106,7 +112,7 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
 
         {/* Floating Number Badge (Top Right) */}
         <div className="absolute right-6 top-6 flex items-center justify-center w-10 h-10 rounded-full bg-white/90 backdrop-blur-md text-[14px] font-bold text-black shadow-lg z-10 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 delay-100" style={mono}>
-          {String(i + 1).padStart(2, '0')}
+          {String(displayNumber).padStart(2, '0')}
         </div>
 
         <div className="absolute left-6 top-6 flex items-center gap-2 rounded-full bg-white/80 backdrop-blur-md px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-black/80 shadow-sm z-10" style={mono}>
@@ -118,8 +124,12 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, transition: { delay: 0.3, duration: 0.4 } }}
         exit={{ opacity: 0, transition: { duration: 0.1 } }}
-        className="relative z-10 flex flex-row justify-between items-end bg-white p-4 md:px-6 md:py-5 shrink-0"
+        className="relative z-10 flex flex-row justify-start items-center gap-5 bg-white p-4 md:px-6 md:py-5 shrink-0 border-t border-black/5"
       >
+        <div className="text-[clamp(2.5rem,4vw,3.5rem)] leading-none text-black/90 font-bold select-none pt-1" style={bebas}>
+          {String(displayNumber).padStart(2, '0')}
+        </div>
+        <div className="w-[1px] h-10 bg-black/10" />
         <div className="flex flex-col gap-1 md:gap-1.5">
           <h2 className="text-[clamp(1.5rem,3vw,3rem)] leading-[0.95] tracking-[0.02em] text-black/90" style={bebas}>
             {p.title}
@@ -127,9 +137,6 @@ export const ProjectCard = memo(function ProjectCard({ project: p, index: i, onC
           <span className="text-[10px] uppercase tracking-[0.3em] text-black/40" style={mono}>
             {p.role}
           </span>
-        </div>
-        <div className="text-[clamp(2.5rem,4vw,3.5rem)] leading-none text-black/10 select-none hidden md:block" style={bebas}>
-          {String(i + 1).padStart(2, '0')}
         </div>
       </motion.div>
     </motion.article>
