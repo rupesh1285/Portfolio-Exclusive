@@ -20,27 +20,37 @@ export default function SceneOne({ clock }: { clock: string }) {
   // Typewriter effect state
   const [roleText, setRoleText] = useState("");
   const [roleIndex, setRoleIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [phase, setPhase] = useState<"typing" | "waiting" | "deleting">("typing");
 
   useEffect(() => {
     const currentRole = ROLES[roleIndex];
-    let typingSpeed = isDeleting ? 40 : 120; // Slower elegant typing, smooth deletion
 
-    if (!isDeleting && roleText === currentRole) {
-      typingSpeed = 3000; // Wait exactly 3 seconds at the end
-      setIsDeleting(true);
-    } else if (isDeleting && roleText === "") {
-      setIsDeleting(false);
-      setRoleIndex((prev) => (prev + 1) % ROLES.length);
-      typingSpeed = 800; // Small pause before starting next role
+    if (phase === "typing") {
+      if (roleText === currentRole) {
+        // Done typing — enter waiting phase, cursor blinks here for 3s
+        const waitTimer = setTimeout(() => setPhase("deleting"), 3000);
+        return () => clearTimeout(waitTimer);
+      }
+      const timer = setTimeout(() => {
+        setRoleText(currentRole.substring(0, roleText.length + 1));
+      }, 120);
+      return () => clearTimeout(timer);
     }
 
-    const timer = setTimeout(() => {
-      setRoleText(currentRole.substring(0, roleText.length + (isDeleting ? -1 : 1)));
-    }, typingSpeed);
-
-    return () => clearTimeout(timer);
-  }, [roleText, isDeleting, roleIndex]);
+    if (phase === "deleting") {
+      if (roleText === "") {
+        // Done deleting — move to next role
+        setRoleIndex((prev) => (prev + 1) % ROLES.length);
+        setPhase("typing");
+        const pauseTimer = setTimeout(() => {}, 600);
+        return () => clearTimeout(pauseTimer);
+      }
+      const timer = setTimeout(() => {
+        setRoleText(currentRole.substring(0, roleText.length - 1));
+      }, 40);
+      return () => clearTimeout(timer);
+    }
+  }, [roleText, phase, roleIndex]);
 
   // Hero entrance
   useEffect(() => {
@@ -307,7 +317,7 @@ export default function SceneOne({ clock }: { clock: string }) {
             <span>{roleText}</span>
             <span 
               className="inline-block w-[2px] h-[12px] bg-white ml-2 shadow-[0_0_8px_rgba(255,255,255,0.6)]"
-              style={{ animation: 'cursor-blink 1s step-end infinite' }}
+              style={{ animation: `cursor-blink ${phase === 'waiting' ? '0.8s' : '1s'} step-end infinite` }}
             />
           </div>
 
