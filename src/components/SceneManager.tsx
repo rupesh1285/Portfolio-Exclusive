@@ -24,22 +24,23 @@ export default function SceneManager({ scenes }: SceneManagerProps) {
   // eslint-disable-next-line react-hooks/refs
   const { checkScroll } = useSceneScroll({ current: sceneRefs.current[activeScene] });
 
-  const animateTo = useCallback((nextIndex: number) => {
-    if (isAnimating.current || nextIndex === activeScene) return;
-    
-    // Ensure the incoming scene is mounted before animating
-    setMountedScenes((prev) => {
-      if (!prev.has(nextIndex)) {
+  // Pre-mount adjacent scenes so they are ready before the user scrolls.
+  // This eliminates the lag caused by dynamic imports loading mid-animation.
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setMountedScenes((prev) => {
         const next = new Set(prev);
-        next.add(nextIndex);
+        // Mount scenes adjacent to the active one
+        if (activeScene > 0) next.add(activeScene - 1);
+        if (activeScene < scenes.length - 1) next.add(activeScene + 1);
+        if (next.size === prev.size) return prev; // No change, skip re-render
         return next;
-      }
-      return prev;
-    });
+      });
+    }, 300); // Small delay so it doesn't compete with the initial render
+    return () => clearTimeout(timer);
+  }, [activeScene, scenes.length]);
 
-    isAnimating.current = true;
-    const currentIndex = activeScene;
-    
+  const runAnimation = useCallback((currentIndex: number, nextIndex: number) => {
     const currentLayer = layerRefs.current[currentIndex];
     const nextLayer = layerRefs.current[nextIndex];
     
@@ -54,12 +55,8 @@ export default function SceneManager({ scenes }: SceneManagerProps) {
 
     const tl = gsap.timeline({
       onComplete: () => {
-        // Immediately hide the outgoing scene BEFORE clearing its transforms.
-        // This prevents it from teleporting back to the center of the screen for 1 frame
-        // before React's state update kicks in to hide it.
         gsap.set(currentLayer, { visibility: "hidden" });
         gsap.set(currentLayer, { clearProps: "transform,opacity,zIndex" });
-        
         gsap.set(nextLayer, { clearProps: "transform,opacity" });
         setActiveScene(nextIndex);
         isAnimating.current = false;
@@ -70,11 +67,9 @@ export default function SceneManager({ scenes }: SceneManagerProps) {
     // Scene 1 <-> 2 (index 0 <-> 1): Curtain rise/fall
     if ((currentIndex === 0 && nextIndex === 1) || (currentIndex === 1 && nextIndex === 0)) {
       if (nextIndex > currentIndex) {
-        // Curtain rise (0 -> 1)
         gsap.set(nextLayer, { yPercent: 100 });
         tl.to(nextLayer, { yPercent: 0, duration: 0.8, ease: "power3.inOut" });
       } else {
-        // Curtain fall (1 -> 0)
         gsap.set(currentLayer, { zIndex: 10 });
         gsap.set(nextLayer, { zIndex: 5 });
         tl.to(currentLayer, { yPercent: 100, duration: 0.8, ease: "power3.inOut" });
@@ -83,12 +78,10 @@ export default function SceneManager({ scenes }: SceneManagerProps) {
     // Scene 2 <-> 3 (index 1 <-> 2): Scale + fade
     else if ((currentIndex === 1 && nextIndex === 2) || (currentIndex === 2 && nextIndex === 1)) {
       if (nextIndex > currentIndex) {
-        // 1 -> 2
         gsap.set(nextLayer, { opacity: 0 });
         tl.to(currentLayer, { scale: 0.92, opacity: 0.3, duration: 0.7, ease: "power2.inOut" }, 0)
           .to(nextLayer, { opacity: 1, duration: 0.7, ease: "power2.out" }, 0);
       } else {
-        // 2 -> 1
         gsap.set(nextLayer, { scale: 0.92, opacity: 0.3 });
         tl.to(currentLayer, { opacity: 0, duration: 0.7, ease: "power2.inOut" }, 0)
           .to(nextLayer, { scale: 1, opacity: 1, duration: 0.7, ease: "power2.out" }, 0);
@@ -97,11 +90,9 @@ export default function SceneManager({ scenes }: SceneManagerProps) {
     // Scene 3 <-> 4 (index 2 <-> 3): Right wipe
     else if ((currentIndex === 2 && nextIndex === 3) || (currentIndex === 3 && nextIndex === 2)) {
       if (nextIndex > currentIndex) {
-        // 2 -> 3
         gsap.set(nextLayer, { xPercent: 100 });
         tl.to(nextLayer, { xPercent: 0, duration: 0.8, ease: "power3.inOut" });
       } else {
-        // 3 -> 2
         gsap.set(currentLayer, { zIndex: 10 });
         gsap.set(nextLayer, { zIndex: 5 });
         tl.to(currentLayer, { xPercent: 100, duration: 0.8, ease: "power3.inOut" });
@@ -112,14 +103,41 @@ export default function SceneManager({ scenes }: SceneManagerProps) {
       tl.to(currentLayer, { opacity: 0, duration: 0.5 }, 0)
         .to(nextLayer, { opacity: 1, duration: 0.5 }, 0);
     }
-  }, [activeScene]);
+  }, []);
+
+  const animateTo = useCallback((nextIndex: number) => {
+    if (isAnimating.current || nextIndex === activeScene) return;
+    
+    isAnimating.current = true;
+    const currentIndex = activeScene;
+
+    // Check if the scene is already mounted
+    const alreadyMounted = mountedScenes.has(nextIndex);
+
+    if (alreadyMounted) {
+      // Scene is ready — animate immediately on the next frame
+      requestAnimationFrame(() => {
+        runAnimation(currentIndex, nextIndex);
+      });
+    } else {
+      // Scene not yet mounted — mount it first, then wait for it to render
+      setMountedScenes((prev) => {
+        const next = new Set(prev);
+        next.add(nextIndex);
+        return next;
+      });
+      // Wait for React to render + browser to paint the new scene
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          runAnimation(currentIndex, nextIndex);
+        });
+      });
+    }
+  }, [activeScene, mountedScenes, runAnimation]);
 
   useEffect(() => {
-    // Only one scene active at a time. The rest are hidden.
-    // However, during animation, both outgoing and incoming need to be visible.
-    // This is handled by the GSAP timeline and CSS classes.
     const intentAccumulator = { up: 0, down: 0 };
-    const INTENT_THRESHOLD = 3; // Number of consecutive scroll events to trigger transition (handles trackpad inertia)
+    const INTENT_THRESHOLD = 3;
 
     const handleScrollIntent = (direction: "up" | "down") => {
       if (isAnimating.current) return;
@@ -141,7 +159,6 @@ export default function SceneManager({ scenes }: SceneManagerProps) {
           animateTo(activeScene - 1);
         }
       } else {
-        // Reset if scrolling within bounds
         intentAccumulator.up = 0;
         intentAccumulator.down = 0;
       }
@@ -153,7 +170,7 @@ export default function SceneManager({ scenes }: SceneManagerProps) {
       onDown: () => handleScrollIntent("up"),
       onUp: () => handleScrollIntent("down"),
       tolerance: 10,
-      preventDefault: false, // Let native scroll happen when within bounds
+      preventDefault: false,
     });
 
     return () => observer.kill();
