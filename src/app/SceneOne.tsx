@@ -1,14 +1,46 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 
 const mono = { fontFamily: "'DM Mono', ui-monospace, monospace" } as const;
 const luxury = { fontFamily: "'Cinzel', serif", fontWeight: 500 } as const;
 const cormorant = { fontFamily: "'Cormorant Garamond', Georgia, serif" } as const;
 
+const ROLES = [
+  "Full-Stack Architect",
+  "Creative Developer",
+  "UI/UX Engineer",
+  "Product Builder"
+];
+
 export default function SceneOne({ clock }: { clock: string }) {
   const rootRef = useRef<HTMLDivElement>(null);
+  
+  // Typewriter effect state
+  const [roleText, setRoleText] = useState("");
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentRole = ROLES[roleIndex];
+    let typingSpeed = isDeleting ? 30 : 80;
+
+    if (!isDeleting && roleText === currentRole) {
+      typingSpeed = 2500; // Pause at the end of the word
+      setIsDeleting(true);
+    } else if (isDeleting && roleText === "") {
+      setIsDeleting(false);
+      setRoleIndex((prev) => (prev + 1) % ROLES.length);
+      typingSpeed = 600; // Pause before typing next word
+    }
+
+    const timer = setTimeout(() => {
+      setRoleText(currentRole.substring(0, roleText.length + (isDeleting ? -1 : 1)));
+    }, typingSpeed);
+
+    return () => clearTimeout(timer);
+  }, [roleText, isDeleting, roleIndex]);
 
   // Hero entrance
   useEffect(() => {
@@ -267,12 +299,13 @@ export default function SceneOne({ clock }: { clock: string }) {
             </h1>
           </div>
 
-          <p
-            className="hero-sub mt-6 mb-6 text-[11px] uppercase tracking-[0.8em] text-white/50"
+          <div
+            className="hero-sub mt-6 mb-6 flex items-center h-4 text-[11px] uppercase tracking-[0.8em] text-white/50"
             style={mono}
           >
-            Full-Stack Architect
-          </p>
+            <span>{roleText}</span>
+            <span className="w-1.5 h-3 ml-2 bg-white/50 animate-[pulse_1s_ease-in-out_infinite]" />
+          </div>
 
           <p
             className="hero-sub w-[90vw] md:w-[45vw] max-w-[600px] text-[clamp(12px,min(1.2vw,2.5vh),18px)] font-light italic leading-relaxed text-white/60 drop-shadow-md"
