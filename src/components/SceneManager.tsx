@@ -88,15 +88,20 @@ export default function SceneManager({ scenes }: SceneManagerProps) {
           .to(nextLayer, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 1.2, ease: "power3.inOut", force3D: true }, 0);
       }
     }
-    // Scene 3 <-> 4: Right wipe
+    // Scene 3 <-> 4: Cinematic 3D Parallax Up
     else if ((currentIndex === 2 && nextIndex === 3) || (currentIndex === 3 && nextIndex === 2)) {
       if (nextIndex > currentIndex) {
-        gsap.set(nextLayer, { xPercent: 100 });
-        tl.to(nextLayer, { xPercent: 0, duration: 1, ease: "power2.inOut", force3D: true });
+        // 2 -> 3: Scene 4 slides up over Scene 3, Scene 3 pushes back
+        gsap.set(currentLayer, { zIndex: 5, transformOrigin: "50% 0%" });
+        gsap.set(nextLayer, { zIndex: 10, yPercent: 100, rotationX: 10, transformOrigin: "50% 100%" });
+        tl.to(currentLayer, { scale: 0.9, opacity: 0.2, filter: "blur(10px)", duration: 1.1, ease: "power3.inOut", force3D: true }, 0)
+          .to(nextLayer, { yPercent: 0, rotationX: 0, duration: 1.1, ease: "power3.inOut", force3D: true }, 0);
       } else {
-        gsap.set(currentLayer, { zIndex: 10 });
-        gsap.set(nextLayer, { zIndex: 5 });
-        tl.to(currentLayer, { xPercent: 100, duration: 1, ease: "power2.inOut", force3D: true });
+        // 3 -> 2: Scene 4 slides down, revealing Scene 3 coming forward
+        gsap.set(currentLayer, { zIndex: 10, transformOrigin: "50% 100%" });
+        gsap.set(nextLayer, { zIndex: 5, scale: 0.9, opacity: 0.2, filter: "blur(10px)", transformOrigin: "50% 0%" });
+        tl.to(currentLayer, { yPercent: 100, rotationX: 10, duration: 1.1, ease: "power3.inOut", force3D: true }, 0)
+          .to(nextLayer, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 1.1, ease: "power3.inOut", force3D: true }, 0);
       }
     } else {
       // Fallback crossfade

@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import gsap from "gsap";
 
 const mono = { fontFamily: "'DM Mono', ui-monospace, monospace" } as const;
 const bebas = { fontFamily: "'Bebas Neue', sans-serif" } as const;
@@ -8,6 +9,7 @@ const cormorant = { fontFamily: "'Cormorant Garamond', Georgia, serif" } as cons
 
 export default function SceneFour() {
   const [time, setTime] = useState("");
+  const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const updateTime = () => {
@@ -19,8 +21,43 @@ export default function SceneFour() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    // Reset elements for animation
+    const headerTitle = root.querySelectorAll(".s4-title-line");
+    const fadeElements = root.querySelectorAll(".s4-fade");
+    const linkElements = root.querySelectorAll(".s4-link");
+
+    gsap.set(headerTitle, { yPercent: 120, rotationX: 20 });
+    gsap.set(fadeElements, { opacity: 0, y: 30 });
+    gsap.set(linkElements, { opacity: 0, x: -20 });
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const tl = gsap.timeline({ defaults: { ease: "power4.out", force3D: true } });
+            
+            tl.to(headerTitle, { yPercent: 0, rotationX: 0, duration: 1.4, stagger: 0.1, delay: 0.2 })
+              .to(fadeElements, { opacity: 1, y: 0, duration: 1.2, stagger: 0.1 }, "-=1.1")
+              .to(linkElements, { opacity: 1, x: 0, duration: 0.8, stagger: 0.08 }, "-=1");
+            
+            obs.disconnect();
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    
+    obs.observe(root);
+    return () => obs.disconnect();
+  }, []);
+
   return (
     <div
+      ref={rootRef}
       className="relative min-h-[100dvh] w-full overflow-hidden bg-[#e8e4dc] text-[#0c0c0c] flex flex-col justify-between"
     >
       <style>{`
@@ -63,18 +100,21 @@ export default function SceneFour() {
         </div>
 
         <header className="mb-20">
-          <p className="mb-6 flex items-center gap-3 text-[9px] uppercase tracking-[0.55em] text-black/50" style={mono}>
+          <p className="s4-fade mb-6 flex items-center gap-3 text-[9px] uppercase tracking-[0.55em] text-black/50" style={mono}>
             <span className="h-px w-12 bg-black/25" />
             04 — Handshake
           </p>
-          <div className="overflow-hidden">
-            <h1 className="text-[clamp(4rem,12vw,10rem)] leading-[0.85] tracking-[0.02em] uppercase origin-bottom" style={bebas}>
+          <div className="overflow-hidden" style={{ perspective: "1000px" }}>
+            <h1 className="s4-title-line text-[clamp(4rem,12vw,10rem)] leading-[0.85] tracking-[0.02em] uppercase origin-bottom" style={bebas}>
               LET&apos;S <span className="text-transparent" style={{ WebkitTextStroke: "1.5px rgba(0,0,0,0.3)" }}>BUILD</span>
-              <br />
+            </h1>
+          </div>
+          <div className="overflow-hidden" style={{ perspective: "1000px" }}>
+            <h1 className="s4-title-line text-[clamp(4rem,12vw,10rem)] leading-[0.85] tracking-[0.02em] uppercase origin-bottom" style={bebas}>
               SOMETHING.
             </h1>
           </div>
-          <p className="mt-8 max-w-xl text-[15px] leading-[1.8] text-black/60 italic" style={cormorant}>
+          <p className="s4-fade mt-8 max-w-xl text-[15px] leading-[1.8] text-black/60 italic" style={cormorant}>
             We&apos;ve reached the end of the scroll. If you&apos;re looking for an architect who treats backend resilience as a feature and frontend motion as a prerequisite, let&apos;s start a conversation.
           </p>
         </header>
@@ -82,13 +122,13 @@ export default function SceneFour() {
         <div className="flex flex-col md:flex-row justify-between items-end mt-auto gap-12 pb-10">
           {/* Socials / Links */}
           <div className="flex flex-col gap-4">
-            <p className="text-[10px] uppercase tracking-[0.4em] text-black/40 mb-2" style={mono}>Connect</p>
+            <p className="s4-fade text-[10px] uppercase tracking-[0.4em] text-black/40 mb-2" style={mono}>Connect</p>
             {[
               { name: "Twitter / X", url: "https://twitter.com/rupesh" },
               { name: "LinkedIn", url: "https://linkedin.com/in/rupesh" },
               { name: "GitHub", url: "https://github.com/rupesh1285" },
             ].map((link) => (
-              <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" data-cursor-dark className="text-[13px] tracking-[0.1em] text-black/70 hover:text-black transition-colors relative group w-fit" style={mono}>
+              <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" data-cursor-dark className="s4-link text-[13px] tracking-[0.1em] text-black/70 hover:text-black transition-colors relative group w-fit" style={mono}>
                 {link.name} ↗
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-black transition-all duration-300 group-hover:w-full" />
               </a>
@@ -97,8 +137,8 @@ export default function SceneFour() {
 
           {/* Large Email Callout */}
           <div className="text-left md:text-right">
-            <p className="text-[10px] uppercase tracking-[0.4em] text-black/40 mb-4" style={mono}>Initiate</p>
-            <a href="mailto:rupesh@example.com" data-cursor-dark className="group relative inline-block">
+            <p className="s4-fade text-[10px] uppercase tracking-[0.4em] text-black/40 mb-4" style={mono}>Initiate</p>
+            <a href="mailto:rupesh@example.com" data-cursor-dark className="s4-fade group relative inline-block">
               <span className="text-[clamp(1.5rem,4vw,3rem)] tracking-[0.02em] transition-colors group-hover:text-black/70" style={bebas}>
                 RUPESH@EXAMPLE.COM
               </span>
@@ -109,7 +149,7 @@ export default function SceneFour() {
       </div>
 
       {/* Footer Tape */}
-      <div className="relative z-10 overflow-hidden border-t border-black/[0.08] bg-[#e2ded5] py-4 mt-auto">
+      <div className="s4-fade relative z-10 overflow-hidden border-t border-black/[0.08] bg-[#e2ded5] py-4 mt-auto">
         <div className="flex justify-between items-center px-5 md:px-10 lg:px-14">
           <div className="ticker-inner flex items-center gap-10 opacity-70" style={{ width: "calc(100% - 150px)" }}>
             {[...Array(8)].map((_, i) => (
